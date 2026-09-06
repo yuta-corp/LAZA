@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from "react";
+import type gsap from "gsap";
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight, Fingerprint, Megaphone, ShieldCheck } from "lucide-react"
@@ -14,6 +15,7 @@ interface AnimatedContentProps {
 
 export default function AnimatedContent({ reports }: AnimatedContentProps) {
   const gsapContainerRef = useRef<HTMLDivElement | null>(null);
+  const gsapRef = useRef<typeof gsap | null>(null);
 
   useEffect(() => {
     // Import GSAP dynamically to avoid SSR issues
@@ -21,6 +23,7 @@ export default function AnimatedContent({ reports }: AnimatedContentProps) {
       const { gsap } = await import("gsap");
       const { ScrollTrigger } = await import("gsap/ScrollTrigger");
 
+      gsapRef.current = gsap;
       gsap.registerPlugin(ScrollTrigger);
 
       const container = gsapContainerRef.current;
@@ -199,9 +202,10 @@ export default function AnimatedContent({ reports }: AnimatedContentProps) {
     loadGSAP();
 
     return () => {
-      // Cleanup GSAP contexts if needed
-      if (window.gsap && container) {
-        window.gsap.killTweensOf(container);
+      // Cleanup GSAP tweens on the container
+      const gsapInstance = gsapRef.current;
+      if (gsapInstance && container) {
+        gsapInstance.killTweensOf(container);
       }
     };
   }, []);

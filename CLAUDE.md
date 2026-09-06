@@ -38,7 +38,6 @@ To run a single test (if using a test framework, adjust accordingly):
 - **prisma/**: Database schema and seed
   - `schema.prisma`: Report/Evidence models and enums
   - `seed.ts`: Demo data generation
-- **storage/**: Evidence files (outside git, see .gitignore)
 - **public/**: Static assets
 - **hooks/**: Custom hooks (if any)
 - **styles/**: Tailwind CSS configuration (via tailwind.config.ts and postcss.config.mjs)
@@ -52,11 +51,11 @@ To run a single test (if using a test framework, adjust accordingly):
 
 ### Data Model (prisma/schema.prisma)
 - Report: id, slug, title, description, category, region, status, createdAt, updatedAt
-- Evidence: id, reportId, url (encrypted path), sha256, createdAt
+- Evidence: id, reportId, url (URL publique Vercel Blob des fichiers, ou lien), sha256, createdAt
 - Enums: ReportCategory, ReportRegion, ReportStatus (DRAFT, PENDING, PUBLISHED, REJECTED)
 
 ### Security Notes
 - Never store raw CIN or birthdate in browser or DB; only salted hash
 - Salt rotates server-side; old salts stored temporarily for verification
-- File evidence stored outside repo (storage/evidence/) with encrypted filenames
+- Evidence files uploaded to Vercel Blob (public); only the blob URL is stored in the DB
 - Demo data via `pnpm db:seed` is fictional; reset with migration

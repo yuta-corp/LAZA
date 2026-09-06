@@ -156,7 +156,7 @@ export default async function SignalementPage({ params }: PageProps) {
                       className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
                     >
                       <Link2 className="size-3" />
-                      Ouvrir la source
+                      {evidence.kind === EvidenceKind.LINK ? "Ouvrir la source" : "Consulter la preuve"}
                     </a>
                   )}
                 </li>

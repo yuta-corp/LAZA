@@ -62,7 +62,6 @@ lib/
 prisma/
   schema.prisma                # Modèle Report / Evidence + énumérations
   seed.ts                      # Données fictives
-storage/evidence/              # Fichiers de preuve (hors git)
 ```
 
 ## Sécurité & conformité
@@ -73,6 +72,8 @@ storage/evidence/              # Fichiers de preuve (hors git)
   partage de clés Shamir avec la CMIL et la Justice — voir le document de référence).
 - **Intégrité des preuves** : l'empreinte SHA-256 de chaque fichier est calculée dans le
   navigateur **et recalculée côté serveur** ; toute divergence entraîne le rejet.
+- **Stockage des preuves** : les fichiers sont téléversés sur **Vercel Blob** (accès public) ;
+  seule l'URL publique est conservée en base, et tout visiteur peut consulter la preuve.
 - **Avertissement légal** (Art. 373.1, loi 2014-038) affiché sur toutes les pages
   publiques et accepté dans le formulaire avant envoi.
 - Obligations documentées : déclaration **CMIL** du traitement, protocoles BIANCO/JJ,

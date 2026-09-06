@@ -89,8 +89,8 @@ model Evidence {
   fileName           String
   mimeType           String
   size               Int
-  storagePath        String? // fichier stocké sur disque (hors repo git)
-  url                String? // preuve de type lien
+  storagePath        String? // TODO: champ obsolète, abandonné au profit de `url` (Vercel Blob)
+  url                String? // URL publique (Vercel Blob) des fichiers, ou lien pour les preuves de type lien
   checksum           String // SHA-256 calculé côté client (intégrité)
   verificationStatus VerificationStatus @default(PENDING)
   createdAt          DateTime           @default(now())

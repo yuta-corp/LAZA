@@ -199,7 +199,7 @@ function SectionOrchestrator({ children }: SectionOrchestratorProps) {
 
     return () => {
       ctx.revert();
-      ScrollTrigger.getAll().forEach((t) => t.kill());
+      ScrollTrigger.getAll().forEach((t: ScrollTrigger) => t.kill());
     };
   }, []);
 

@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto"
 import { prisma } from "@/lib/prisma"
 import { nextReference, slugify } from "@/lib/report"
-import { saveEvidenceFile, sha256, removeEvidenceDir } from "@/lib/storage"
+import { saveEvidenceFile, sha256, removeEvidenceBlobs } from "@/lib/storage"
 import {
   evidenceKindFromMime,
   isCategory,
@@ -138,14 +138,14 @@ export async function POST(request: Request) {
     fileName: string
     mimeType: string
     size: number
-    storagePath: string | null
     url: string | null
     checksum: string
   }> = []
+  const uploadedUrls: string[] = []
 
   try {
     for (const file of files) {
-      const { storagePath, checksum } = await saveEvidenceFile(reportId, file)
+      const { url, checksum } = await saveEvidenceFile(reportId, file)
       const declared = clientHashes.find((h) => h.name === file.name)!
       if (checksum !== declared.sha256) {
         throw new Error(`Intégrité non vérifiée pour le fichier : ${file.name}`)
@@ -157,10 +157,10 @@ export async function POST(request: Request) {
         fileName: file.name,
         mimeType: file.type,
         size: file.size,
-        storagePath,
-        url: null,
+        url,
         checksum,
       })
+      uploadedUrls.push(url)
     }
 
     for (const link of links) {
@@ -170,7 +170,6 @@ export async function POST(request: Request) {
         fileName: link,
         mimeType: "text/html",
         size: 0,
-        storagePath: null,
         url: link,
         checksum: sha256(Buffer.from(link)),
       })
@@ -187,9 +186,9 @@ export async function POST(request: Request) {
       { status: 201 },
     )
   } catch (error) {
-    // Rollback : suppression du signalement et des fichiers stockés.
+    // Rollback : suppression du signalement et des preuves téléversées sur Blob.
     await prisma.report.delete({ where: { id: reportId } }).catch(() => {})
-    await removeEvidenceDir(reportId).catch(() => {})
+    await removeEvidenceBlobs(uploadedUrls).catch(() => {})
     const message =
       error instanceof Error ? error.message : "Une erreur est survenue lors de l'enregistrement."
     return Response.json({ ok: false, errors: [message] }, { status: 500 })

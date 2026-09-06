@@ -1,0 +1,100 @@
+// Laza — Plateforme de dénonciation anonyme de corruption
+// Modèle de données — Prisma 7
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ReportStatus {
+  SUBMITTED
+  UNDER_REVIEW
+  PUBLISHED
+  REJECTED
+}
+
+enum Category {
+  MARCHES_PUBLICS
+  FONCIER
+  DOUANES_IMPOTS
+  SANTE
+  EDUCATION
+  JUSTICE
+  SECURITE
+  MINES
+  TELECOMS
+  ENERGIE
+  AUTRE
+}
+
+enum EvidenceKind {
+  DOCUMENT
+  IMAGE
+  VIDEO
+  AUDIO
+  LINK
+}
+
+enum VerificationStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+model Report {
+  id          String       @id @default(cuid())
+  slug        String       @unique
+  reference   String       @unique // ex: LAZ-2026-0001
+  title       String
+  summary     String
+  description String
+  category    Category
+  region      String?
+  status      ReportStatus @default(SUBMITTED)
+
+  // Engagement d'identité (couche ZKP) — seul un hash est stocké, jamais la donnée brute.
+  identityCommitment String?
+  commitmentSalt     String?
+
+  // Avertissement légal (Art. 373.1 — dénonciation abusive)
+  legalAccepted   Boolean  @default(false)
+  legalAcceptedAt DateTime?
+
+  // Modération (équipe de confiance — pré-modération)
+  moderationNote String?
+  reviewedBy     String?
+  reviewedAt     DateTime?
+  publishedAt    DateTime?
+  rejectedAt     DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  evidence Evidence[]
+
+  @@index([status, createdAt])
+  @@index([category])
+  @@index([publishedAt])
+}
+
+model Evidence {
+  id                 String             @id @default(cuid())
+  report             Report             @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  reportId           String
+  kind               EvidenceKind
+  fileName           String
+  mimeType           String
+  size               Int
+  storagePath        String? // TODO: champ obsolète, abandonné au profit de `url` (Vercel Blob)
+  url                String? // URL publique (Vercel Blob) des fichiers, ou lien pour les preuves de type lien
+  checksum           String // SHA-256 calculé côté client (intégrité)
+  verificationStatus VerificationStatus @default(PENDING)
+  createdAt          DateTime           @default(now())
+
+  @@index([reportId])
+  @@index([verificationStatus])
+}

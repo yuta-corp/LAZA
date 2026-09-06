@@ -41,3 +41,4 @@ next-env.d.ts
 
 # preuves téléversées (hors repo)
 /storage
+.vercel

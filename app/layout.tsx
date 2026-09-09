@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import { Inter, Geist_Mono } from "next/font/google"
-import { ClerkProvider } from "@clerk/nextjs"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -41,14 +40,12 @@ export default function RootLayout({
       className={cn("antialiased", fontMono.variable, "font-sans", inter.variable)}
     >
       <body className="flex min-h-svh flex-col">
-        <ClerkProvider>
-          <ThemeProvider>
-            <TooltipProvider>
-              {children}
-              <Toaster position="bottom-center" richColors />
-            </TooltipProvider>
-          </ThemeProvider>
-        </ClerkProvider>
+        <ThemeProvider>
+          <TooltipProvider>
+            {children}
+            <Toaster position="bottom-center" richColors />
+          </TooltipProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

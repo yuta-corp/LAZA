@@ -1,3 +1,4 @@
+import { ClerkProvider } from "@clerk/nextjs"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
@@ -8,7 +9,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   await requireAdmin()
 
   return (
-    <SidebarProvider
+    <ClerkProvider>
+      <SidebarProvider
       style={
         {
           "--sidebar-width": "calc(var(--spacing) * 72)",
@@ -25,6 +27,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           </div>
         </div>
       </SidebarInset>
-    </SidebarProvider>
+      </SidebarProvider>
+    </ClerkProvider>
   )
 }

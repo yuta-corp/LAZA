@@ -8,9 +8,9 @@ import { redirect } from "next/navigation"
  * Redirige vers l'accueil sinon, et retourne l'identifiant Clerk du modérateur.
  */
 export async function requireAdmin(): Promise<string> {
-  const { sessionClaims, userId } = await auth()
+  const { isAuthenticated, sessionClaims, userId } = await auth()
   // Non connecté → page de connexion (qui ramène sur /admin après connexion).
-  if (!userId) {
+  if (!isAuthenticated) {
     redirect("/sign-in")
   }
   // Connecté mais sans le rôle admin → accueil.

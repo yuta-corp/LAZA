@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto"
 import { prisma } from "@/lib/prisma"
-import { nextReference, slugify } from "@/lib/report"
+import { createReportWithReference, slugify } from "@/lib/report"
 import { saveEvidenceFile, sha256, removeEvidenceBlobs } from "@/lib/storage"
 import {
   evidenceKindFromMime,
@@ -112,25 +112,26 @@ export async function POST(request: Request) {
   }
 
   const reportId = randomUUID()
-  const reference = await nextReference(prisma)
   const slug = `${slugify(title)}-${randomUUID().slice(0, 6)}`
 
-  const report = await prisma.report.create({
-    data: {
-      id: reportId,
-      slug,
-      reference,
-      title,
-      summary,
-      description,
-      category: categoryRaw as Category,
-      region: region || null,
-      legalAccepted,
-      legalAcceptedAt: new Date(),
-      identityCommitment,
-      commitmentSalt,
-    },
-  })
+  const report = await createReportWithReference(prisma, (reference) =>
+    prisma.report.create({
+      data: {
+        id: reportId,
+        slug,
+        reference,
+        title,
+        summary,
+        description,
+        category: categoryRaw as Category,
+        region: region || null,
+        legalAccepted,
+        legalAcceptedAt: new Date(),
+        identityCommitment,
+        commitmentSalt,
+      },
+    }),
+  )
 
   const evidenceData: Array<{
     reportId: string
@@ -182,7 +183,7 @@ export async function POST(request: Request) {
     await prisma.evidence.createMany({ data: evidenceData })
 
     return Response.json(
-      { ok: true, reference, status: report.status },
+      { ok: true, reference: report.reference, status: report.status },
       { status: 201 },
     )
   } catch (error) {

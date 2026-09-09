@@ -131,6 +131,43 @@ async function main() {
         { kind: EvidenceKind.AUDIO, fileName: "entretien-temoin.mp3", mimeType: "audio/mpeg", size: 8_412_060 },
       ],
     },
+    // --- En attente de modération (espace admin) ---
+    {
+      slug: "marche-attribue-de-gre-a-gre",
+      reference: "LAZ-2026-0007",
+      title: "Marché attribué de gré à gré sans mise en concurrence",
+      summary:
+        "Un marché de travaux aurait été attribué directement, sans appel d'offres, à une entreprise liée à un agent de la collectivité.",
+      description:
+        "Le marché, d'un montant estimé à 250 millions d'ariary, aurait été conclu de gré à gré malgré un seuil légal imposant la mise en concurrence. Une copie de la convention et les échanges avec le service des marchés ont été fournis.",
+      category: Category.MARCHES_PUBLICS,
+      region: "Diana",
+      status: ReportStatus.SUBMITTED,
+      createdAt: new Date(now.getTime() - 1 * day),
+      evidence: [
+        { kind: EvidenceKind.DOCUMENT, fileName: "convention-marche.pdf", mimeType: "application/pdf", size: 512_044 },
+        { kind: EvidenceKind.IMAGE, fileName: "echanges-service-marches.jpg", mimeType: "image/jpeg", size: 1_622_190 },
+      ],
+    },
+    {
+      slug: "paiements-suspects-agent-sans-poste",
+      reference: "LAZ-2026-0008",
+      title: "Paiements suspects en faveur d'un agent sans poste",
+      summary:
+        "Des indemnités mensuelles seraient versées à un agent qui n'exerce plus aucune fonction depuis plus d'un an.",
+      description:
+        "Les états de paie mentionnent des indemnités de transport et de représentation au bénéfice d'un agent radié des tableaux de service. Les relevés de paie des six derniers mois ont été fournis, ainsi que l'ordre de service de radiation.",
+      category: Category.AUTRE,
+      region: "Atsimo-Andrefana",
+      status: ReportStatus.UNDER_REVIEW,
+      reviewedBy: "moderateur-demo",
+      reviewedAt: new Date(now.getTime() - 2 * day),
+      createdAt: new Date(now.getTime() - 4 * day),
+      evidence: [
+        { kind: EvidenceKind.DOCUMENT, fileName: "etats-de-paie.pdf", mimeType: "application/pdf", size: 388_210 },
+        { kind: EvidenceKind.DOCUMENT, fileName: "ordre-service-radiation.pdf", mimeType: "application/pdf", size: 142_855 },
+      ],
+    },
   ]
 
   for (const report of reports) {

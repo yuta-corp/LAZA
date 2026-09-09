@@ -45,6 +45,12 @@ enum VerificationStatus {
   REJECTED
 }
 
+enum CommentStatus {
+  PENDING
+  PUBLISHED
+  REJECTED
+}
+
 model Report {
   id          String       @id @default(cuid())
   slug        String       @unique
@@ -74,11 +80,65 @@ model Report {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  evidence Evidence[]
+  evidence  Evidence[]
+  comments  Comment[]
+  likes     ReportLike[]
 
   @@index([status, createdAt])
   @@index([category])
   @@index([publishedAt])
+}
+
+/**
+ * Identité locale (auth de base SHA + salt) : l'empreinte ne quitte jamais le
+ * navigateur, seul le hash sha256(CIN | naissance | salt) est stocké.
+ * Chaque pseudo public est rattaché à une empreinte unique.
+ */
+model Identity {
+  id          String   @id @default(cuid())
+  fingerprint String   @unique // sha256(secretLocal | salt) — secret stocké en cookie, jamais au serveur
+  salt        String // salt ayant servi à dériver l'empreinte (conservé pour correspondance)
+  pseudo      String   @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  comments Comment[]
+}
+
+/**
+ * Commentaire public sur un signalement (fil de discussion, façon réseau social).
+ * Pré-modération : un commentaire n'est visible qu'après validation par l'équipe.
+ */
+model Comment {
+  id             String        @id @default(cuid())
+  report         Report        @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  reportId       String
+  identity       Identity?     @relation(fields: [identityId], references: [id])
+  identityId     String?
+  authorName     String? // pseudo snapshot au moment de la contribution
+  content        String
+  status         CommentStatus @default(PENDING)
+  moderationNote String?
+  reviewedBy     String?
+  reviewedAt     DateTime?
+  publishedAt    DateTime?
+  createdAt      DateTime      @default(now())
+
+  @@index([reportId, status])
+  @@index([status, createdAt])
+  @@index([identityId])
+}
+
+/** Soutien (like) anonyme : un seul par visiteur (empreinte stockée en cookie). */
+model ReportLike {
+  id          String   @id @default(cuid())
+  report      Report   @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  reportId    String
+  fingerprint String
+  createdAt   DateTime @default(now())
+
+  @@unique([reportId, fingerprint])
+  @@index([reportId])
 }
 
 model Evidence {

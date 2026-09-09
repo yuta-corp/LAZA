@@ -8,6 +8,7 @@ import { ReportCard } from "@/components/report-card"
 import { LegalWarning } from "@/components/legal-warning"
 import { prisma } from "@/lib/prisma"
 import { CATEGORY_LABELS } from "@/lib/report"
+import { FINGERPRINT_COOKIE } from "@/lib/constants"
 import type { Category } from "@/lib/generated/prisma/enums"
 
 // Le fil reflète immédiatement les signalements publiés par la modération.
@@ -19,16 +20,16 @@ export const metadata: Metadata = {
     "Suivez en temps réel les signalements de corruption vérifiés et publiés à Madagascar. Soutenez-les et participez au fil de commentaires.",
 }
 
-interface HomePageProps {
+interface FeedPageProps {
   searchParams: Promise<{ categorie?: string }>
 }
 
-export default async function HomePage({ searchParams }: HomePageProps) {
+export default async function FeedPage({ searchParams }: FeedPageProps) {
   const { categorie } = await searchParams
   const filter = categorie && categorie in CATEGORY_LABELS ? (categorie as Category) : undefined
 
   const cookieStore = await cookies()
-  const fingerprint = cookieStore.get("laza_fp")?.value
+  const fingerprint = cookieStore.get(FINGERPRINT_COOKIE)?.value
 
   const reports = await prisma.report.findMany({
     where: { status: "PUBLISHED", category: filter },
@@ -65,10 +66,9 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       {/* En-tête du fil — onglets */}
       <div className="sticky top-0 z-30 border-b border-border bg-background/80 backdrop-blur md:top-0">
         <div className="flex">
-          <Link href="/" className="flex-1 border-b-2 border-accent px-4 py-3 text-center">
-            <span className="font-semibold">Pour vous</span>
-          </Link>
-          <span className="flex-1 px-4 py-3 text-center text-muted-foreground">Suivis</span>
+          <span className="flex-1 border-b-2 border-accent px-4 py-3 text-center">
+            <span className="font-semibold">Tous les signalements</span>
+          </span>
         </div>
       </div>
 
@@ -98,7 +98,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
           <span className="text-sm text-muted-foreground">Filtré par :</span>
           <Badge variant="secondary">{CATEGORY_LABELS[filter]}</Badge>
           <Link
-            href="/"
+            href="/fil"
             className="ml-auto text-sm font-medium text-accent hover:opacity-80"
           >
             Réinitialiser

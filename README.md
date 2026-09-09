@@ -67,7 +67,7 @@ prisma/
 ## Sécurité & conformité
 
 - **Anonymat** : seul `sha256(CIN | date de naissance | salt)` est stocké — le numéro CIN
-  ne quitte jamais le navigateur. Le sel est généré par le serveur (`/api/salt`).
+  ne quitte jamais le navigateur. Le sel est généré par le serveur (`getIdentitySalt()`).
 - **Levée d'anonymat** : uniquement sur **réquisition judiciaire** (schéma cible :
   partage de clés Shamir avec la CMIL et la Justice — voir le document de référence).
 - **Intégrité des preuves** : l'empreinte SHA-256 de chaque fichier est calculée dans le

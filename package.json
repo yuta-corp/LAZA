@@ -12,7 +12,8 @@
     "typecheck": "tsc --noEmit",
     "db:seed": "tsx prisma/seed.ts",
     "db:promote": "tsx scripts/promote-admin.ts",
-    "db:migrate": "prisma migrate dev"
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

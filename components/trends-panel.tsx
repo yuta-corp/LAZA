@@ -49,7 +49,7 @@ export async function TrendsPanel() {
             {trends.map(({ category, label, count }) => (
               <li key={category}>
                 <Link
-                  href={`/?categorie=${category}`}
+                  href={`/fil?categorie=${category}`}
                   className="flex items-center justify-between gap-3 px-4 py-2.5 transition-colors hover:bg-muted"
                 >
                   <span className="min-w-0">
@@ -72,7 +72,7 @@ export async function TrendsPanel() {
 
         <div className="border-t px-4 py-2.5">
           <Link
-            href="/?categorie=AUTRE"
+            href="/fil?categorie=AUTRE"
             className="inline-flex items-center gap-1 text-sm font-medium text-accent transition-opacity hover:opacity-80"
           >
             Explorer toutes les tendances

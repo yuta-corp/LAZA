@@ -43,7 +43,7 @@ To run a single test (if using a test framework, adjust accordingly):
 - **styles/**: Tailwind CSS configuration (via tailwind.config.ts and postcss.config.mjs)
 
 ### Key Features
-- Anonymous reporting: Browser-side encryption (Web Crypto) stores only SHA-256(CIN + birthdate + salt); salt from `/api/salt`
+- Anonymous reporting: Browser-side encryption (Web Crypto) stores only SHA-256(CIN + birthdate + salt); salt from server action `getIdentitySalt()`
 - Evidence integrity: Client-side SHA-256 of files verified server-side
 - Pre-moderation: Reports queued for trusted team review before publishing
 - Legal compliance: Malagasy law (Art. 373.1) warning displayed and accepted in form

@@ -49,6 +49,29 @@
     --shadow-elevated: 0 10px 15px -3px rgb(12 149 171 / 0.2), 0 4px 6px -4px rgb(12 149 171 / 0.2);
 }
 
+@theme {
+    /* LAZA editorial token set (design Stitch « civic editorial ») */
+    --font-newsreader: var(--font-newsreader);
+    --color-ink: #1a2027;
+    --color-navy-ink: #12181f;
+    --color-slate-ink: #1e293b;
+    --color-muted-ink: #64748b;
+    --color-ink-muted: #3d494c;
+    --color-hairline: #e2e8f0;
+    --color-hairline-strong: #cbd5e1;
+    --color-paper: #f8fafc;
+    --color-canvas-tint: #f8f9ff;
+    --color-surface-container: #e9eef8;
+    --color-surface-container-low: #eef4fe;
+    --color-surface-variant: #dde3ed;
+    --color-teal-deep: #006575;
+    --color-teal-mid: #008094;
+    --color-teal-light: #a7eeff;
+    --color-canvas-dark: #090c0e;
+    --color-secure: #059669;
+    --color-vermilion: #dc2626;
+}
+
 :root {
     /* AAPLY design system — charcoal primary, teal accent, neutres */
     --background: #ffffff;

@@ -1,5 +1,7 @@
 import type { PrismaClient } from "@/lib/generated/prisma/client"
 import type { Category, ReportStatus } from "@/lib/generated/prisma/enums"
+import { EvidenceKind } from "@/lib/generated/prisma/enums"
+import { FileText, Film, Image as ImageIcon, Link2, Mic, type LucideIcon } from "lucide-react"
 
 /** Génère un slug unique à partir d'un titre. */
 export function slugify(input: string): string {
@@ -36,6 +38,32 @@ export async function nextReference(prisma: PrismaClient): Promise<string> {
     }
   }
   return buildReference(max + 1)
+}
+
+/** Nombre de tentatives avant d'abandonner en cas de collision de référence. */
+export const MAX_REFERENCE_RETRIES = 3
+
+/**
+ * Crée le signalement avec une référence unique, en retentant en cas de
+ * collision (deux créations simultanées peuvent choisir la même référence,
+ * contrainte @unique sur `reference`).
+ */
+export async function createReportWithReference<T extends { reference: string }>(
+  prisma: PrismaClient,
+  create: (reference: string) => Promise<T>,
+): Promise<T> {
+  for (let attempt = 1; attempt <= MAX_REFERENCE_RETRIES; attempt++) {
+    try {
+      return await create(await nextReference(prisma))
+    } catch (error) {
+      const isUniqueViolation =
+        error && typeof error === "object" && "code" in error && (error as { code: string }).code === "P2002"
+      if (!isUniqueViolation || attempt === MAX_REFERENCE_RETRIES) {
+        throw error
+      }
+    }
+  }
+  throw new Error("Impossible de générer une référence unique.")
 }
 
 export const CATEGORY_LABELS: Record<Category, string> = {
@@ -95,4 +123,33 @@ export function formatDateFr(date: Date): string {
     month: "long",
     year: "numeric",
   }).format(date)
+}
+
+/** Temps relatif (« il y a 3 h »), puis date courte au-delà de 7 jours. */
+export function relativeTimeFr(date: Date): string {
+  const diff = Date.now() - date.getTime()
+  const minutes = Math.floor(diff / 60_000)
+  if (minutes < 1) return "à l'instant"
+  if (minutes < 60) return `il y a ${minutes} min`
+  const hours = Math.floor(minutes / 60)
+  if (hours < 24) return `il y a ${hours} h`
+  const days = Math.floor(hours / 24)
+  if (days < 7) return `il y a ${days} j`
+  return formatDateFr(date)
+}
+
+export const EVIDENCE_LABELS: Record<EvidenceKind, string> = {
+  [EvidenceKind.DOCUMENT]: "Document",
+  [EvidenceKind.IMAGE]: "Image",
+  [EvidenceKind.VIDEO]: "Vidéo",
+  [EvidenceKind.AUDIO]: "Audio",
+  [EvidenceKind.LINK]: "Lien",
+}
+
+export const EVIDENCE_ICONS: Record<EvidenceKind, LucideIcon> = {
+  [EvidenceKind.DOCUMENT]: FileText,
+  [EvidenceKind.IMAGE]: ImageIcon,
+  [EvidenceKind.VIDEO]: Film,
+  [EvidenceKind.AUDIO]: Mic,
+  [EvidenceKind.LINK]: Link2,
 }

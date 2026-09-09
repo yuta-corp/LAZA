@@ -29,6 +29,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Progress } from "@/components/ui/progress"
 import { LegalWarning } from "@/components/legal-warning"
 import { computeIdentityCommitment, maskHash, sha256File } from "@/lib/crypto/identity"
+import { getIdentitySalt } from "@/app/actions"
 import {
   CATEGORIES,
   evidenceKindFromMime,
@@ -234,8 +235,7 @@ export function ReportForm() {
     setError(null)
     setComputing(true)
     try {
-      const res = await fetch("/api/salt")
-      const { salt } = await res.json()
+      const { salt } = await getIdentitySalt()
       const hash = await computeIdentityCommitment(normalizeCin(cin), birthDate, salt)
       setCommitment({ hash, salt })
       toast.success("Empreinte d'identité générée sur cet appareil.")
@@ -302,8 +302,8 @@ export function ReportForm() {
           <li>3. Vous pouvez ensuite le partager sur les réseaux sociaux.</li>
         </ol>
         <div className="mt-6 flex justify-center gap-2">
-          <Button variant="outline" nativeButton={false} render={<Link href="/" />}>
-            Retour à l&apos;accueil
+          <Button variant="outline" nativeButton={false} render={<Link href="/fil" />}>
+            Retour au fil
           </Button>
           <Button onClick={() => window.location.reload()}>Signaler un autre fait</Button>
         </div>

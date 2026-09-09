@@ -2,18 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { cookies } from "next/headers"
-import {
-  ArrowLeft,
-  BadgeCheck,
-  FileText,
-  Film,
-  Image as ImageIcon,
-  Link2,
-  MapPin,
-  MessageSquare,
-  Mic,
-  ShieldCheck,
-} from "lucide-react"
+import { ArrowLeft, MapPin, MessageSquare, ShieldCheck } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
@@ -22,7 +11,8 @@ import { LikeButton } from "@/components/like-button"
 import { FeedShareButton } from "@/components/feed-share-button"
 import { CommentSection } from "@/components/comment-section"
 import { LegalWarning } from "@/components/legal-warning"
-import { CATEGORY_LABELS, CATEGORY_VARIANTS, formatDateFr } from "@/lib/report"
+import { CATEGORY_LABELS, CATEGORY_VARIANTS, EVIDENCE_ICONS, EVIDENCE_LABELS, relativeTimeFr } from "@/lib/report"
+import { FINGERPRINT_COOKIE } from "@/lib/constants"
 import { prisma } from "@/lib/prisma"
 import { EvidenceKind } from "@/lib/generated/prisma/enums"
 
@@ -62,34 +52,6 @@ export async function generateMetadata({ params }: MetadataProps): Promise<Metad
   }
 }
 
-const EVIDENCE_ICONS: Record<EvidenceKind, typeof FileText> = {
-  [EvidenceKind.DOCUMENT]: FileText,
-  [EvidenceKind.IMAGE]: ImageIcon,
-  [EvidenceKind.VIDEO]: Film,
-  [EvidenceKind.AUDIO]: Mic,
-  [EvidenceKind.LINK]: Link2,
-}
-
-const EVIDENCE_LABELS: Record<EvidenceKind, string> = {
-  [EvidenceKind.DOCUMENT]: "Document",
-  [EvidenceKind.IMAGE]: "Image",
-  [EvidenceKind.VIDEO]: "Vidéo",
-  [EvidenceKind.AUDIO]: "Audio",
-  [EvidenceKind.LINK]: "Lien",
-}
-
-function relativeTime(date: Date): string {
-  const diff = Date.now() - date.getTime()
-  const minutes = Math.floor(diff / 60_000)
-  if (minutes < 1) return "à l'instant"
-  if (minutes < 60) return `il y a ${minutes} min`
-  const hours = Math.floor(minutes / 60)
-  if (hours < 24) return `il y a ${hours} h`
-  const days = Math.floor(hours / 24)
-  if (days < 7) return `il y a ${days} j`
-  return formatDateFr(date)
-}
-
 export default async function SignalementPage({ params }: PageProps) {
   const { slug } = await params
   const report = await prisma.report.findUnique({
@@ -108,15 +70,18 @@ export default async function SignalementPage({ params }: PageProps) {
   }
 
   const cookieStore = await cookies()
-  const fingerprint = cookieStore.get("laza_fp")?.value
+  const fingerprint = cookieStore.get(FINGERPRINT_COOKIE)?.value
 
-  const [likeCount, initialLiked] = await Promise.all([
+  const [likeCount, initialLiked, identity] = await Promise.all([
     prisma.reportLike.count({ where: { reportId: report.id } }),
     fingerprint
       ? prisma.reportLike.findUnique({
           where: { reportId_fingerprint: { reportId: report.id, fingerprint } },
           select: { id: true },
         })
+      : null,
+    fingerprint
+      ? prisma.identity.findUnique({ where: { fingerprint }, select: { pseudo: true } })
       : null,
   ])
 
@@ -127,7 +92,7 @@ export default async function SignalementPage({ params }: PageProps) {
           variant="ghost"
           size="icon"
           nativeButton={false}
-          render={<Link href="/" aria-label="Retour au fil" />}
+          render={<Link href="/fil" aria-label="Retour au fil" />}
         >
           <ArrowLeft className="size-5" />
         </Button>
@@ -145,10 +110,9 @@ export default async function SignalementPage({ params }: PageProps) {
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-sm">
               <span className="font-semibold">Dénonciateur anonyme</span>
-              <BadgeCheck className="size-4 shrink-0 text-accent" aria-label="Identité engagée" />
               <span className="text-muted-foreground">·</span>
               <span className="text-muted-foreground">
-                {relativeTime(report.publishedAt ?? report.createdAt)}
+                {relativeTimeFr(report.publishedAt ?? report.createdAt)}
               </span>
             </div>
             <div className="mt-1 flex flex-wrap items-center gap-1.5">
@@ -201,7 +165,6 @@ export default async function SignalementPage({ params }: PageProps) {
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 text-xs font-medium text-accent hover:opacity-80"
                       >
-                        <Link2 className="size-3" />
                         {evidence.kind === EvidenceKind.LINK ? "Ouvrir la source" : "Consulter la preuve"}
                       </a>
                     )}
@@ -232,7 +195,11 @@ export default async function SignalementPage({ params }: PageProps) {
 
       <Separator />
 
-      <CommentSection slug={report.slug} comments={report.comments} />
+      <CommentSection
+        slug={report.slug}
+        comments={report.comments}
+        initialIdentity={identity ? { pseudo: identity.pseudo } : null}
+      />
 
       <div className="border-t border-border px-4 py-6">
         <LegalWarning compact />

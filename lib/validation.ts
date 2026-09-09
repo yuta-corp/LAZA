@@ -70,3 +70,13 @@ export function isValidHttpUrl(value: string): boolean {
     return false
   }
 }
+
+export const PSEUDO_RULES = { min: 2, max: 24 } as const
+
+/** Pseudo public : 2 à 24 caractères (lettres, chiffres, « . _ - », espace interne). */
+export function isValidPseudo(input: string): boolean {
+  if (input.length < PSEUDO_RULES.min || input.length > PSEUDO_RULES.max) {
+    return false
+  }
+  return /^[A-Za-z0-9À-ÿ][A-Za-z0-9À-ÿ._ -]*[A-Za-z0-9À-ÿ]$/.test(input)
+}

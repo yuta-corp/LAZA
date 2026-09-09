@@ -1,48 +1,17 @@
 import Link from "next/link"
-import {
-  BadgeCheck,
-  FileText,
-  Film,
-  Image as ImageIcon,
-  Link2,
-  MapPin,
-  MessageSquare,
-  Mic,
-  Paperclip,
-  ShieldCheck,
-} from "lucide-react"
+import { BadgeCheck, MapPin, MessageSquare, Paperclip, ShieldCheck } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { LikeButton } from "@/components/like-button"
 import { FeedShareButton } from "@/components/feed-share-button"
-import { CATEGORY_LABELS, CATEGORY_VARIANTS, formatDateFr } from "@/lib/report"
+import { CATEGORY_LABELS, CATEGORY_VARIANTS, EVIDENCE_ICONS, relativeTimeFr } from "@/lib/report"
 import { EvidenceKind } from "@/lib/generated/prisma/enums"
 import type { Evidence, Report } from "@/lib/generated/prisma/client"
-
-const EVIDENCE_ICONS: Record<EvidenceKind, typeof FileText> = {
-  [EvidenceKind.DOCUMENT]: FileText,
-  [EvidenceKind.IMAGE]: ImageIcon,
-  [EvidenceKind.VIDEO]: Film,
-  [EvidenceKind.AUDIO]: Mic,
-  [EvidenceKind.LINK]: Link2,
-}
 
 interface ReportCardProps {
   report: Report & { evidence: Evidence[] }
   likeCount?: number
   commentCount?: number
   initialLiked?: boolean
-}
-
-function relativeTime(date: Date): string {
-  const diff = Date.now() - date.getTime()
-  const minutes = Math.floor(diff / 60_000)
-  if (minutes < 1) return "à l'instant"
-  if (minutes < 60) return `il y a ${minutes} min`
-  const hours = Math.floor(minutes / 60)
-  if (hours < 24) return `il y a ${hours} h`
-  const days = Math.floor(hours / 24)
-  if (days < 7) return `il y a ${days} j`
-  return formatDateFr(date)
 }
 
 export function ReportCard({ report, likeCount = 0, commentCount = 0, initialLiked = false }: ReportCardProps) {
@@ -67,7 +36,7 @@ export function ReportCard({ report, likeCount = 0, commentCount = 0, initialLik
             </span>
             <BadgeCheck className="size-4 shrink-0 text-accent" aria-label="Identité engagée" />
             <span className="text-muted-foreground">·</span>
-            <span className="text-muted-foreground">{relativeTime(report.publishedAt ?? report.createdAt)}</span>
+            <span className="text-muted-foreground">{relativeTimeFr(report.publishedAt ?? report.createdAt)}</span>
             <span className="text-muted-foreground">·</span>
             <span className="font-mono text-xs text-muted-foreground">{report.reference}</span>
           </div>

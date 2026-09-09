@@ -1,12 +1,15 @@
 "use client"
 
-import { useState } from "react"
-import { Loader2, MessageSquare, Send } from "lucide-react"
+import { useCallback, useState } from "react"
+import { Loader2, MessageSquare, Send, UserPen } from "lucide-react"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { formatDateFr } from "@/lib/report"
+import { PSEUDO_RULES } from "@/lib/validation"
+import { registerPseudo, submitComment } from "@/app/actions"
+import { ensureShaFingerprint } from "@/lib/fingerprint"
 
 interface PublishedComment {
   id: string
@@ -18,38 +21,58 @@ interface PublishedComment {
 interface CommentSectionProps {
   slug: string
   comments: PublishedComment[]
+  initialIdentity: { pseudo: string } | null
 }
 
-export function CommentSection({ slug, comments }: CommentSectionProps) {
-  const [authorName, setAuthorName] = useState("")
+export function CommentSection({ slug, comments, initialIdentity }: CommentSectionProps) {
+  const [identity, setIdentity] = useState<{ pseudo: string } | null>(initialIdentity)
+  const [pseudo, setPseudo] = useState(initialIdentity?.pseudo ?? "")
   const [content, setContent] = useState("")
   const [sending, setSending] = useState(false)
 
-  async function submit(e: React.FormEvent) {
-    e.preventDefault()
-    if (content.trim().length === 0 || sending) return
+  const submit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault()
+      const trimmed = content.trim()
+      if (!trimmed || sending) return
 
-    setSending(true)
-    try {
-      const res = await fetch(`/api/reports/${slug}/comments`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content, authorName }),
-      })
-      const data = (await res.json()) as { error?: string; message?: string }
-      if (!res.ok) {
-        toast.error(data.error ?? "Impossible d'envoyer le commentaire.")
-        return
+      setSending(true)
+      try {
+        // L'empreinte (cookie) est créée avant toute action serveur : c'est
+        // elle, puis le pseudo, qui identifient l'auteur côté serveur.
+        await ensureShaFingerprint()
+
+        if (!identity) {
+          const chosen = pseudo.trim()
+          if (chosen.length < PSEUDO_RULES.min) {
+            toast.error("Choisissez un pseudo pour participer.")
+            setSending(false)
+            return
+          }
+          const registered = await registerPseudo(chosen)
+          if (!registered.ok) {
+            toast.error(registered.error)
+            setSending(false)
+            return
+          }
+          setIdentity(registered.identity)
+        }
+
+        const result = await submitComment(slug, trimmed)
+        if (!result.ok) {
+          toast.error(result.error)
+          return
+        }
+        toast.success(result.message)
+        setContent("")
+      } catch {
+        toast.error("Erreur réseau — réessayez.")
+      } finally {
+        setSending(false)
       }
-      toast.success(data.message ?? "Commentaire soumis.")
-      setContent("")
-      setAuthorName("")
-    } catch {
-      toast.error("Erreur réseau — réessayez.")
-    } finally {
-      setSending(false)
-    }
-  }
+    },
+    [content, sending, identity, pseudo, slug],
+  )
 
   return (
     <div id="commentaires" className="scroll-mt-16">
@@ -93,19 +116,35 @@ export function CommentSection({ slug, comments }: CommentSectionProps) {
           />
           <p className="mt-1 text-right text-xs text-muted-foreground">{content.length}/500</p>
         </div>
-        <div className="flex items-center gap-2">
-          <Input
-            value={authorName}
-            onChange={(e) => setAuthorName(e.target.value)}
-            maxLength={60}
-            placeholder="Pseudo (optionnel — affiché « Anonyme »)"
-            className="max-w-56 bg-background"
-          />
-          <Button type="submit" disabled={sending || content.trim().length === 0}>
-            {sending ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
-            Envoyer
-          </Button>
-        </div>
+
+        {!identity && (
+          <div className="flex items-center gap-2">
+            <UserPen className="size-4 shrink-0 text-muted-foreground" />
+            <Input
+              value={pseudo}
+              onChange={(e) => setPseudo(e.target.value)}
+              maxLength={PSEUDO_RULES.max}
+              required
+              placeholder="Choisissez votre pseudo (affiché sur le fil)"
+              className="max-w-72 bg-background"
+            />
+          </div>
+        )}
+        {identity && (
+          <p className="text-xs text-muted-foreground">
+            Vous commentez en tant que{" "}
+            <span className="font-semibold text-foreground">@{identity.pseudo}</span> — votre
+            identité est liée à votre empreinte locale.
+          </p>
+        )}
+
+        <Button
+          type="submit"
+          disabled={sending || content.trim().length === 0 || (!identity && pseudo.trim().length < PSEUDO_RULES.min)}
+        >
+          {sending ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
+          Envoyer
+        </Button>
       </form>
     </div>
   )

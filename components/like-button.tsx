@@ -2,17 +2,10 @@
 
 import { useCallback, useEffect, useState, useTransition } from "react"
 import { Heart } from "lucide-react"
+import { toast } from "sonner"
 import { cn } from "@/lib/utils"
-
-const COOKIE_NAME = "laza_fp"
-
-function getFingerprint(): string {
-  const match = document.cookie.match(/(?:^|; )laza_fp=([^;]+)/)
-  if (match) return match[1]
-  const fp = crypto.randomUUID()
-  document.cookie = `${COOKIE_NAME}=${fp}; path=/; max-age=31536000; SameSite=Lax`
-  return fp
-}
+import { toggleLike } from "@/app/actions"
+import { ensureShaFingerprint } from "@/lib/fingerprint"
 
 interface LikeButtonProps {
   slug: string
@@ -36,20 +29,20 @@ export function LikeButton({ slug, initialCount, initialLiked }: LikeButtonProps
   const toggle = useCallback(() => {
     if (pending) return
     startTransition(async () => {
-      const fingerprint = getFingerprint()
       try {
-        const res = await fetch(`/api/reports/${slug}/like`, {
-          method: liked ? "DELETE" : "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ fingerprint }),
-        })
-        if (!res.ok) return
-        const data = (await res.json()) as { liked: boolean; count: number }
-        setLiked(data.liked)
-        setCount(data.count)
-        if (data.liked) setBump(true)
+        // L'empreinte (cookie) est la seule source d'identité côté serveur.
+        await ensureShaFingerprint()
+        const target = !liked
+        const result = await toggleLike(slug, target)
+        if (!result.ok) {
+          toast.error(result.error)
+          return
+        }
+        setLiked(result.liked)
+        setCount(result.count)
+        if (result.liked) setBump(true)
       } catch {
-        // erreur réseau — on garde l'état actuel
+        toast.error("Erreur réseau — réessayez.")
       }
     })
   }, [liked, pending, slug])

@@ -1,12 +1,18 @@
 import Link from "next/link"
 import Image from "next/image"
+import { Megaphone } from "lucide-react"
+import { auth } from "@clerk/nextjs/server"
+import { SignInButton, UserButton } from "@clerk/nextjs"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
 
-export function Header() {
+export async function Header() {
+  const { sessionClaims, userId } = await auth()
+  const isAdmin = sessionClaims?.metadata?.role === "admin"
+
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur">
-      <div className="mx-auto flex h-14 w-full max-w-3xl items-center justify-between px-4">
+      <div className="mx-auto flex h-14 max-w-2xl items-center justify-between gap-2 px-4">
         <Link href="/" className="flex items-center gap-2">
           <Image
             src="/log.png"
@@ -19,18 +25,30 @@ export function Header() {
           <span className="text-lg font-semibold tracking-tight">Laza</span>
         </Link>
 
-        <nav className="flex items-center gap-1 text-sm">
-          <Link href="/" className="rounded-md px-2 py-1.5 text-muted-foreground hover:bg-muted hover:text-foreground">
-            Accueil
-          </Link>
-          <Link href="/#comment-ca-marche" className="hidden rounded-md px-2 py-1.5 text-muted-foreground hover:bg-muted hover:text-foreground sm:block">
-            Comment ça marche
-          </Link>
+        <div className="flex items-center gap-1.5">
+          {isAdmin && (
+            <Link
+              href="/admin"
+              className="inline-flex items-center rounded-md px-2 py-1.5 text-sm font-medium text-primary hover:bg-muted"
+            >
+              Modération
+            </Link>
+          )}
+          {userId ? (
+            <UserButton />
+          ) : (
+            <SignInButton mode="modal">
+              <span className="cursor-pointer rounded-md px-2 py-1.5 text-sm text-muted-foreground hover:bg-muted hover:text-foreground">
+                Connexion
+              </span>
+            </SignInButton>
+          )}
           <ThemeToggle />
-          <Button size="sm" className="ml-1" nativeButton={false} render={<Link href="/signaler" />}>
-            Signaler
+          <Button size="sm" className="rounded-full" nativeButton={false} render={<Link href="/signaler" />}>
+            <Megaphone className="size-3.5" />
+            <span className="hidden sm:inline">Signaler</span>
           </Button>
-        </nav>
+        </div>
       </div>
     </header>
   )

@@ -60,17 +60,32 @@ export const STATUS_LABELS: Record<ReportStatus, string> = {
 }
 
 export const CATEGORY_VARIANTS: Record<Category, string> = {
-  MARCHES_PUBLICS: "bg-blue-500/10 text-blue-600 dark:text-blue-400",
-  FONCIER: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
-  DOUANES_IMPOTS: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
-  SANTE: "bg-rose-500/10 text-rose-600 dark:text-rose-400",
-  EDUCATION: "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400",
-  JUSTICE: "bg-violet-500/10 text-violet-600 dark:text-violet-400",
-  SECURITE: "bg-orange-500/10 text-orange-600 dark:text-orange-400",
-  MINES: "bg-lime-500/10 text-lime-600 dark:text-lime-400",
-  TELECOMS: "bg-cyan-500/10 text-cyan-600 dark:text-cyan-400",
-  ENERGIE: "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400",
-  AUTRE: "bg-muted text-muted-foreground",
+  MARCHES_PUBLICS: "bg-secondary text-secondary-foreground",
+  FONCIER: "bg-secondary text-secondary-foreground",
+  DOUANES_IMPOTS: "bg-secondary text-secondary-foreground",
+  SANTE: "bg-secondary text-secondary-foreground",
+  EDUCATION: "bg-secondary text-secondary-foreground",
+  JUSTICE: "bg-secondary text-secondary-foreground",
+  SECURITE: "bg-secondary text-secondary-foreground",
+  MINES: "bg-secondary text-secondary-foreground",
+  TELECOMS: "bg-secondary text-secondary-foreground",
+  ENERGIE: "bg-secondary text-secondary-foreground",
+  AUTRE: "bg-secondary text-secondary-foreground",
+}
+
+/** Pastille neutre associée à chaque catégorie (tendances, avatars). */
+export const CATEGORY_DOTS: Record<Category, string> = {
+  MARCHES_PUBLICS: "bg-accent",
+  FONCIER: "bg-[#0c95ab]",
+  DOUANES_IMPOTS: "bg-[#0c95ab]/70",
+  SANTE: "bg-[#0c95ab]/50",
+  EDUCATION: "bg-[#4b5563]",
+  JUSTICE: "bg-[#4b5563]/70",
+  SECURITE: "bg-[#4b5563]/50",
+  MINES: "bg-[#9ca3af]",
+  TELECOMS: "bg-[#9ca3af]/70",
+  ENERGIE: "bg-[#9ca3af]/50",
+  AUTRE: "bg-muted-foreground",
 }
 
 /** Formatte une date en français. */

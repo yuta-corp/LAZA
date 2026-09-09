@@ -45,6 +45,12 @@ enum VerificationStatus {
   REJECTED
 }
 
+enum CommentStatus {
+  PENDING
+  PUBLISHED
+  REJECTED
+}
+
 model Report {
   id          String       @id @default(cuid())
   slug        String       @unique
@@ -74,11 +80,46 @@ model Report {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  evidence Evidence[]
+  evidence  Evidence[]
+  comments  Comment[]
+  likes     ReportLike[]
 
   @@index([status, createdAt])
   @@index([category])
   @@index([publishedAt])
+}
+
+/**
+ * Commentaire public sur un signalement (fil de discussion, façon réseau social).
+ * Pré-modération : un commentaire n'est visible qu'après validation par l'équipe.
+ */
+model Comment {
+  id             String        @id @default(cuid())
+  report         Report        @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  reportId       String
+  authorName     String? // pseudo optionnel — affiché « Anonyme » par défaut
+  content        String
+  status         CommentStatus @default(PENDING)
+  moderationNote String?
+  reviewedBy     String?
+  reviewedAt     DateTime?
+  publishedAt    DateTime?
+  createdAt      DateTime      @default(now())
+
+  @@index([reportId, status])
+  @@index([status, createdAt])
+}
+
+/** Soutien (like) anonyme : un seul par visiteur (empreinte stockée en cookie). */
+model ReportLike {
+  id          String   @id @default(cuid())
+  report      Report   @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  reportId    String
+  fingerprint String
+  createdAt   DateTime @default(now())
+
+  @@unique([reportId, fingerprint])
+  @@index([reportId])
 }
 
 model Evidence {

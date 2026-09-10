@@ -12,7 +12,7 @@ interface LogoProps {
  * Logotype officiel LAZA (emblem vectoriel, fichier public/logo.svg).
  * Utilisé tel quel sur les surfaces claires du site public.
  */
-export function Logo({ href = "/", size = 36, className }: LogoProps) {
+export function Logo({ href = "/", size = 44, className }: LogoProps) {
   return (
     <Link href={href} className={cn("flex items-center", className)}>
       <Image

@@ -1,6 +1,5 @@
 import Link from "next/link"
 import { Compass, Home, Megaphone } from "lucide-react"
-import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
 import { Logo } from "@/components/logo"
 
@@ -13,7 +12,7 @@ export function NavLeft() {
   return (
     <aside className="sticky top-0 hidden h-svh w-72 flex-col px-3 py-4 md:flex">
       <div className="flex flex-col gap-1">
-        <Logo href="/" size={32} className="w-fit rounded-lg p-2.5 transition-colors hover:bg-muted" />
+        <Logo href="/" size={40} className="w-fit rounded-lg p-2.5 transition-colors hover:bg-muted" />
 
         <nav className="mt-2 flex flex-col gap-0.5">
           {NAV_ITEMS.map(({ label, href, icon: Icon }) => (
@@ -37,10 +36,6 @@ export function NavLeft() {
             <span className="hidden lg:inline">Signaler</span>
           </Button>
         </nav>
-      </div>
-
-      <div className="mt-auto flex items-center gap-2 rounded-lg px-3 py-2.5">
-        <ThemeToggle />
       </div>
     </aside>
   )

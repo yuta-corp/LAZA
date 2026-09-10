@@ -1,8 +1,8 @@
 import Link from "next/link"
 import { Megaphone } from "lucide-react"
-import { ThemeToggle } from "@/components/theme-toggle"
 import { Logo } from "@/components/logo"
 import { Footer } from "@/components/footer"
+import { MobileMenu } from "@/components/mobile-menu"
 import { Button } from "@/components/ui/button"
 
 const NAV_LINKS = [
@@ -19,7 +19,7 @@ export default function LandingLayout({ children }: { children: React.ReactNode 
       <header className="sticky top-0 z-50 w-full border-b border-hairline bg-white/95 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-[72rem] items-center justify-between gap-4 px-6">
           <div className="flex items-center gap-3">
-            <Logo href="/" size={32} />
+            <Logo href="/" size={44} />
             <span className="hidden border-l border-hairline pl-3 font-mono text-[11px] uppercase tracking-[0.06em] text-muted-ink sm:inline">
               Civic-Tech
             </span>
@@ -38,7 +38,7 @@ export default function LandingLayout({ children }: { children: React.ReactNode 
           </nav>
 
           <div className="flex items-center gap-2">
-            <ThemeToggle />
+            <MobileMenu links={NAV_LINKS} />
             <Link
               href="/fil"
               className="hidden rounded-md border border-hairline px-4 py-2 text-[14px] font-medium text-ink transition-colors hover:bg-paper sm:inline-flex"

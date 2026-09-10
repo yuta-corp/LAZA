@@ -43,12 +43,24 @@ function Button({
   className,
   variant = "default",
   size = "default",
+  type,
+  render,
   ...props
 }: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
+  // Base UI force `type="button"` sur le <button> natif (useButton.js), ce qui
+  // empêche la soumission des formulaires server actions. Si un `type` explicite
+  // est fourni, on le réapplique via le `render` element (fusionné en dernier).
+  const renderOverride =
+    type !== undefined
+      ? { render: <button type={type} /> }
+      : render
+        ? { render }
+        : {}
   return (
     <ButtonPrimitive
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
+      {...renderOverride}
       {...props}
     />
   )

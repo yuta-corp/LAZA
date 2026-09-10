@@ -3,6 +3,7 @@ import { Inter, Geist_Mono, Newsreader } from "next/font/google"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
+import { CookieConsent } from "@/components/cookie-consent"
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
@@ -55,6 +56,7 @@ export default function RootLayout({
         <ThemeProvider>
           <TooltipProvider>
             {children}
+            <CookieConsent />
             <Toaster position="bottom-center" richColors />
           </TooltipProvider>
         </ThemeProvider>

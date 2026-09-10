@@ -18,6 +18,9 @@ const TRANSPARENCE = [
 const DROITS = [
   { label: "Protection des sources", href: "/#protection" },
   { label: "Cadre juridique malgache", href: "/#cadre-juridique" },
+  { label: "Mentions légales", href: "/legal" },
+  { label: "Conditions d'utilisation", href: "/terms" },
+  { label: "Politique de cookies", href: "/cookies" },
   { label: "Signaler un fait", href: "/signaler" },
 ]
 

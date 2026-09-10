@@ -33,6 +33,7 @@ import {
   UserCheck,
 } from "lucide-react"
 import { prisma } from "@/lib/prisma"
+import { LandingReveal } from "@/app/(landing)/landing-reveal"
 import { CATEGORY_LABELS, EVIDENCE_LABELS, relativeTimeFr } from "@/lib/report"
 import type { Evidence, Report } from "@/lib/generated/prisma/client"
 
@@ -95,13 +96,14 @@ export default async function LandingPage() {
 
   return (
     <div className="bg-canvas-tint">
+      <LandingReveal>
       {/* ============================= HERO ============================= */}
       <section className="relative overflow-hidden border-b border-hairline bg-white py-20 lg:py-24">
         <div className="mx-auto max-w-[72rem] px-6">
           <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-12">
             {/* Colonne éditoriale gauche */}
             <div className="flex flex-col gap-6 lg:col-span-7">
-              <span className="inline-flex w-fit items-center gap-2 rounded-lg bg-teal-deep/10 px-2.5 py-1">
+              <span data-hero className="inline-flex w-fit items-center gap-2 rounded-lg bg-teal-deep/10 px-2.5 py-1">
                 <span className="relative flex size-2">
                   <span className="absolute inline-flex size-full animate-ping rounded-full bg-teal-deep opacity-75" />
                   <span className="relative inline-flex size-2 rounded-full bg-teal-deep" />
@@ -111,18 +113,18 @@ export default async function LandingPage() {
                 </span>
               </span>
 
-              <h1 className="font-newsreader text-[40px] font-medium leading-[1.1em] tracking-[-0.015em] text-ink lg:text-[56px] lg:leading-[1.05em] lg:tracking-[-0.02em]">
+              <h1 data-hero className="font-newsreader text-[40px] font-medium leading-[1.1em] tracking-[-0.015em] text-ink lg:text-[56px] lg:leading-[1.05em] lg:tracking-[-0.02em]">
                 Dénoncez la corruption.{" "}
-                <em className="font-normal italic text-secondary">En protégeant</em> votre anonymat.
+                <em className="font-normal italic text-teal-deep">En protégeant</em> votre anonymat.
               </h1>
 
-              <p className="max-w-2xl text-[17px] leading-[1.6em] text-ink-muted lg:text-[18px]">
+              <p data-hero className="max-w-2xl text-[17px] leading-[1.6em] text-ink-muted lg:text-[18px]">
                 LAZA permet de signaler anonymement des faits de corruption documentés, avec des
                 preuves sous sceau cryptographique et une modération éditoriale systématique avant
                 publication.
               </p>
 
-              <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:items-center">
+              <div data-hero className="flex flex-col gap-3 pt-1 sm:flex-row sm:items-center">
                 <Link
                   href="/signaler"
                   className="group inline-flex items-center justify-center gap-2 rounded-md bg-slate-ink px-5 py-2.5 text-[14px] font-medium text-white shadow-sm transition-colors duration-150 hover:bg-teal-mid"
@@ -139,7 +141,7 @@ export default async function LandingPage() {
                 </Link>
               </div>
 
-              <p className="flex items-center gap-2 pt-1 text-[12px] text-muted-ink">
+              <p data-hero className="flex items-center gap-2 pt-1 text-[12px] text-muted-ink">
                 <ShieldCheck className="size-5 shrink-0 text-secure" />
                 Votre CIN ne quitte jamais votre appareil : seule son empreinte SHA-256 est
                 transmise au serveur.
@@ -147,7 +149,7 @@ export default async function LandingPage() {
             </div>
 
             {/* Carte de dossier (artefact) */}
-            <div className="relative lg:col-span-5">
+            <div data-hero className="relative lg:col-span-5">
               <div className="pointer-events-none absolute -right-12 -top-12 size-64 rounded-full bg-teal-deep/10 blur-2xl" />
               <div className="relative rounded-xl bg-paper p-6 shadow-md transition-shadow duration-200 hover:shadow-xl">
                 {heroReport ? (
@@ -249,7 +251,7 @@ export default async function LandingPage() {
       {/* ============================= MÉTRIQUES ============================= */}
       <section id="impact" className="scroll-mt-20 border-b border-hairline bg-paper py-8">
         <div className="mx-auto max-w-[72rem] px-6">
-          <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+          <div className="grid grid-cols-2 gap-8 md:grid-cols-4" data-reveal>
             <MetricBlock label="Dossiers documentés" value={formatNumber(published)} caption={`${published} publiés`} />
             <MetricBlock label="Preuves scellées" value={formatNumber(evidenceCount)} caption="Empreintes SHA-256 vérifiées" />
             <MetricBlock label="Protocole d'identité" value="SHA-256" caption="Empreinte calculée sur votre appareil — jamais votre CIN" accent />
@@ -261,7 +263,7 @@ export default async function LandingPage() {
       {/* ============================= 3 PRINCIPES ============================= */}
       <section id="pourquoi-laza" className="scroll-mt-20 border-b border-hairline bg-white py-16 lg:py-20">
         <div className="mx-auto max-w-[72rem] px-6">
-          <div className="mb-10 max-w-3xl">
+          <div className="mb-10 max-w-3xl" data-fade>
             <EyebrowLabel>Architecture Citoyenne</EyebrowLabel>
             <SectionTitle>Une plateforme pensée pour faire entendre les faits.</SectionTitle>
             <p className="mt-3 text-[17px] leading-[1.6em] text-ink-muted">
@@ -270,7 +272,7 @@ export default async function LandingPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3" data-reveal>
             <PrincipleCard
               icon={<Fingerprint className="size-7 text-teal-deep" />}
               title="Anonymat par empreinte"
@@ -296,7 +298,7 @@ export default async function LandingPage() {
       {/* ============================= COMMENT ÇA MARCHE ============================= */}
       <section id="comment-ca-marche" className="scroll-mt-20 border-b border-hairline bg-paper py-16 lg:py-20">
         <div className="mx-auto max-w-[72rem] px-6">
-          <div className="mb-10 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+          <div className="mb-10 flex flex-col justify-between gap-4 md:flex-row md:items-end" data-fade>
             <div>
               <EyebrowLabel>Procédure Opérationnelle</EyebrowLabel>
               <SectionTitle>Signaler en quatre étapes.</SectionTitle>
@@ -306,7 +308,7 @@ export default async function LandingPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4" data-reveal>
             <StepCard
               n="01"
               title="Détails des faits"
@@ -343,7 +345,7 @@ export default async function LandingPage() {
       <section id="protection" className="scroll-mt-20 border-b border-hairline bg-white py-16 lg:py-20">
         <div className="mx-auto max-w-[72rem] px-6">
           <div className="rounded-xl bg-canvas-dark p-8 text-on-primary lg:p-12">
-            <div className="mb-10 max-w-3xl">
+            <div className="mb-10 max-w-3xl" data-fade>
               <span className="mb-4 inline-flex items-center gap-2 rounded-md bg-teal-deep/20 px-2.5 py-1 font-mono text-[11px] uppercase text-teal-light">
                 <Terminal className="size-4" />
                 Architecture Privacy by Design · Client-Side Cryptography
@@ -359,7 +361,7 @@ export default async function LandingPage() {
               </p>
             </div>
 
-            <div className="mb-10 overflow-x-auto pb-2">
+            <div className="mb-10 overflow-x-auto pb-2" data-reveal>
               <div className="flex min-w-[700px] items-center justify-between gap-2">
                 <PipelineNode n="01" label="Origine" icon={<Laptop className="size-[18px]" />} title="Votre Navigateur" caption="Environnement d'exécution isolé côté client." glow={false} />
                 <ArrowRight className="shrink-0 text-surface-variant" />
@@ -373,7 +375,7 @@ export default async function LandingPage() {
               </div>
             </div>
 
-            <div className="flex items-start gap-3 rounded-lg bg-slate-ink p-4">
+            <div data-fade className="flex items-start gap-3 rounded-lg bg-slate-ink p-4">
               <BadgeCheck className="mt-0.5 size-5 shrink-0 text-teal-light" />
               <p className="text-[15px] leading-[1.5em] text-surface-variant">
                 <strong className="font-medium text-surface-container-lowest">Vos données en clair ne sont jamais stockées :</strong>{" "}
@@ -390,7 +392,7 @@ export default async function LandingPage() {
       {/* ============================= MODÉRATION ============================= */}
       <section id="moderation" className="scroll-mt-20 border-b border-hairline bg-canvas-tint py-16 lg:py-20">
         <div className="mx-auto max-w-[72rem] px-6">
-          <div className="mb-10 max-w-3xl">
+          <div className="mb-10 max-w-3xl" data-fade>
             <EyebrowLabel>Rigueur Déontologique</EyebrowLabel>
             <SectionTitle>Pas de rumeurs. Des faits documentés.</SectionTitle>
             <p className="mt-3 text-[17px] leading-[1.6em] text-ink-muted">
@@ -399,7 +401,7 @@ export default async function LandingPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4" data-reveal>
             <ModerationCard
               step="ÉTAPE 1"
               icon={<PenLine className="size-[18px]" />}
@@ -432,7 +434,7 @@ export default async function LandingPage() {
       {/* ============================= REGISTRE OUVERT ============================= */}
       <section id="registre" className="scroll-mt-20 border-b border-hairline bg-paper py-16 lg:py-20">
         <div className="mx-auto max-w-[72rem] px-6">
-          <div className="mb-10 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+          <div className="mb-10 flex flex-col justify-between gap-4 md:flex-row md:items-end" data-fade>
             <div>
               <EyebrowLabel>Registre Ouvert</EyebrowLabel>
               <SectionTitle>Découvrez ce qui est signalé.</SectionTitle>
@@ -447,7 +449,7 @@ export default async function LandingPage() {
           </div>
 
           {teasers.length > 0 ? (
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3" data-reveal>
               {teasers.map((report) => (
                 <article
                   key={report.id}
@@ -498,7 +500,7 @@ export default async function LandingPage() {
             </div>
           )}
 
-          <div className="mt-8 flex flex-col items-start justify-between gap-5 rounded-xl bg-white p-6 shadow-sm sm:flex-row sm:items-center">
+          <div data-fade className="mt-8 flex flex-col items-start justify-between gap-5 rounded-xl bg-white p-6 shadow-sm sm:flex-row sm:items-center">
             <div className="flex items-center gap-3">
               <Database className="size-7 shrink-0 text-teal-deep" />
               <div>
@@ -524,7 +526,7 @@ export default async function LandingPage() {
       <section className="border-b border-hairline bg-white py-16 lg:py-20">
         <div className="mx-auto max-w-[72rem] px-6">
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12">
-            <div className="flex flex-col gap-4 lg:col-span-6">
+            <div className="flex flex-col gap-4 lg:col-span-6" data-fade>
               <span className="inline-block font-mono text-[11px] font-semibold uppercase tracking-widest text-teal-deep">
                 Force de Dissuasion
               </span>
@@ -549,7 +551,7 @@ export default async function LandingPage() {
               </ul>
             </div>
 
-            <div className="rounded-xl bg-paper p-8 lg:col-span-6">
+            <div className="rounded-xl bg-paper p-8 lg:col-span-6" data-reveal>
               <div className="flex flex-col items-center">
                 <div className="mb-10 w-full max-w-sm rounded-lg bg-white p-4 text-center shadow-sm">
                   <span className="mb-1 block font-mono text-[11px] uppercase text-teal-deep">
@@ -580,7 +582,7 @@ export default async function LandingPage() {
       {/* ============================= CTA FINAL ============================= */}
       <section className="bg-canvas-tint py-20 lg:py-24">
         <div className="mx-auto max-w-[72rem] px-6">
-          <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
+          <div className="mx-auto flex max-w-3xl flex-col items-center text-center" data-fade>
             <div className="mb-8 inline-flex size-14 items-center justify-center rounded-xl bg-white text-teal-deep shadow-sm">
               <Megaphone className="size-8" />
             </div>
@@ -618,6 +620,7 @@ export default async function LandingPage() {
           </div>
         </div>
       </section>
+      </LandingReveal>
     </div>
   )
 }

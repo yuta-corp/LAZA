@@ -101,7 +101,16 @@ export default function LegalPage() {
               <Gavel className="mt-0.5 size-4 shrink-0 text-vermilion" />
               Le service est fourni « en l&apos;état », en mode best-effort. Il ne constitue pas une
               autorité judiciaire et ne remplace pas les procédures officielles : les autorités
-              compétentes (BIANCO) restent saisissables des faits signalés. L&apos;éditeur ne saurait
+              compétentes (
+              <a
+                href="https://www.bianco-mg.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline decoration-teal-deep/40 underline-offset-2 hover:decoration-teal-deep"
+              >
+                BIANCO
+              </a>
+              ) restent saisissables des faits signalés. L&apos;éditeur ne saurait
               être tenu responsable des usages qui seraient faits des informations publiées.
             </p>
           </LegalSection>

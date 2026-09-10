@@ -116,12 +116,12 @@ export function Footer() {
             </span>
             <div className="flex flex-wrap gap-x-5 gap-y-2">
               <a
-                href="https://www.bianco.mg"
+                href="https://www.bianco-mg.org/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="transition-colors hover:text-ink"
               >
-                BIANCO
+                BIANCO — Bureau Indépendant Anti-Corruption
               </a>
               <a
                 href="https://digital.gov.mg"
@@ -132,7 +132,7 @@ export function Footer() {
                 CMIL — protection des données
               </a>
               <a
-                href="https://www.justice.gov.mg"
+                href="https://www.justice.mg/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="transition-colors hover:text-ink"

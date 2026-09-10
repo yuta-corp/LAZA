@@ -38,7 +38,6 @@ export default function LandingLayout({ children }: { children: React.ReactNode 
           </nav>
 
           <div className="flex items-center gap-2">
-            <MobileMenu links={NAV_LINKS} />
             <Link
               href="/fil"
               className="hidden rounded-md border border-hairline px-4 py-2 text-[14px] font-medium text-ink transition-colors hover:bg-paper sm:inline-flex"
@@ -54,6 +53,7 @@ export default function LandingLayout({ children }: { children: React.ReactNode 
               <Megaphone className="size-4" />
               Signaler un fait
             </Button>
+            <MobileMenu links={NAV_LINKS} />
           </div>
         </div>
       </header>

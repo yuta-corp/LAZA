@@ -66,6 +66,10 @@ model Report {
   identityCommitment String?
   commitmentSalt     String?
 
+  // Pseudo public choisi à la soumission — lié à l'empreinte d'identité
+  // (display éditorial : la carte/fil affiche le pseudo au lieu d'« anonyme »).
+  authorName String?
+
   // Avertissement légal (Art. 373.1 — dénonciation abusive)
   legalAccepted   Boolean  @default(false)
   legalAcceptedAt DateTime?

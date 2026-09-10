@@ -16,6 +16,7 @@ import {
   Mic,
   Paperclip,
   ShieldAlert,
+  Shuffle,
   Trash2,
   Upload,
 } from "lucide-react"
@@ -29,6 +30,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Progress } from "@/components/ui/progress"
 import { LegalWarning } from "@/components/legal-warning"
 import { computeIdentityCommitment, maskHash, sha256File } from "@/lib/crypto/identity"
+import { generatePseudo } from "@/lib/pseudo"
 import { getIdentitySalt } from "@/app/actions"
 import {
   CATEGORIES,
@@ -36,9 +38,11 @@ import {
   isValidCin,
   isValidDateOfBirth,
   isValidHttpUrl,
+  isValidPseudo,
   MAX_EVIDENCE_FILES,
   MAX_FILE_SIZE,
   normalizeCin,
+  PSEUDO_RULES,
   TEXT_RULES,
 } from "@/lib/validation"
 import { CATEGORY_LABELS } from "@/lib/report"
@@ -113,6 +117,7 @@ export function ReportForm() {
   // Étape 3 — identité
   const [cin, setCin] = useState("")
   const [birthDate, setBirthDate] = useState("")
+  const [pseudo, setPseudo] = useState("")
   const [commitment, setCommitment] = useState<{ hash: string; salt: string } | null>(null)
   const [computing, setComputing] = useState(false)
 
@@ -150,6 +155,10 @@ export function ReportForm() {
         }
         return true
       case 2:
+        if (!isValidPseudo(pseudo)) {
+          setError(`Pseudo invalide (${PSEUDO_RULES.min} à ${PSEUDO_RULES.max} caractères, espaces internes tolérés).`)
+          return false
+        }
         if (!isValidCin(cin)) {
           setError("Numéro CIN invalide (10 à 14 chiffres).")
           return false
@@ -246,6 +255,12 @@ export function ReportForm() {
     }
   }
 
+  function surprisePseudo() {
+    const next = generatePseudo()
+    setPseudo(next)
+    setCommitment(null)
+  }
+
   async function handleSubmit() {
     if (!validateStep(3) || !commitment) return
     setSubmitting(true)
@@ -257,6 +272,7 @@ export function ReportForm() {
       formData.append("category", category ?? "")
       formData.append("region", region)
       formData.append("legalAccepted", String(legalAccepted))
+      formData.append("pseudo", pseudo.trim())
       formData.append("identityCommitment", commitment.hash)
       formData.append("commitmentSalt", commitment.salt)
       formData.append("links", JSON.stringify(links))
@@ -530,6 +546,37 @@ export function ReportForm() {
             </AlertDescription>
           </Alert>
 
+          <div className="space-y-2">
+            <Label htmlFor="pseudo">Votre pseudo public *</Label>
+            <div className="flex gap-2">
+              <Input
+                id="pseudo"
+                value={pseudo}
+                onChange={(e) => {
+                  setPseudo(e.target.value)
+                  setCommitment(null)
+                }}
+                maxLength={PSEUDO_RULES.max}
+                placeholder="Ex. Ravinala42"
+              />
+              <Button
+                type="button"
+                variant="outline"
+                onClick={surprisePseudo}
+                aria-label="Générer un pseudo au hasard"
+                title="Pas d'inspiration ? Laissez la chance choisir."
+                className="shrink-0"
+              >
+                <Shuffle className="size-4" />
+                Surprendre
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              {pseudo.length}/{PSEUDO_RULES.max} — ce pseudo sera affiché publiquement avec votre
+              signalement, sans jamais révéler votre identité.
+            </p>
+          </div>
+
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="cin">Numéro CIN *</Label>
@@ -574,6 +621,13 @@ export function ReportForm() {
                   Seule cette empreinte sera envoyée au serveur. Votre CIN et votre date de
                   naissance ne quittent pas cet appareil.
                 </span>
+                <span className="mt-2 block font-sans text-xs text-foreground">
+                  ✅ Pseudo retenu :{" "}
+                  <span className="font-semibold text-emerald-600 dark:text-emerald-400">
+                    @{pseudo.trim() || "—"}
+                  </span>{" "}
+                  — il sera affiché publiquement avec ce signalement.
+                </span>
               </AlertDescription>
             </Alert>
           )}
@@ -608,7 +662,10 @@ export function ReportForm() {
                 {region ? ` · ${region}` : ""}
               </li>
               <li>{files.length} fichier(s) + {links.length} lien(s) de preuve</li>
-              <li>Identité : empreinte cryptographique (anonyme, levable sur réquisition)</li>
+              <li>
+                Identité : empreinte cryptographique (anonyme, levable sur réquisition) — publié
+                sous le pseudo <strong>{pseudo.trim() || "—"}</strong>
+              </li>
             </ul>
           </div>
         </div>

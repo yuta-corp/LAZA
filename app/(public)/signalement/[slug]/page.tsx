@@ -109,7 +109,9 @@ export default async function SignalementPage({ params }: PageProps) {
           </div>
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-sm">
-              <span className="font-semibold">Dénonciateur anonyme</span>
+              <span className="font-semibold">
+                {report.authorName ? `@${report.authorName}` : "Dénonciateur anonyme"}
+              </span>
               <span className="text-muted-foreground">·</span>
               <span className="text-muted-foreground">
                 {relativeTimeFr(report.publishedAt ?? report.createdAt)}

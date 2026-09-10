@@ -68,6 +68,8 @@
     --color-teal-mid: #008094;
     --color-teal-light: #a7eeff;
     --color-canvas-dark: #090c0e;
+    --color-on-primary: #f8fafc;
+    --color-surface-container-lowest: #ffffff;
     --color-secure: #059669;
     --color-vermilion: #dc2626;
 }

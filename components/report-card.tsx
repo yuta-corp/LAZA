@@ -32,7 +32,7 @@ export function ReportCard({ report, likeCount = 0, commentCount = 0, initialLik
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-sm">
             <span className="font-semibold text-foreground">
-              Dénonciateur anonyme
+              {report.authorName ? `@${report.authorName}` : "Dénonciateur anonyme"}
             </span>
             <BadgeCheck className="size-4 shrink-0 text-accent" aria-label="Identité engagée" />
             <span className="text-muted-foreground">·</span>

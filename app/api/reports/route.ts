@@ -5,6 +5,7 @@ import { saveEvidenceFile, sha256, removeEvidenceBlobs } from "@/lib/storage"
 import {
   evidenceKindFromMime,
   isCategory,
+  isValidPseudo,
   MAX_EVIDENCE_FILES,
   MAX_FILE_SIZE,
   TEXT_RULES,
@@ -39,6 +40,7 @@ export async function POST(request: Request) {
   const categoryRaw = formString(form, "category")
   const region = formString(form, "region")
   const legalAccepted = form.get("legalAccepted") === "true"
+  const pseudo = formString(form, "pseudo") || null
   const identityCommitment = formString(form, "identityCommitment") || null
   const commitmentSalt = formString(form, "commitmentSalt") || null
 
@@ -67,6 +69,9 @@ export async function POST(request: Request) {
   }
   if (!legalAccepted) {
     errors.push("L'avertissement légal doit être accepté.")
+  }
+  if (pseudo && !isValidPseudo(pseudo)) {
+    errors.push("Pseudo invalide (2 à 24 caractères).")
   }
   if (identityCommitment && !/^[0-9a-f]{64}$/.test(identityCommitment)) {
     errors.push("Empreinte d'identité invalide.")
@@ -129,6 +134,7 @@ export async function POST(request: Request) {
         legalAcceptedAt: new Date(),
         identityCommitment,
         commitmentSalt,
+        authorName: pseudo,
       },
     }),
   )

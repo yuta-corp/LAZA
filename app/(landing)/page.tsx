@@ -158,7 +158,7 @@ export default async function LandingPage() {
                       <div>
                         <div className="flex items-center gap-1.5">
                           <span className="font-mono text-[11px] uppercase text-muted-ink">
-                            Anonyme
+                            {heroReport.authorName ? `@${heroReport.authorName}` : "Anonyme"}
                           </span>
                           <span className="text-[10px] text-muted-ink">•</span>
                           {heroReport.region && (

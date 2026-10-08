@@ -1,0 +1,76 @@
+
+> Laza@0.0.1 dev /home/yuta/yuta_corp/Laza
+> next dev
+
+▲ Next.js 16.2.6 (Turbopack)
+- Local:         http://localhost:36907
+- Network:       http://192.168.88.245:36907
+- Environments: .env.local, .env
+✓ Ready in 1415ms
+○ Compiling proxy ...
+
+○ Compiling / ...
+ GET / 200 in 13.5s (next.js: 7.5s, application-code: 6.0s)
+ GET /signaler 200 in 499ms (next.js: 88ms, application-code: 411ms)
+ GET / 200 in 818ms (next.js: 22ms, application-code: 796ms)
+ GET / 200 in 1000ms (next.js: 59ms, application-code: 941ms)
+ GET /signaler 200 in 1397ms (next.js: 83ms, application-code: 1315ms)
+✓ Compiled in 1746ms
+ GET /signaler 200 in 761ms (next.js: 133ms, application-code: 628ms)
+✓ Compiled in 1484ms
+✓ Compiled in 1553ms
+ POST /signaler 200 in 332ms (next.js: 132ms, application-code: 200ms)
+  └─ ƒ getIdentitySalt() in 24ms app/actions.ts
+○ Compiling /api/reports ...
+ POST /api/reports 201 in 9.3s (next.js: 9.0s, application-code: 246ms)
+ GET / 200 in 640ms (next.js: 87ms, application-code: 553ms)
+ GET /signaler 200 in 916ms (next.js: 205ms, application-code: 711ms)
+✓ Compiled in 2.8s
+✓ Compiled in 3.4s
+⚠ Fast Refresh had to perform a full reload when ./lib/i18n.ts changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /signaler 200 in 1876ms (next.js: 154ms, application-code: 1723ms)
+ GET /signaler 200 in 399ms (next.js: 47ms, application-code: 352ms)
+ GET /signaler 200 in 1418ms (next.js: 158ms, application-code: 1260ms)
+ GET / 200 in 843ms (next.js: 158ms, application-code: 684ms)
+ GET /signaler 200 in 108ms (next.js: 12ms, application-code: 96ms)
+ GET /fil 200 in 1948ms (next.js: 204ms, application-code: 1744ms)
+○ Compiling /legal ...
+ GET /legal 200 in 9.5s (next.js: 7.6s, application-code: 1886ms)
+ GET /legal 200 in 473ms (next.js: 10ms, application-code: 463ms)
+ GET / 200 in 208ms (next.js: 38ms, application-code: 170ms)
+ GET /signaler 200 in 58ms (next.js: 6ms, application-code: 52ms)
+ GET / 200 in 100ms (next.js: 4ms, application-code: 96ms)
+ GET /fil 200 in 281ms (next.js: 5ms, application-code: 275ms)
+ POST /fil 200 in 35ms (next.js: 3ms, application-code: 31ms)
+  └─ ƒ getIdentitySalt() in 4ms app/actions.ts
+ POST /fil 200 in 75ms (next.js: 3ms, application-code: 72ms)
+  └─ ƒ toggleLike("marche-public-surfacture-construction-ecole", true) in 58ms app/actions.ts
+ GET /signaler 200 in 5.5s (next.js: 2.6s, application-code: 3.0s)
+ GET /signaler 200 in 3.0s (next.js: 40ms, application-code: 2.9s)
+ GET /signaler 200 in 2.7s (next.js: 142ms, application-code: 2.6s)
+ GET /signaler 200 in 1817ms (next.js: 352ms, application-code: 1465ms)
+ GET /fil 200 in 6.8s (next.js: 1523ms, application-code: 5.3s)
+ GET /fil 200 in 3.4s (next.js: 184ms, application-code: 3.2s)
+ GET /fil 200 in 2.6s (next.js: 95ms, application-code: 2.5s)
+ GET /fil 200 in 1134ms (next.js: 43ms, application-code: 1091ms)
+ GET /signaler 200 in 2.6s (next.js: 20ms, application-code: 2.6s)
+ GET /signaler 200 in 2.1s (next.js: 73ms, application-code: 2.0s)
+ GET /signaler 200 in 2.2s (next.js: 29ms, application-code: 2.2s)
+ GET /signaler 200 in 1759ms (next.js: 124ms, application-code: 1634ms)
+ GET /signaler 200 in 991ms (next.js: 53ms, application-code: 938ms)
+ GET /fil 200 in 4.1s (next.js: 868ms, application-code: 3.2s)
+ GET /fil 200 in 1560ms (next.js: 97ms, application-code: 1463ms)
+ GET /fil 200 in 2.7s (next.js: 37ms, application-code: 2.7s)
+ GET /fil 200 in 2.3s (next.js: 55ms, application-code: 2.3s)
+ GET /fil 200 in 920ms (next.js: 55ms, application-code: 865ms)
+ GET /signaler 200 in 1178ms (next.js: 9ms, application-code: 1169ms)
+ GET /fil 200 in 1232ms (next.js: 240ms, application-code: 992ms)
+ GET /signaler 200 in 1670ms (next.js: 395ms, application-code: 1275ms)
+ GET /fil 200 in 1824ms (next.js: 86ms, application-code: 1739ms)
+ GET /fil?categorie=MARCHES_PUBLICS 200 in 191ms (next.js: 16ms, application-code: 174ms)
+ GET /fil?categorie=FONCIER 200 in 133ms (next.js: 8ms, application-code: 126ms)
+ GET /fil 200 in 24ms (next.js: 6ms, application-code: 18ms)
+ GET /fil 200 in 216ms (next.js: 10ms, application-code: 206ms)
+ GET / 200 in 146ms (next.js: 36ms, application-code: 109ms)
+ GET /terms 200 in 2.8s (next.js: 2.7s, application-code: 88ms)
+[?25h

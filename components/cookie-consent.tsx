@@ -46,7 +46,7 @@ export function CookieConsent() {
   return (
     <div
       role="dialog"
-      aria-label="Préférences de cookies"
+      aria-label="Choix des cookies"
       className="fixed bottom-4 left-1/2 z-[60] w-[calc(100%-2rem)] max-w-xl -translate-x-1/2 rounded-xl border border-hairline bg-white p-5 shadow-elevated"
     >
       <div className="flex items-start gap-3">
@@ -58,12 +58,11 @@ export function CookieConsent() {
         </span>
         <div>
           <p className="mb-1 text-[14px] font-semibold text-ink">
-            Nous respectons votre vie privée
+            Tes données restent à toi
           </p>
           <p className="mb-3 text-[13px] leading-relaxed text-ink-muted">
-            Laza dépose uniquement des cookies fonctionnels (préférence de consentement, empreinte
-            anonyme pour la participation, thème d&apos;affichage) et aucun cookie publicitaire ou de
-            tracking tiers. Vous acceptez ou refusez d&apos;emblée.
+            Laza garde juste quelques cookies pour que le site marche : ton choix ici, ton pseudo,
+            et ton thème d&apos;affichage. Pas de publicité, pas de pistage. Tu peux accepter ou refuser.
           </p>
           <div className="flex flex-wrap items-center gap-2">
             <button
@@ -71,14 +70,14 @@ export function CookieConsent() {
               onClick={() => choose("accepted")}
               className="rounded-md bg-slate-ink px-3.5 py-1.5 text-[13px] font-medium text-white transition-colors hover:bg-teal-mid"
             >
-              Tout accepter
+              J&apos;accepte
             </button>
             <button
               type="button"
               onClick={() => choose("refused")}
               className="rounded-md border border-hairline px-3.5 py-1.5 text-[13px] font-medium text-ink transition-colors hover:bg-paper"
             >
-              Tout refuser
+              Je refuse
             </button>
             <Link
               href="/cookies"

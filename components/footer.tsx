@@ -1,149 +1,84 @@
+"use client"
+
 import Link from "next/link"
-import { Gavel, Lock } from "lucide-react"
+import { ArrowRight, Lock } from "lucide-react"
 import { Logo } from "@/components/logo"
+import { LanguageSwitcher } from "@/components/language-switcher"
+import { useLanguage } from "@/components/language-provider"
 
-const NAVIGATION = [
-  { label: "Accueil", href: "/" },
-  { label: "Comment ça marche", href: "/#comment-ca-marche" },
-  { label: "Pourquoi LAZA", href: "/#pourquoi-laza" },
-  { label: "Registre public", href: "/fil" },
-]
+const CONTACT_EMAIL = "yttuta-mg@proton.me"
 
-const TRANSPARENCE = [
-  { label: "Protocole de modération", href: "/#moderation" },
-  { label: "Indicateurs & métriques", href: "/#impact" },
-  { label: "Registre des signalements", href: "/fil" },
-]
-
-const DROITS = [
-  { label: "Protection des sources", href: "/#protection" },
-  { label: "Cadre juridique malgache", href: "/#cadre-juridique" },
-  { label: "Mentions légales", href: "/legal" },
-  { label: "Conditions d'utilisation", href: "/terms" },
-  { label: "Politique de cookies", href: "/cookies" },
-  { label: "Signaler un fait", href: "/signaler" },
-]
-
+/**
+ * Pied de page de la landing : volontairement minimal (guide landing page).
+ * Il répète l'action principale, garde le contact réel et la mention légale
+ * essentielle, sans plan du site ni distractions.
+ */
 export function Footer() {
+  const { t } = useLanguage()
+
+  const links = [
+    { label: t.footer.links.how, href: "/#comment-ca-marche" },
+    { label: t.footer.links.feed, href: "/fil" },
+    { label: t.footer.links.legal, href: "/legal" },
+    { label: t.footer.links.terms, href: "/terms" },
+    { label: t.footer.links.cookies, href: "/cookies" },
+  ]
+
   return (
-    <footer className="w-full border-t border-hairline bg-white">
-      <div className="mx-auto max-w-[72rem] px-6 py-12">
-        <div className="mb-10 grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-5">
-          <div className="pr-0 lg:col-span-2 lg:pr-8">
-            <div className="mb-3 flex items-center gap-1">
-              <Logo size={30} />
-              <span className="size-2 rounded-full bg-teal-deep" />
-            </div>
-            <p className="mb-4 max-w-md text-[15px] leading-relaxed text-ink-muted">
-              Plateforme civique indépendante pour le signalement sécurisé, le recoupement et la
-              documentation des faits de corruption à Madagascar.
-            </p>
-            <span className="inline-flex items-center gap-2 rounded-md bg-paper px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.06em] text-muted-ink">
-              <Lock className="size-4 text-secure" />
-              Empreintes SHA-256 calculées sur votre appareil
-            </span>
+    <footer className="border-t border-hairline bg-paper">
+      <div className="mx-auto max-w-[72rem] px-5 py-12 lg:px-6">
+        {/* CTA répété en bas de page */}
+        <div className="flex flex-col items-start gap-4 rounded-2xl border border-hairline bg-white p-6 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="font-newsreader text-[22px] font-semibold text-ink">{t.finalCta.title}</p>
+            <p className="mt-1 text-[15px] text-ink-muted">{t.finalCta.note}</p>
+          </div>
+          <Link
+            href="/signaler"
+            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-teal-deep px-6 text-[16px] font-semibold text-white transition-colors hover:bg-teal-mid sm:w-auto"
+          >
+            {t.finalCta.cta}
+            <ArrowRight className="size-4" />
+          </Link>
+        </div>
+
+        <div className="mt-10 flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+          <div className="max-w-md">
+            <Logo href="/" size={36} />
+            <p className="mt-3 text-[15px] leading-[1.55em] text-ink-muted">{t.footer.tagline}</p>
           </div>
 
-          <div>
-            <h4 className="mb-4 font-mono text-[11px] uppercase tracking-wider text-ink">
-              Navigation
-            </h4>
-            <ul className="space-y-2.5">
-              {NAVIGATION.map((item) => (
-                <li key={item.href}>
-                  <Link href={item.href} className="text-[13px] text-ink-muted transition-colors hover:text-ink">
-                    {item.label}
+          <div className="flex flex-col gap-2">
+            <LanguageSwitcher className="w-fit" />
+            <ul className="mt-1 flex flex-wrap gap-x-5 gap-y-2">
+              {links.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-[14px] text-ink-muted underline-offset-4 transition-colors hover:text-ink hover:underline"
+                  >
+                    {link.label}
                   </Link>
                 </li>
               ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="mb-4 font-mono text-[11px] uppercase tracking-wider text-ink">
-              Transparence
-            </h4>
-            <ul className="space-y-2.5">
-              {TRANSPARENCE.map((item) => (
-                <li key={item.href}>
-                  <Link href={item.href} className="text-[13px] text-ink-muted transition-colors hover:text-ink">
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="mb-4 font-mono text-[11px] uppercase tracking-wider text-ink">
-              Confidentialité & Droits
-            </h4>
-            <ul className="space-y-2.5">
-              {DROITS.map((item) => (
-                <li key={item.href}>
-                  <Link href={item.href} className="text-[13px] text-ink-muted transition-colors hover:text-ink">
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
+              <li>
+                <a
+                  href={`mailto:${CONTACT_EMAIL}`}
+                  className="text-[14px] text-ink-muted underline-offset-4 transition-colors hover:text-ink hover:underline"
+                >
+                  {t.footer.links.contact}
+                </a>
+              </li>
             </ul>
           </div>
         </div>
 
-        <div id="cadre-juridique" className="space-y-4 border-t border-hairline pt-8">
-          <p className="flex items-start gap-2 text-[13px] leading-relaxed text-ink-muted">
-            <Gavel className="mt-0.5 size-4 shrink-0 text-vermilion" />
-            <span>
-              <strong className="font-semibold text-ink">Avertissement solennel :</strong> les
-              signalements publiés sont des faits allégués, examinés et validés par une modération
-              indépendante avant publication. LAZA ne constitue pas une autorité judiciaire et ne
-              remplace pas les procédures officielles : les autorités compétentes (BIANCO) restent
-              saisissables des faits signalés. Toute dénonciation abusive est punie par l&apos;article
-              373.1 du Code pénal malgache (6 mois à 5 ans d&apos;emprisonnement et amende de 1 à 10
-              millions d&apos;Ariary).
-            </span>
+        <div className="mt-8 border-t border-hairline pt-6">
+          <p className="flex items-start gap-2 text-[14px] leading-[1.55em] text-ink-muted">
+            <Lock className="mt-0.5 size-4 shrink-0 text-secure" />
+            <span>{t.footer.legalShort}</span>
           </p>
-          <p className="text-[13px] leading-relaxed text-ink-muted">
-            Le traitement des données à caractère personnel est soumis à la loi n° 2014-038 relative
-            à la protection des données à caractère personnel, dont l&apos;autorité de contrôle est la
-            Commission Malgache de l&apos;Informatique et des Libertés (CMIL). Les preuves sont stockées
-            sur un registre ouvert (Vercel Blob) et leur empreinte SHA-256 est recalculée côté serveur
-            pour garantir l&apos;intégrité.
-          </p>
-          <div className="flex flex-col gap-2 pt-2 text-[13px] text-ink-muted sm:flex-row sm:items-center sm:justify-between">
-            <span className="font-mono text-[11px] uppercase tracking-[0.06em]">
-              Plateforme indépendante d&apos;intérêt public citoyen malgache
-            </span>
-            <div className="flex flex-wrap gap-x-5 gap-y-2">
-              <a
-                href="https://www.bianco-mg.org/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="transition-colors hover:text-ink"
-              >
-                BIANCO — Bureau Indépendant Anti-Corruption
-              </a>
-              <a
-                href="https://digital.gov.mg"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="transition-colors hover:text-ink"
-              >
-                CMIL — protection des données
-              </a>
-              <a
-                href="https://www.justice.mg/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="transition-colors hover:text-ink"
-              >
-                Ministère de la Justice
-              </a>
-            </div>
-          </div>
-          <p className="text-[11px] text-muted-ink">
-            © 2026 LAZA MADAGASCAR · Protocole citoyen ouvert · Code source ouvert sous licence civile — aucune affiliation partisane ni gouvernementale.
-          </p>
+          <p className="mt-3 text-[13px] text-muted-ink">{t.footer.rights}</p>
         </div>
       </div>
     </footer>

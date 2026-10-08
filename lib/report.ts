@@ -1,6 +1,7 @@
 import type { PrismaClient } from "@/lib/generated/prisma/client"
 import type { Category, ReportStatus } from "@/lib/generated/prisma/enums"
 import { EvidenceKind } from "@/lib/generated/prisma/enums"
+import type { Lang } from "@/lib/i18n"
 import { FileText, Film, Image as ImageIcon, Link2, Mic, type LucideIcon } from "lucide-react"
 
 /** Génère un slug unique à partir d'un titre. */
@@ -125,6 +126,28 @@ export function formatDateFr(date: Date): string {
   }).format(date)
 }
 
+/**
+ * Titre court déduit du récit libre.
+ * Le parcours simplifié ne demande pas de titre : il est proposé à partir de la
+ * première phrase, puis ajustable par la personne sur l'écran de vérification.
+ */
+export function deriveTitle(story: string): string {
+  const text = story.replace(/\s+/g, " ").trim()
+  if (!text) return ""
+  // Première phrase assez longue pour faire un titre ; sinon on coupe le texte.
+  const firstSentence = text.match(/^.{10,140}?[.!?…](\s|$)/)?.[0] ?? text
+  return firstSentence.trim().slice(0, 140).trim()
+}
+
+/** Résumé déduit du récit libre (coupé proprement sur un mot). */
+export function deriveSummary(story: string, max = 300): string {
+  const text = story.replace(/\s+/g, " ").trim()
+  if (text.length <= max) return text
+  const cut = text.slice(0, max - 1)
+  const lastSpace = cut.lastIndexOf(" ")
+  return `${cut.slice(0, lastSpace > 40 ? lastSpace : cut.length).trimEnd()}…`
+}
+
 /** Temps relatif (« il y a 3 h »), puis date courte au-delà de 7 jours. */
 export function relativeTimeFr(date: Date): string {
   const diff = Date.now() - date.getTime()
@@ -135,6 +158,18 @@ export function relativeTimeFr(date: Date): string {
   if (hours < 24) return `il y a ${hours} h`
   const days = Math.floor(hours / 24)
   if (days < 7) return `il y a ${days} j`
+  return formatDateFr(date)
+}
+
+/** Temps relatif dans la langue demandée (« il y a 3 h » / « 3 ora lasa »). */
+export function formatRelative(date: Date, lang: Lang = "fr"): string {
+  const minutes = Math.floor((Date.now() - date.getTime()) / 60_000)
+  if (minutes < 1) return lang === "mg" ? "izao ankehitriny" : "à l'instant"
+  if (minutes < 60) return lang === "mg" ? `${minutes} min lasa` : `il y a ${minutes} min`
+  const hours = Math.floor(minutes / 60)
+  if (hours < 24) return lang === "mg" ? `${hours} ora lasa` : `il y a ${hours} h`
+  const days = Math.floor(hours / 24)
+  if (days < 7) return lang === "mg" ? `${days} andro lasa` : `il y a ${days} j`
   return formatDateFr(date)
 }
 

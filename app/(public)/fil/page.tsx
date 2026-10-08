@@ -2,13 +2,12 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { cookies } from "next/headers"
 import { Megaphone, ShieldCheck } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { ReportCard } from "@/components/report-card"
 import { LegalWarning } from "@/components/legal-warning"
 import { prisma } from "@/lib/prisma"
 import { CATEGORY_LABELS } from "@/lib/report"
 import { FINGERPRINT_COOKIE } from "@/lib/constants"
+import { cn } from "@/lib/utils"
 import type { Category } from "@/lib/generated/prisma/enums"
 
 // Le fil reflète immédiatement les signalements publiés par la modération.
@@ -17,7 +16,7 @@ export const dynamic = "force-dynamic"
 export const metadata: Metadata = {
   title: "Fil des dénonciations vérifiées",
   description:
-    "Suivez en temps réel les signalements de corruption vérifiés et publiés à Madagascar. Soutenez-les et participez au fil de commentaires.",
+    "Suivez les signalements de corruption vérifiés et publiés à Madagascar. Soutenez-les et participez au fil de commentaires.",
 }
 
 interface FeedPageProps {
@@ -44,12 +43,23 @@ export default async function FeedPage({ searchParams }: FeedPageProps) {
     take: 50,
   })
 
-  const likeCounts = await prisma.reportLike.groupBy({
-    by: ["reportId"],
-    where: { reportId: { in: reports.map((report) => report.id) } },
-    _count: { _all: true },
-  })
+  const [likeCounts, categoryCounts] = await Promise.all([
+    prisma.reportLike.groupBy({
+      by: ["reportId"],
+      where: { reportId: { in: reports.map((report) => report.id) } },
+      _count: { _all: true },
+    }),
+    // Puces de filtre : uniquement les catégories qui ont du contenu publié.
+    prisma.report.groupBy({
+      by: ["category"],
+      where: { status: "PUBLISHED" },
+      _count: { _all: true },
+      orderBy: { _count: { category: "desc" } },
+    }),
+  ])
+
   const likeCountById = new Map(likeCounts.map((row) => [row.reportId, row._count._all]))
+  const totalPublished = categoryCounts.reduce((sum, row) => sum + row._count._all, 0)
 
   // Empreintes soutenant déjà les signalements affichés (cookie du visiteur)
   let likedReportIds = new Set<string>()
@@ -62,79 +72,124 @@ export default async function FeedPage({ searchParams }: FeedPageProps) {
   }
 
   return (
-    <div>
-      {/* En-tête du fil — onglets */}
-      <div className="sticky top-0 z-30 border-b border-border bg-background/80 backdrop-blur md:top-0">
-        <div className="flex">
-          <span className="flex-1 border-b-2 border-accent px-4 py-3 text-center">
-            <span className="font-semibold">Tous les signalements</span>
-          </span>
+    <div className="min-h-svh bg-canvas-tint">
+      {/* En-tête du fil : titre, vrai compteur, filtres réels */}
+      <div className="sticky top-14 z-30 border-b border-hairline bg-white/90 backdrop-blur md:top-0">
+        <div className="px-4 pt-4 sm:px-5">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <h1 className="font-newsreader text-[22px] font-semibold leading-tight text-ink sm:text-[26px]">
+                Signalements publiés
+              </h1>
+              <p className="mt-0.5 text-[14px] text-ink-muted">
+                Des faits vérifiés, publiés sans le nom des personnes.
+              </p>
+            </div>
+            <Link
+              href="/signaler"
+              className="hidden shrink-0 items-center gap-1.5 rounded-xl bg-teal-deep px-4 py-2.5 text-[14px] font-semibold text-white transition-colors hover:bg-teal-mid sm:inline-flex"
+            >
+              <Megaphone className="size-4" />
+              Signaler un fait
+            </Link>
+          </div>
+
+          {/* Filtres par catégorie — vraies puces, défilement horizontal sur mobile */}
+          <div className="-mx-4 mt-3 flex gap-2 overflow-x-auto px-4 pb-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <FilterChip href="/fil" active={!filter} label="Tout" count={totalPublished} />
+            {categoryCounts.map((row) => (
+              <FilterChip
+                key={row.category}
+                href={`/fil?categorie=${row.category}`}
+                active={filter === row.category}
+                label={CATEGORY_LABELS[row.category]}
+                count={row._count._all}
+              />
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Zone de contribution */}
-      <div className="flex gap-3 border-b border-border px-4 py-3">
-        <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-          <ShieldCheck className="size-5" />
-        </div>
-        <div className="flex min-w-0 flex-1 flex-col gap-3">
-          <p className="pt-1 text-[15px] text-muted-foreground">
-            Vous avez connaissance d&apos;un fait de corruption ?
-          </p>
-          <Button
-            size="lg"
-            className="w-fit rounded-full"
-            nativeButton={false}
-            render={<Link href="/signaler" />}
-          >
-            <Megaphone className="size-4" />
-            Signaler un fait
-          </Button>
-        </div>
-      </div>
-
-      {filter && (
-        <div className="flex items-center gap-2 border-b border-border bg-secondary/50 px-4 py-2">
-          <span className="text-sm text-muted-foreground">Filtré par :</span>
-          <Badge variant="secondary">{CATEGORY_LABELS[filter]}</Badge>
-          <Link
-            href="/fil"
-            className="ml-auto text-sm font-medium text-accent hover:opacity-80"
-          >
-            Réinitialiser
-          </Link>
-        </div>
-      )}
-
-      {/* Fil chronologique */}
+      {/* Fil */}
       {reports.length === 0 ? (
-        <div className="flex flex-col items-center gap-3 px-4 py-16 text-center">
-          <ShieldCheck className="size-10 text-muted-foreground/40" />
-          <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
-            Aucun signalement publié pour le moment. Soyez la première voix — chaque
-            dénonciation vérifiée alimente la transparence.
-          </p>
-          <Button variant="outline" className="rounded-full" nativeButton={false} render={<Link href="/signaler" />}>
-            Signaler un fait
-          </Button>
+        <div className="px-4 py-12 sm:px-5">
+          <div className="mx-auto max-w-md rounded-2xl border border-hairline bg-white p-6 text-center sm:p-8">
+            <span className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-teal-deep/10 text-teal-deep">
+              <ShieldCheck className="size-6" />
+            </span>
+            <h2 className="mt-4 font-newsreader text-[22px] font-semibold text-ink">
+              {filter ? "Rien dans cette catégorie" : "Rien à afficher pour l'instant"}
+            </h2>
+            <p className="mt-2 text-[15px] leading-[1.55em] text-ink-muted">
+              {filter
+                ? "Aucun fait vérifié n'a encore été publié dans cette catégorie."
+                : "Les premiers signalements vérifiés apparaîtront ici. Tu peux être la première personne à en déposer un."}
+            </p>
+            <div className="mt-5 flex flex-col items-center gap-2">
+              <Link
+                href="/signaler"
+                className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-teal-deep px-6 text-[16px] font-semibold text-white transition-colors hover:bg-teal-mid sm:w-auto"
+              >
+                <Megaphone className="size-4" />
+                Signaler un fait
+              </Link>
+              {filter ? (
+                <Link
+                  href="/fil"
+                  className="text-[15px] font-medium text-teal-deep underline-offset-4 hover:underline"
+                >
+                  Voir tous les signalements
+                </Link>
+              ) : null}
+            </div>
+          </div>
         </div>
       ) : (
-        <div>
+        <ul className="space-y-4 px-4 py-5 sm:px-5">
           {reports.map((report) => (
-            <ReportCard
-              key={report.id}
-              report={report}
-              likeCount={likeCountById.get(report.id) ?? 0}
-              commentCount={report.comments.length}
-              initialLiked={likedReportIds.has(report.id)}
-            />
+            <li key={report.id}>
+              <ReportCard
+                report={report}
+                likeCount={likeCountById.get(report.id) ?? 0}
+                commentCount={report.comments.length}
+                initialLiked={likedReportIds.has(report.id)}
+              />
+            </li>
           ))}
-        </div>
+        </ul>
       )}
 
-      <div className="px-4 py-6">
+      <div className="px-4 pb-10 sm:px-5">
         <LegalWarning compact />
       </div>
     </div>
+  )
+}
+
+function FilterChip({
+  href,
+  label,
+  count,
+  active,
+}: {
+  href: string
+  label: string
+  count: number
+  active: boolean
+}) {
+  return (
+    <Link
+      href={href}
+      aria-current={active ? "page" : undefined}
+      className={cn(
+        "inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-[13px] font-medium transition-colors",
+        active
+          ? "border-teal-deep bg-teal-deep text-white"
+          : "border-hairline bg-white text-ink-muted hover:border-teal-deep/40 hover:text-ink",
+      )}
+    >
+      {label}
+      <span className={cn("tabular-nums", active ? "text-white/75" : "text-muted-ink")}>{count}</span>
+    </Link>
   )
 }

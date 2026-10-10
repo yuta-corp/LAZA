@@ -353,9 +353,9 @@ const mg: Copy = {
   },
 
   how: {
-    eyebrow: "Ahoana no fandehany",
+    eyebrow: "Ahoana no fiasany",
     title: "Efatra dingana. Izay ihany.",
-    intro: "Tsy misy apetraka. Finday sy dimy minitra dia ampy.",
+    intro: "Tsy mila mametraka na inona na inona ianao. Finday sy dimy minitra dia ampy.",
     steps: [
       { title: "Mitantara ianao", body: "Soraty amin'ny teninao izay zava-nitranga." },
       { title: "Manampy porofo ianao", body: "Sary, rosia, feo na rohy. Iray dia ampy." },
@@ -365,8 +365,8 @@ const mg: Copy = {
   },
 
   trust: {
-    eyebrow: "Antony hatokisanao anay",
-    title: "Ny fiarovana anao, hazavaina tsotra.",
+    eyebrow: "Nahoana no matoky anay ?",
+    title: "Ny fiarovanao, hazavaina tsotra.",
     items: [
       {
         title: "Tsy mangataka ny anaranao izahay",
@@ -393,7 +393,7 @@ const mg: Copy = {
     items: [
       "Mivoaka ny tantaranao. Hita izy.",
       "Hita ny zava-misy, tsy hita ny anaranao.",
-      "Afaka manadihady ny mpanao gazety sy ny andrim-panjakana.",
+      "Afaka manadihady izany ny mpanao gazety sy ny manam-pahefana.",
       "Mitahiry porofo misy daty momba izay hitanao ianao.",
     ],
   },
@@ -402,10 +402,10 @@ const mg: Copy = {
     eyebrow: "Isa, fa tsy teny fotsiny",
     title: "Tena izy avokoa izay hitanao eto.",
     intro:
-      "Mivantana avy amin'ny banky angonao ny isa. Tsy mamorona teny na isa izahay.",
+      "Mivantana avy amin'ny angon-drakitry ny tranokala ny isa. Tsy mamorona tantara na isa izahay.",
     statReports: "Rakitra navoaka",
     statEvidence: "Porofo voamarina",
-    statSupport: "Fanohanana",
+    statSupport: "Fanohanana vahoaka",
     emptyTitle: "Mbola tsy misy rakitra navoaka",
     emptyBody:
       "Tsy mampiseho isa sandoka izahay. Izao kosa no fomba fitantanana ny rakitra iray.",
@@ -464,14 +464,14 @@ const mg: Copy = {
       home: "Fandraisana",
       feed: "Fitarainana navoaka",
       report: "Mitatitra",
-      how: "Ahoana no fandehany",
+      how: "Ahoana no fiasany",
       legal: "Fanamarihana ara-dalàna",
       terms: "Fepetran'ny fampiasana",
       cookies: "Cookies",
       contact: "Mifandraisa aminay",
     },
     legalShort:
-      "Sazy ara-dalàna ny fitarainana sandoka eto Madagasikara (andrin'ny 373.1 amin'ny fehezan-dalàna famaizana). Ny marina ihany no atolory.",
+      "Sazy ara-dalàna ny fitarainana sandoka eto Madagasikara (373.1 amin'ny fehezan-dalàna famaizana). Ny marina ihany no atolory.",
     rights: "© 2026 Laza Madagascar · Tranokala mahaleo tena.",
   },
 
@@ -497,7 +497,7 @@ const mg: Copy = {
       hint: "Soraty araka ny fiteninao. Ny fiandohana, ny afovoany, ny fiafarana. Tsy hisy hitsara anao.",
       label: "Ny tantaranao",
       placeholder:
-        "Ohatra : tamin'ny 12 marsa, tao amin'ny biraon'ny hetra Antananarivo, nangataka 200 000 Ar tamin'ahy ny mpiasa iray mba hampivoaka ny rakitrako…",
+        "Ohatra : tamin'ny 12 martsa, tao amin'ny biraon'ny hetra Antananarivo, nangataka 200 000 Ar tamin'ahy ny mpiasa iray mba hampivoaka ny rakitrako…",
       reassurance: "Tsy asoratrao eto ny anaranao.",
       error: "Soraty kely misimisy kokoa : roa na telo fehezanteny (40 litera farafahakeliny).",
     },
@@ -560,7 +560,7 @@ const mg: Copy = {
         `rakitra ${files} sy rohy ${links}`,
       recapIdentity: "Avoaka amin'ny solon'anarana",
       legalLabel:
-        "Manambara aho fa marina izay lazaiko ary marina ny porofoko. Fantatro fa misy sazy ny fitarainana sandoka eto Madagasikara (andrin'ny 373.1).",
+        "Manambara aho fa marina izay lazaiko ary marina ny porofoko. Fantatro fa misy sazy ny fitarainana sandoka eto Madagasikara (373.1 amin'ny fehezan-dalàna famaizana).",
       send: "Alefa ny fitarainako",
       sending: "Eo am-pandefasana…",
       errorLegal: "Tsindrio ny efamira vao afaka mandefa.",

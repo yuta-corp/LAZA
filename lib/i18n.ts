@@ -46,6 +46,14 @@ const fr = {
     feed: "Voir les signalements",
   },
 
+  nav: {
+    home: "Accueil",
+    explore: "Signalements",
+    how: "Comment ça marche",
+    trust: "Anonymat & confiance",
+    press: "Presse & partenaires",
+  },
+
   hero: {
     kicker: "Signalement anonyme · Madagascar",
     title: "On t'a volé ?",
@@ -485,6 +493,14 @@ const mg: Copy = {
   header: {
     cta: "Mitatitra izao",
     feed: "Hijery ny fitarainana",
+  },
+
+  nav: {
+    home: "Fandraisana",
+    explore: "Fitarainana",
+    how: "Ahoana ny fiasany",
+    trust: "Tsy mitonona anarana",
+    press: "Presa & mpiara-miombon'antoka",
   },
 
   hero: {

@@ -18,6 +18,30 @@ export function LandingHeader() {
       <div className="mx-auto flex h-16 max-w-[72rem] items-center justify-between gap-3 px-4 sm:px-5 lg:px-6">
         <Logo href="/" size={46} />
 
+        <nav
+          className="hidden items-center gap-1 sm:flex"
+          aria-label={t.nav.explore}
+        >
+          <Link
+            href="/fil"
+            className="rounded-lg px-3 py-2 text-[14px] font-medium text-ink-muted transition-colors hover:bg-paper hover:text-teal-deep"
+          >
+            {t.nav.explore}
+          </Link>
+          <Link
+            href="/#comment-ca-marche"
+            className="rounded-lg px-3 py-2 text-[14px] font-medium text-ink-muted transition-colors hover:bg-paper hover:text-teal-deep"
+          >
+            {t.nav.how}
+          </Link>
+          <Link
+            href="/#confiance"
+            className="rounded-lg px-3 py-2 text-[14px] font-medium text-ink-muted transition-colors hover:bg-paper hover:text-teal-deep"
+          >
+            {t.nav.trust}
+          </Link>
+        </nav>
+
         <div className="flex items-center gap-2">
           <LanguageSwitcher />
           <Link

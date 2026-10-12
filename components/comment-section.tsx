@@ -6,10 +6,11 @@ import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { formatDateFr } from "@/lib/report"
+import { formatDateLong } from "@/lib/report"
 import { PSEUDO_RULES } from "@/lib/validation"
 import { registerPseudo, submitComment } from "@/app/actions"
 import { ensureShaFingerprint } from "@/lib/fingerprint"
+import { useLanguage } from "@/components/language-provider"
 
 interface PublishedComment {
   id: string
@@ -24,8 +25,15 @@ interface CommentSectionProps {
   initialIdentity: { pseudo: string } | null
 }
 
-export function CommentSection({ slug, comments, initialIdentity }: CommentSectionProps) {
-  const [identity, setIdentity] = useState<{ pseudo: string } | null>(initialIdentity)
+export function CommentSection({
+  slug,
+  comments,
+  initialIdentity,
+}: CommentSectionProps) {
+  const { t } = useLanguage()
+  const [identity, setIdentity] = useState<{ pseudo: string } | null>(
+    initialIdentity
+  )
   const [pseudo, setPseudo] = useState(initialIdentity?.pseudo ?? "")
   const [content, setContent] = useState("")
   const [sending, setSending] = useState(false)
@@ -45,7 +53,7 @@ export function CommentSection({ slug, comments, initialIdentity }: CommentSecti
         if (!identity) {
           const chosen = pseudo.trim()
           if (chosen.length < PSEUDO_RULES.min) {
-            toast.error("Choisissez un pseudo pour participer.")
+            toast.error(t.actions.comments.pseudoRequired)
             setSending(false)
             return
           }
@@ -66,12 +74,12 @@ export function CommentSection({ slug, comments, initialIdentity }: CommentSecti
         toast.success(result.message)
         setContent("")
       } catch {
-        toast.error("Erreur réseau — réessayez.")
+        toast.error(t.actions.errors.network)
       } finally {
         setSending(false)
       }
     },
-    [content, sending, identity, pseudo, slug],
+    [content, sending, identity, pseudo, slug, t]
   )
 
   return (
@@ -79,8 +87,10 @@ export function CommentSection({ slug, comments, initialIdentity }: CommentSecti
       <div className="flex items-center gap-2 px-4 py-3">
         <MessageSquare className="size-4 text-accent" />
         <h2 className="text-base font-semibold">
-          Commentaires{" "}
-          <span className="font-normal text-muted-foreground">({comments.length})</span>
+          {t.actions.comments.title}{" "}
+          <span className="font-normal text-muted-foreground">
+            ({comments.length})
+          </span>
         </h2>
       </div>
 
@@ -90,9 +100,11 @@ export function CommentSection({ slug, comments, initialIdentity }: CommentSecti
           {comments.map((comment) => (
             <li key={comment.id} className="border-b border-border px-4 py-3">
               <div className="flex items-center gap-2 text-sm">
-                <span className="font-semibold">{comment.authorName ?? "Anonyme"}</span>
+                <span className="font-semibold">
+                  {comment.authorName ?? t.actions.comments.anonymous}
+                </span>
                 <span className="text-xs text-muted-foreground">
-                  {formatDateFr(new Date(comment.createdAt))}
+                  {formatDateLong(new Date(comment.createdAt))}
                 </span>
               </div>
               <p className="mt-1 text-[15px] leading-relaxed whitespace-pre-wrap">
@@ -111,10 +123,12 @@ export function CommentSection({ slug, comments, initialIdentity }: CommentSecti
             onChange={(e) => setContent(e.target.value)}
             maxLength={500}
             required
-            placeholder="Apporter un écho, une précision, une information complémentaire… (pré-modéré)"
+            placeholder={t.actions.comments.placeholder}
             className="min-h-24 resize-none bg-background"
           />
-          <p className="mt-1 text-right text-xs text-muted-foreground">{content.length}/500</p>
+          <p className="mt-1 text-right text-xs text-muted-foreground">
+            {content.length}/500
+          </p>
         </div>
 
         {!identity && (
@@ -125,25 +139,35 @@ export function CommentSection({ slug, comments, initialIdentity }: CommentSecti
               onChange={(e) => setPseudo(e.target.value)}
               maxLength={PSEUDO_RULES.max}
               required
-              placeholder="Choisissez votre pseudo (affiché sur le fil)"
+              placeholder={t.actions.comments.pseudoPlaceholder}
               className="max-w-72 bg-background"
             />
           </div>
         )}
         {identity && (
           <p className="text-xs text-muted-foreground">
-            Vous commentez en tant que{" "}
-            <span className="font-semibold text-foreground">@{identity.pseudo}</span> — votre
-            identité est liée à votre empreinte locale.
+            {t.actions.comments.asIdentity}{" "}
+            <span className="font-semibold text-foreground">
+              @{identity.pseudo}
+            </span>{" "}
+            {t.actions.comments.identityNote}
           </p>
         )}
 
         <Button
           type="submit"
-          disabled={sending || content.trim().length === 0 || (!identity && pseudo.trim().length < PSEUDO_RULES.min)}
+          disabled={
+            sending ||
+            content.trim().length === 0 ||
+            (!identity && pseudo.trim().length < PSEUDO_RULES.min)
+          }
         >
-          {sending ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
-          Envoyer
+          {sending ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            <Send className="size-4" />
+          )}
+          {t.actions.comments.send}
         </Button>
       </form>
     </div>

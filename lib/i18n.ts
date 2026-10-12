@@ -246,6 +246,63 @@ const fr = {
     published: "Publié",
   },
 
+  actions: {
+    like: {
+      support: "Soutenir ce signalement",
+      unsupport: "Retirer mon soutien",
+    },
+    share: {
+      onX: "Partager sur X",
+      onLinkedin: "Partager sur LinkedIn",
+      onFacebook: "Partager sur Facebook",
+      onWhatsapp: "Partager sur WhatsApp",
+      text: (title: string) => `${title} — signalement vérifié sur Laza`,
+      copiedToast: "Lien copié dans le presse-papier.",
+      copyFailed: "Impossible de copier le lien.",
+      copied: "Copié !",
+      copyLink: "Copier le lien",
+      share: "Partager",
+      storyCopied: "Lien copié — collez-le dans votre story Instagram.",
+      storyLabel: "Story Instagram (copie le lien)",
+      feedCopied: (title: string) =>
+        `Lien copié — « ${title} » est partageable.`,
+    },
+    comments: {
+      title: "Commentaires",
+      anonymous: "Anonyme",
+      placeholder:
+        "Apporter un écho, une précision, une information complémentaire… (pré-modéré)",
+      pseudoPlaceholder: "Choisissez votre pseudo (affiché sur le fil)",
+      pseudoRequired: "Choisissez un pseudo pour participer.",
+      asIdentity: "Vous commentez en tant que",
+      identityNote: "— votre identité est liée à votre empreinte locale.",
+      send: "Envoyer",
+    },
+    errors: {
+      network: "Erreur réseau — réessayez.",
+    },
+    legal: {
+      title: "Avertissement légal",
+      intro:
+        "Toute dénonciation doit être de bonne foi et étayée par des preuves. En vertu de l'article 373.1 du Code pénal malgache, la dénonciation abusive est punie de",
+      penaltyJail: "6 mois à 5 ans d'emprisonnement",
+      and: "et d'une amende de",
+      penaltyFine: "1 à 10 millions d'Ariary",
+      outro:
+        "Les signalements sont soumis à une vérification préalable par une équipe de modération indépendante. Les données à caractère personnel sont traitées conformément à la loi n° 2014-038 (déclaration CMIL).",
+      extra:
+        "En cas de dénonciation abusive avérée, l'identité du déclarant peut être levée sur réquisition judiciaire.",
+    },
+    cookies: {
+      ariaLabel: "Choix des cookies",
+      title: "Tes données restent à toi",
+      body: "Laza garde juste quelques cookies pour que le site marche : ton choix ici, ton pseudo, et ton thème d'affichage. Pas de publicité, pas de pistage. Tu peux accepter ou refuser.",
+      accept: "J'accepte",
+      refuse: "Je refuse",
+      learnMore: "En savoir plus",
+    },
+  },
+
   footer: {
     tagline:
       "Signalement anonyme de corruption à Madagascar. Indépendant et gratuit.",
@@ -626,6 +683,66 @@ const mg: Copy = {
     share: "Zarao",
     status: "Toe-javatra",
     published: "Navoaka",
+  },
+
+  actions: {
+    like: {
+      support: "Manohana ity fitarainana ity",
+      unsupport: "Esory ny fanohanako",
+    },
+    share: {
+      onX: "Zarao amin'ny X",
+      onLinkedin: "Zarao amin'ny LinkedIn",
+      onFacebook: "Zarao amin'ny Facebook",
+      onWhatsapp: "Zarao amin'ny WhatsApp",
+      text: (title: string) =>
+        `${title} — fitarainana voamarina tao amin'ny Laza`,
+      copiedToast: "Voadika tao amin'ny takelaka ny rohy.",
+      copyFailed: "Tsy afaka nadika ny rohy.",
+      copied: "Voadika !",
+      copyLink: "Adikao ny rohy",
+      share: "Zarao",
+      storyCopied: "Voadika ny rohy — apetaho ao amin'ny Instagram story-nao.",
+      storyLabel: "Instagram story (adika ny rohy)",
+      feedCopied: (title: string) =>
+        `Voadika ny rohy — azo zaraina « ${title} ».`,
+    },
+    comments: {
+      title: "Fanehoan-kevitra",
+      anonymous: "Tsy mitonona anarana",
+      placeholder:
+        "Lazao ny hevitrao, fanazavana na vaovao fanampiny… (dinihina mialoha)",
+      pseudoPlaceholder:
+        "Safidio ny solon'anaranao (aseho amin'ny fifanakalozana)",
+      pseudoRequired: "Safidio solon'anarana vao mandray anjara ianao.",
+      asIdentity: "Maneho hevitra amin'ny anarana",
+      identityNote:
+        "ianao — mifamatotra amin'ny marika eo an-toerana ny maha-ianao.",
+      send: "Alefa",
+    },
+    errors: {
+      network: "Nisy olana tamin'ny aterineto — andramo indray.",
+    },
+    legal: {
+      title: "Fampitandremana ara-dalàna",
+      intro:
+        "Tsy maintsy amin'ny fo madio sy tohanan'ny porofo ny fitarainana rehetra. Araka ny andininy 373.1 amin'ny Fehezan-dalàna famaizana malagasy, ny fitarainana diso dia voasazy",
+      penaltyJail: "6 volana ka hatramin'ny 5 taona an-tranomaizina",
+      and: "sy lamandy",
+      penaltyFine: "1 ka hatramin'ny 10 tapitrisa Ariary",
+      outro:
+        "Ny fitarainana dia dinihin'ny ekipa mpanara-maso mahaleo tena aloha. Ny angona manokana dia karakaraina araka ny lalàna laharana 2014-038 (fanambarana CMIL).",
+      extra:
+        "Raha hita fa fitarainana diso izy, azo ambara ny maha-izy azy raha mangataka ny fitsarana.",
+    },
+    cookies: {
+      ariaLabel: "Safidy momba ny cookies",
+      title: "Anao ihany ny angonao",
+      body: "Cookies vitsivitsy ihany no tehirizin'i Laza mba handehanan'ny tranokala: ny safidinao eto, ny solon'anaranao, ary ny endrika aseho. Tsy misy dokam-barotra, tsy misy fanarahamaso. Azonao ekena na lavina.",
+      accept: "Ekena",
+      refuse: "Lavina",
+      learnMore: "Fantaro bebe kokoa",
+    },
   },
 
   footer: {

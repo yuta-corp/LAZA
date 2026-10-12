@@ -16,7 +16,7 @@ export function LandingHeader() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-hairline bg-white/95 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-[72rem] items-center justify-between gap-3 px-4 sm:px-5 lg:px-6">
-        <Logo href="/" size={42} />
+        <Logo href="/" size={46} />
 
         <div className="flex items-center gap-2">
           <LanguageSwitcher />

@@ -12,7 +12,7 @@ export function NavLeft() {
   return (
     <aside className="sticky top-0 hidden h-svh w-72 flex-col px-3 py-4 md:flex">
       <div className="flex flex-col gap-1">
-        <Logo href="/" size={40} className="w-fit rounded-lg p-2.5 transition-colors hover:bg-muted" />
+        <Logo href="/" size={40} className="w-fit rounded-lg p-2 transition-colors hover:bg-muted" />
 
         <nav className="mt-2 flex flex-col gap-0.5">
           {NAV_ITEMS.map(({ label, href, icon: Icon }) => (

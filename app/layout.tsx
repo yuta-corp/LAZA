@@ -21,17 +21,41 @@ const newsreader = Newsreader({
   variable: "--font-newsreader",
 })
 
+const TITLE = "Laza — Dénoncer la corruption à Madagascar"
+const DESCRIPTION =
+  "Plateforme de dénonciation anonyme de corruption à Madagascar. Signalez des faits avec des preuves, vérifiés avant publication et partageables sur les réseaux sociaux."
+
+/**
+ * Les icônes (favicon, icône Apple) sont fournies par les fichiers de
+ * convention `app/icon.png` et `app/apple-icon.png`.
+ */
 export const metadata: Metadata = {
   title: {
-    default: "Laza — Dénoncer la corruption à Madagascar",
+    default: TITLE,
     template: "%s — Laza",
   },
-  description:
-    "Plateforme de dénonciation anonyme de corruption à Madagascar. Signalez des faits avec des preuves, vérifiés avant publication et partageables sur les réseaux sociaux.",
+  description: DESCRIPTION,
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
-  icons: {
-    icon: "/favicon.ico",
-    apple: "/log.png",
+  openGraph: {
+    type: "website",
+    siteName: "Laza",
+    locale: "fr_MG",
+    title: TITLE,
+    description: DESCRIPTION,
+    images: [
+      {
+        url: "/brand/og.png",
+        width: 1200,
+        height: 630,
+        alt: "Laza — signalement anonyme de corruption à Madagascar",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+    images: ["/brand/og.png"],
   },
 }
 

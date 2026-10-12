@@ -41,13 +41,20 @@ export async function generateMetadata({ params }: MetadataProps): Promise<Metad
       description: report.summary,
       url,
       type: "article",
-      images: [{ url: "/log.png", width: 2000, height: 2000, alt: "Laza" }],
+      images: [
+        {
+          url: "/brand/og.png",
+          width: 1200,
+          height: 630,
+          alt: `${report.title} — dossier vérifié sur Laza`,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: report.title,
       description: report.summary,
-      images: ["/log.png"],
+      images: ["/brand/og.png"],
     },
   }
 }

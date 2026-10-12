@@ -2,7 +2,14 @@ import type { PrismaClient } from "@/lib/generated/prisma/client"
 import type { Category, ReportStatus } from "@/lib/generated/prisma/enums"
 import { EvidenceKind } from "@/lib/generated/prisma/enums"
 import type { Lang } from "@/lib/i18n"
-import { FileText, Film, Image as ImageIcon, Link2, Mic, type LucideIcon } from "lucide-react"
+import {
+  FileText,
+  Film,
+  Image as ImageIcon,
+  Link2,
+  Mic,
+  type LucideIcon,
+} from "lucide-react"
 
 /** Génère un slug unique à partir d'un titre. */
 export function slugify(input: string): string {
@@ -49,16 +56,18 @@ export const MAX_REFERENCE_RETRIES = 3
  * collision (deux créations simultanées peuvent choisir la même référence,
  * contrainte @unique sur `reference`).
  */
-export async function createReportWithReference<T extends { reference: string }>(
-  prisma: PrismaClient,
-  create: (reference: string) => Promise<T>,
-): Promise<T> {
+export async function createReportWithReference<
+  T extends { reference: string },
+>(prisma: PrismaClient, create: (reference: string) => Promise<T>): Promise<T> {
   for (let attempt = 1; attempt <= MAX_REFERENCE_RETRIES; attempt++) {
     try {
       return await create(await nextReference(prisma))
     } catch (error) {
       const isUniqueViolation =
-        error && typeof error === "object" && "code" in error && (error as { code: string }).code === "P2002"
+        error &&
+        typeof error === "object" &&
+        "code" in error &&
+        (error as { code: string }).code === "P2002"
       if (!isUniqueViolation || attempt === MAX_REFERENCE_RETRIES) {
         throw error
       }
@@ -134,21 +143,27 @@ export function formatDateLong(date: Date): string {
 /** Taille de fichier lisible (« 1,2 Mo »). */
 export function formatBytes(bytes: number, lang: Lang = "fr"): string {
   if (!bytes || bytes <= 0) return lang === "mg" ? "—" : "—"
-  const units = lang === "mg" ? ["o", "Ko", "Mo", "Go"] : ["o", "Ko", "Mo", "Go"]
+  const units =
+    lang === "mg" ? ["o", "Ko", "Mo", "Go"] : ["o", "Ko", "Mo", "Go"]
   let value = bytes
   let unit = 0
   while (value >= 1024 && unit < units.length - 1) {
     value /= 1024
     unit++
   }
-  const rounded = value >= 10 || unit === 0 ? Math.round(value) : Number(value.toFixed(1))
+  const rounded =
+    value >= 10 || unit === 0 ? Math.round(value) : Number(value.toFixed(1))
   return `${String(rounded).replace(".", ",")} ${units[unit]}`
 }
 
 /** Extrait lisible du type de média (« pdf », « jpeg »…). */
 export function mimeExtension(mimeType: string): string {
   const subtype = mimeType.split("/")[1] ?? mimeType
-  return subtype.replace("vnd.", "").replace("x-", "").split(";")[0].toUpperCase()
+  return subtype
+    .replace("vnd.", "")
+    .replace("x-", "")
+    .split(";")[0]
+    .toUpperCase()
 }
 
 /**
@@ -190,9 +205,11 @@ export function relativeTimeFr(date: Date): string {
 export function formatRelative(date: Date, lang: Lang = "fr"): string {
   const minutes = Math.floor((Date.now() - date.getTime()) / 60_000)
   if (minutes < 1) return lang === "mg" ? "izao ankehitriny" : "à l'instant"
-  if (minutes < 60) return lang === "mg" ? `${minutes} min lasa` : `il y a ${minutes} min`
+  if (minutes < 60)
+    return lang === "mg" ? `${minutes} min lasa` : `il y a ${minutes} min`
   const hours = Math.floor(minutes / 60)
-  if (hours < 24) return lang === "mg" ? `${hours} ora lasa` : `il y a ${hours} h`
+  if (hours < 24)
+    return lang === "mg" ? `${hours} ora lasa` : `il y a ${hours} h`
   const days = Math.floor(hours / 24)
   if (days < 7) return lang === "mg" ? `${days} andro lasa` : `il y a ${days} j`
   return formatDateFr(date)

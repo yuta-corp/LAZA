@@ -2,7 +2,13 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { cookies } from "next/headers"
-import { ArrowLeft, ArrowUpRight, BadgeCheck, MapPin, MessageSquare } from "lucide-react"
+import {
+  ArrowLeft,
+  ArrowUpRight,
+  BadgeCheck,
+  MapPin,
+  MessageSquare,
+} from "lucide-react"
 import { ShareButtons } from "@/components/share-buttons"
 import { LikeButton } from "@/components/like-button"
 import { FeedShareButton } from "@/components/feed-share-button"
@@ -29,7 +35,9 @@ interface MetadataProps {
   params: Promise<{ slug: string }>
 }
 
-export async function generateMetadata({ params }: MetadataProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: MetadataProps): Promise<Metadata> {
   const { slug } = await params
   const report = await prisma.report.findUnique({ where: { slug } })
 
@@ -95,7 +103,10 @@ export default async function SignalementPage({ params }: PageProps) {
         })
       : null,
     fingerprint
-      ? prisma.identity.findUnique({ where: { fingerprint }, select: { pseudo: true } })
+      ? prisma.identity.findUnique({
+          where: { fingerprint },
+          select: { pseudo: true },
+        })
       : null,
   ])
 
@@ -116,10 +127,10 @@ export default async function SignalementPage({ params }: PageProps) {
         >
           <ArrowLeft className="size-5" />
         </Link>
-        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-ink">
+        <p className="font-mono text-[11px] tracking-[0.18em] text-muted-ink uppercase">
           {report.reference}
         </p>
-        <span className="ml-auto inline-flex items-center gap-1.5 rounded-full bg-secure/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-secure">
+        <span className="ml-auto inline-flex items-center gap-1.5 rounded-full bg-secure/10 px-2.5 py-1 text-[11px] font-semibold tracking-wider text-secure uppercase">
           <BadgeCheck className="size-3.5" />
           {t.verified}
         </span>
@@ -128,10 +139,10 @@ export default async function SignalementPage({ params }: PageProps) {
       <article className="px-4 py-8 sm:px-6">
         {/* Couverture */}
         <header>
-          <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-teal-deep">
+          <p className="font-mono text-[11px] font-semibold tracking-[0.2em] text-teal-deep uppercase">
             {t.kicker}
           </p>
-          <h1 className="mt-3 font-newsreader text-[30px] font-medium leading-[1.08em] tracking-[-0.02em] text-balance text-ink sm:text-[40px]">
+          <h1 className="mt-3 font-newsreader text-[30px] leading-[1.08em] font-medium tracking-[-0.02em] text-balance text-ink sm:text-[40px]">
             {report.title}
           </h1>
           <p className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px] text-ink-muted">
@@ -150,9 +161,15 @@ export default async function SignalementPage({ params }: PageProps) {
 
         {/* Fiche signalétique */}
         <dl className="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-hairline bg-hairline sm:grid-cols-4">
-          <MetaCell label={t.category} value={categoryLabel(lang, report.category)} />
+          <MetaCell
+            label={t.category}
+            value={categoryLabel(lang, report.category)}
+          />
           <MetaCell label={t.region} value={report.region ?? "—"} />
-          <MetaCell label={t.receivedOn} value={formatDateLong(report.createdAt)} />
+          <MetaCell
+            label={t.receivedOn}
+            value={formatDateLong(report.createdAt)}
+          />
           <MetaCell label={t.publishedOn} value={formatDateLong(publishedAt)} />
         </dl>
 
@@ -164,7 +181,7 @@ export default async function SignalementPage({ params }: PageProps) {
         {/* Corps */}
         <section className="mt-8">
           <SectionHeading>{t.facts}</SectionHeading>
-          <p className="mt-4 whitespace-pre-wrap text-[16px] leading-[1.75em] text-ink-muted">
+          <p className="mt-4 text-[16px] leading-[1.75em] whitespace-pre-wrap text-ink-muted">
             {report.description}
           </p>
         </section>
@@ -174,7 +191,7 @@ export default async function SignalementPage({ params }: PageProps) {
           <SectionHeading>
             {t.evidence}
             {evidenceCount > 0 ? (
-              <span className="ml-2 font-sans text-[13px] font-normal normal-case tracking-normal text-muted-ink">
+              <span className="ml-2 font-sans text-[13px] font-normal tracking-normal text-muted-ink normal-case">
                 {evidenceCount.toString().padStart(2, "0")}
               </span>
             ) : null}
@@ -187,14 +204,19 @@ export default async function SignalementPage({ params }: PageProps) {
               {report.evidence.map((evidence, index) => {
                 const Icon = EVIDENCE_ICONS[evidence.kind]
                 const label = EVIDENCE_LABELS[evidence.kind]
-                const verified = evidence.verificationStatus === VerificationStatus.VERIFIED
-                const rejected = evidence.verificationStatus === VerificationStatus.REJECTED
+                const verified =
+                  evidence.verificationStatus === VerificationStatus.VERIFIED
+                const rejected =
+                  evidence.verificationStatus === VerificationStatus.REJECTED
                 return (
-                  <li key={evidence.id} className="flex items-start gap-3 py-3.5">
-                    <span className="mt-0.5 w-6 shrink-0 font-mono text-[12px] tabular-nums text-muted-ink">
+                  <li
+                    key={evidence.id}
+                    className="flex items-start gap-3 py-3.5"
+                  >
+                    <span className="mt-0.5 w-6 shrink-0 font-mono text-[12px] text-muted-ink tabular-nums">
                       {(index + 1).toString().padStart(2, "0")}
                     </span>
-                    <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-md bg-teal-deep/8 text-teal-deep">
+                    <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-md bg-teal-deep/10 text-teal-deep">
                       <Icon className="size-4" />
                     </span>
                     <div className="min-w-0 flex-1">
@@ -204,7 +226,9 @@ export default async function SignalementPage({ params }: PageProps) {
                       <p className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[12px] text-muted-ink">
                         <span>{label}</span>
                         <span aria-hidden="true">·</span>
-                        <span className="font-mono">{mimeExtension(evidence.mimeType)}</span>
+                        <span className="font-mono">
+                          {mimeExtension(evidence.mimeType)}
+                        </span>
                         {evidence.size ? (
                           <>
                             <span aria-hidden="true">·</span>
@@ -221,13 +245,17 @@ export default async function SignalementPage({ params }: PageProps) {
                     <div className="shrink-0 text-right">
                       <span
                         className={cn(
-                          "inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wider",
+                          "inline-flex items-center gap-1 text-[11px] font-semibold tracking-wider uppercase",
                           verified && "text-secure",
                           rejected && "text-vermilion",
-                          !verified && !rejected && "text-muted-ink",
+                          !verified && !rejected && "text-muted-ink"
                         )}
                       >
-                        {verified ? t.evidenceVerified : rejected ? t.evidenceRejected : t.evidencePending}
+                        {verified
+                          ? t.evidenceVerified
+                          : rejected
+                            ? t.evidenceRejected
+                            : t.evidencePending}
                       </span>
                       {evidence.url ? (
                         <a
@@ -236,7 +264,9 @@ export default async function SignalementPage({ params }: PageProps) {
                           rel="noopener noreferrer"
                           className="mt-1 inline-flex items-center gap-1 text-[12px] font-medium text-teal-deep hover:underline"
                         >
-                          {evidence.kind === EvidenceKind.LINK ? t.evidenceOpenLink : t.evidenceOpen}
+                          {evidence.kind === EvidenceKind.LINK
+                            ? t.evidenceOpenLink
+                            : t.evidenceOpen}
                           <ArrowUpRight className="size-3" />
                         </a>
                       ) : null}
@@ -252,16 +282,21 @@ export default async function SignalementPage({ params }: PageProps) {
         <section className="mt-10 rounded-lg border border-hairline bg-white p-5">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-ink">
+              <p className="font-mono text-[11px] font-semibold tracking-[0.2em] text-muted-ink uppercase">
                 {t.anonymity}
               </p>
               <p className="mt-1 font-newsreader text-[18px] font-semibold text-ink">
                 {report.authorName ? `@${report.authorName}` : t.anonymous}
               </p>
             </div>
-            <BadgeCheck className="size-5 shrink-0 text-teal-deep" aria-hidden="true" />
+            <BadgeCheck
+              className="size-5 shrink-0 text-teal-deep"
+              aria-hidden="true"
+            />
           </div>
-          <p className="mt-2 text-[13px] leading-relaxed text-ink-muted">{t.anonymityNote}</p>
+          <p className="mt-2 text-[13px] leading-relaxed text-ink-muted">
+            {t.anonymityNote}
+          </p>
           {commitment ? (
             <p className="mt-3 font-mono text-[11px] text-muted-ink">
               {t.fingerprint} · {commitment}
@@ -278,12 +313,24 @@ export default async function SignalementPage({ params }: PageProps) {
               className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-[14px] font-medium text-ink-muted transition-colors hover:bg-paper hover:text-teal-deep"
             >
               <MessageSquare className="size-[17px]" />
-              <span className="tabular-nums">{t.comments(report.comments.length)}</span>
+              <span className="tabular-nums">
+                {t.comments(report.comments.length)}
+              </span>
             </Link>
-            <LikeButton slug={report.slug} initialCount={likeCount} initialLiked={Boolean(initialLiked)} />
-            <FeedShareButton title={report.title} path={`/signalement/${report.slug}`} />
+            <LikeButton
+              slug={report.slug}
+              initialCount={likeCount}
+              initialLiked={Boolean(initialLiked)}
+            />
+            <FeedShareButton
+              title={report.title}
+              path={`/signalement/${report.slug}`}
+            />
           </div>
-          <ShareButtons title={report.title} path={`/signalement/${report.slug}`} />
+          <ShareButtons
+            title={report.title}
+            path={`/signalement/${report.slug}`}
+          />
         </div>
       </article>
 
@@ -305,17 +352,19 @@ export default async function SignalementPage({ params }: PageProps) {
 function MetaCell({ label, value }: { label: string; value: string }) {
   return (
     <div className="bg-white px-3.5 py-3">
-      <dt className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-ink">
+      <dt className="font-mono text-[10px] font-semibold tracking-[0.16em] text-muted-ink uppercase">
         {label}
       </dt>
-      <dd className="mt-1 text-[13px] font-medium leading-snug text-ink">{value}</dd>
+      <dd className="mt-1 text-[13px] leading-snug font-medium text-ink">
+        {value}
+      </dd>
     </div>
   )
 }
 
 function SectionHeading({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="font-mono text-[12px] font-semibold uppercase tracking-[0.2em] text-ink">
+    <h2 className="font-mono text-[12px] font-semibold tracking-[0.2em] text-ink uppercase">
       {children}
     </h2>
   )

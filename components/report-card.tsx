@@ -1,5 +1,11 @@
 import Link from "next/link"
-import { ArrowUpRight, BadgeCheck, MapPin, MessageSquare, Paperclip } from "lucide-react"
+import {
+  ArrowUpRight,
+  BadgeCheck,
+  MapPin,
+  MessageSquare,
+  Paperclip,
+} from "lucide-react"
 import { LikeButton } from "@/components/like-button"
 import { FeedShareButton } from "@/components/feed-share-button"
 import { formatRelative } from "@/lib/report"
@@ -31,24 +37,26 @@ export function ReportCard({
     <article className="group/card border-b border-hairline bg-white px-4 py-5 transition-colors hover:bg-paper/60 sm:px-6">
       {/* Bandeau : référence, auteur, date */}
       <div className="flex items-center gap-2">
-        <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-ink">
+        <span className="font-mono text-[10px] font-semibold tracking-[0.16em] text-muted-ink uppercase">
           {report.reference}
         </span>
-        <span className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wider text-secure">
+        <span className="inline-flex items-center gap-1 text-[11px] font-semibold tracking-wider text-secure uppercase">
           <BadgeCheck className="size-3.5" aria-hidden="true" />
           {t.verified}
         </span>
         <span aria-hidden="true" className="text-hairline-strong">
           ·
         </span>
-        <span className="truncate text-[12px] text-muted-ink">{authorName}</span>
+        <span className="truncate text-[12px] text-muted-ink">
+          {authorName}
+        </span>
         <span className="ml-auto shrink-0 text-[12px] text-muted-ink">
           {formatRelative(report.publishedAt ?? report.createdAt, lang)}
         </span>
       </div>
 
       <Link href={detailsHref} className="mt-3 block">
-        <h2 className="font-newsreader text-[21px] font-medium leading-[1.18em] tracking-[-0.01em] text-ink transition-colors group-hover/card:text-teal-deep sm:text-[24px]">
+        <h2 className="font-newsreader text-[21px] leading-[1.18em] font-medium tracking-[-0.01em] text-ink transition-colors group-hover/card:text-teal-deep sm:text-[24px]">
           {report.title}
         </h2>
       </Link>
@@ -58,7 +66,9 @@ export function ReportCard({
       </p>
 
       <div className="mt-3 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[12px] text-muted-ink">
-        <span className="font-medium text-ink">{categoryLabel(lang, report.category)}</span>
+        <span className="font-medium text-ink">
+          {categoryLabel(lang, report.category)}
+        </span>
         {report.region ? (
           <>
             <span aria-hidden="true" className="text-hairline-strong">
@@ -93,7 +103,11 @@ export function ReportCard({
           <span className="tabular-nums">{commentCount}</span>
         </Link>
 
-        <LikeButton slug={report.slug} initialCount={likeCount} initialLiked={initialLiked} />
+        <LikeButton
+          slug={report.slug}
+          initialCount={likeCount}
+          initialLiked={initialLiked}
+        />
 
         <FeedShareButton title={report.title} path={detailsHref} />
 

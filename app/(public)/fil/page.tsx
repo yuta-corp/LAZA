@@ -26,7 +26,10 @@ interface FeedPageProps {
 
 export default async function FeedPage({ searchParams }: FeedPageProps) {
   const { categorie } = await searchParams
-  const filter = categorie && categorie in CATEGORY_LABELS ? (categorie as Category) : undefined
+  const filter =
+    categorie && categorie in CATEGORY_LABELS
+      ? (categorie as Category)
+      : undefined
 
   const cookieStore = await cookies()
   const fingerprint = cookieStore.get(FINGERPRINT_COOKIE)?.value
@@ -61,8 +64,13 @@ export default async function FeedPage({ searchParams }: FeedPageProps) {
     }),
   ])
 
-  const likeCountById = new Map(likeCounts.map((row) => [row.reportId, row._count._all]))
-  const totalPublished = categoryCounts.reduce((sum, row) => sum + row._count._all, 0)
+  const likeCountById = new Map(
+    likeCounts.map((row) => [row.reportId, row._count._all])
+  )
+  const totalPublished = categoryCounts.reduce(
+    (sum, row) => sum + row._count._all,
+    0
+  )
 
   // Empreintes soutenant déjà les signalements affichés (cookie du visiteur)
   let likedReportIds = new Set<string>()
@@ -79,12 +87,12 @@ export default async function FeedPage({ searchParams }: FeedPageProps) {
       {/* En-tête du registre : titre, vrai compteur, filtres réels */}
       <div className="sticky top-14 z-30 border-b border-hairline bg-white/90 backdrop-blur md:top-0">
         <div className="px-4 pt-5 sm:px-6">
-          <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-teal-deep">
+          <p className="font-mono text-[11px] font-semibold tracking-[0.2em] text-teal-deep uppercase">
             {t.eyebrow}
           </p>
           <div className="mt-2 flex items-start justify-between gap-3">
             <div>
-              <h1 className="font-newsreader text-[26px] font-medium leading-[1.1em] tracking-[-0.015em] text-ink sm:text-[32px]">
+              <h1 className="font-newsreader text-[26px] leading-[1.1em] font-medium tracking-[-0.015em] text-ink sm:text-[32px]">
                 {t.title}
               </h1>
               <p className="mt-1 text-[14px] text-ink-muted">{t.intro}</p>
@@ -99,8 +107,13 @@ export default async function FeedPage({ searchParams }: FeedPageProps) {
           </div>
 
           {/* Filtres par catégorie — onglets soulignés, défilement horizontal mobile */}
-          <nav className="-mx-4 mt-4 flex gap-4 overflow-x-auto px-4 sm:-mx-6 sm:px-6 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            <FilterTab href="/fil" active={!filter} label={t.all} count={totalPublished} />
+          <nav className="-mx-4 mt-4 flex [scrollbar-width:none] gap-4 overflow-x-auto px-4 [-ms-overflow-style:none] sm:-mx-6 sm:px-6 [&::-webkit-scrollbar]:hidden">
+            <FilterTab
+              href="/fil"
+              active={!filter}
+              label={t.all}
+              count={totalPublished}
+            />
             {categoryCounts.map((row) => (
               <FilterTab
                 key={row.category}
@@ -185,17 +198,17 @@ function FilterTab({
       href={href}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "group/tab inline-flex shrink-0 items-center gap-1.5 border-b-2 pb-2.5 pt-1 text-[14px] font-medium transition-colors",
+        "group/tab inline-flex shrink-0 items-center gap-1.5 border-b-2 pt-1 pb-2.5 text-[14px] font-medium transition-colors",
         active
           ? "border-teal-deep text-ink"
-          : "border-transparent text-ink-muted hover:border-hairline-strong hover:text-ink",
+          : "border-transparent text-ink-muted hover:border-hairline-strong hover:text-ink"
       )}
     >
       {label}
       <span
         className={cn(
           "font-mono text-[11px] tabular-nums",
-          active ? "text-teal-deep" : "text-muted-ink",
+          active ? "text-teal-deep" : "text-muted-ink"
         )}
       >
         {count}

@@ -16,6 +16,7 @@ import {
   Users,
 } from "lucide-react"
 import { useLanguage } from "@/components/language-provider"
+import { Reveal } from "@/components/reveal"
 import type { Category } from "@/lib/generated/prisma/enums"
 
 export interface LandingStats {
@@ -59,13 +60,14 @@ export function LandingView({ stats, teaser }: LandingViewProps) {
       {/* ============================== 1-3. HERO ============================== */}
       <section className="border-b border-hairline bg-white">
         <div className="mx-auto grid max-w-[72rem] grid-cols-1 items-center gap-12 px-5 py-12 lg:grid-cols-12 lg:gap-10 lg:px-6 lg:py-20">
-          <div className="lg:col-span-7">
-            <span className="inline-block font-mono text-[11px] font-semibold uppercase tracking-widest text-teal-deep">
+          <Reveal className="lg:col-span-7">
+            <span className="inline-block font-mono text-[11px] font-semibold tracking-widest text-teal-deep uppercase">
               {t.hero.kicker}
             </span>
 
-            <h1 className="mt-4 font-newsreader text-[34px] font-medium leading-[1.08em] tracking-[-0.015em] text-ink sm:text-[44px] lg:text-[52px]">
-              {t.hero.title} <span className="text-teal-deep">{t.hero.titleStrong}</span>{" "}
+            <h1 className="mt-4 font-newsreader text-[38px] leading-[1.03em] font-medium tracking-[-0.02em] text-balance text-ink sm:text-[52px] lg:text-[64px]">
+              {t.hero.title}{" "}
+              <span className="text-teal-deep">{t.hero.titleStrong}</span>{" "}
               <em className="font-normal italic">{t.hero.titleAccent}</em>
             </h1>
 
@@ -81,7 +83,9 @@ export function LandingView({ stats, teaser }: LandingViewProps) {
                 {t.hero.cta}
                 <ArrowRight className="size-5" />
               </Link>
-              <p className="mt-3 text-[15px] font-medium text-ink">{t.hero.ctaNote}</p>
+              <p className="mt-3 text-[15px] font-medium text-ink">
+                {t.hero.ctaNote}
+              </p>
             </div>
 
             <p className="mt-6 flex items-start gap-2 text-[15px] leading-[1.5em] text-ink-muted">
@@ -96,12 +100,12 @@ export function LandingView({ stats, teaser }: LandingViewProps) {
               {t.hero.secondary}
               <ArrowRight className="size-4" />
             </Link>
-          </div>
+          </Reveal>
 
           {/* Visuel : un dossier réel, jamais un faux témoignage. */}
-          <div className="lg:col-span-5">
+          <Reveal className="lg:col-span-5" delay={0.12}>
             <div className="rounded-2xl border border-hairline bg-paper p-5 sm:p-6">
-              <span className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-ink">
+              <span className="font-mono text-[11px] font-semibold tracking-widest text-muted-ink uppercase">
                 {teaser ? t.hero.previewTitle : t.hero.previewEmptyTitle}
               </span>
 
@@ -116,7 +120,7 @@ export function LandingView({ stats, teaser }: LandingViewProps) {
                     <span>{teaser.time[lang]}</span>
                   </div>
 
-                  <h2 className="mt-3 font-newsreader text-[21px] font-semibold leading-[1.25em] text-ink">
+                  <h2 className="mt-3 font-newsreader text-[21px] leading-[1.25em] font-semibold text-ink">
                     {teaser.title}
                   </h2>
                   <p className="mt-2 line-clamp-3 text-[15px] leading-[1.5em] text-ink-muted">
@@ -137,7 +141,9 @@ export function LandingView({ stats, teaser }: LandingViewProps) {
                     </Link>
                   </div>
 
-                  <p className="mt-3 text-[13px] italic text-muted-ink">{t.hero.previewNote}</p>
+                  <p className="mt-3 text-[13px] text-muted-ink italic">
+                    {t.hero.previewNote}
+                  </p>
                 </>
               ) : (
                 <p className="mt-3 text-[15px] leading-[1.55em] text-ink-muted">
@@ -145,32 +151,46 @@ export function LandingView({ stats, teaser }: LandingViewProps) {
                 </p>
               )}
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
 
       {/* ============================== 4. COMMENT ÇA MARCHE ============================== */}
-      <section id="comment-ca-marche" className="scroll-mt-20 border-b border-hairline bg-paper py-14 lg:py-20">
+      <section
+        id="comment-ca-marche"
+        className="scroll-mt-20 border-b border-hairline bg-paper py-14 lg:py-20"
+      >
         <div className="mx-auto max-w-[72rem] px-5 lg:px-6">
           <Eyebrow>{t.how.eyebrow}</Eyebrow>
-          <h2 className="font-newsreader text-[28px] font-medium leading-[1.15em] tracking-[-0.01em] text-ink lg:text-[36px]">
+          <h2 className="font-newsreader text-[30px] leading-[1.1em] font-medium tracking-[-0.015em] text-balance text-ink lg:text-[40px]">
             {t.how.title}
           </h2>
-          <p className="mt-3 max-w-2xl text-[17px] leading-[1.55em] text-ink-muted">{t.how.intro}</p>
+          <p className="mt-3 max-w-2xl text-[17px] leading-[1.55em] text-ink-muted">
+            {t.how.intro}
+          </p>
 
           <ol className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {t.how.steps.map((step, index) => {
               const Icon = STEP_ICONS[index] ?? PenLine
               return (
-                <li key={step.title} className="rounded-xl border border-hairline bg-white p-5">
-                  <div className="flex size-10 items-center justify-center rounded-lg bg-teal-deep/10 text-teal-deep">
-                    <Icon className="size-5" />
-                  </div>
-                  <p className="mt-3 font-mono text-[11px] font-semibold uppercase tracking-wider text-muted-ink">
-                    {index + 1}
-                  </p>
-                  <h3 className="mt-1 font-newsreader text-[19px] font-semibold text-ink">{step.title}</h3>
-                  <p className="mt-1.5 text-[15px] leading-[1.5em] text-ink-muted">{step.body}</p>
+                <li key={step.title}>
+                  <Reveal
+                    delay={index * 0.08}
+                    className="rounded-xl border border-hairline bg-white p-5"
+                  >
+                    <div className="flex size-10 items-center justify-center rounded-lg bg-teal-deep/10 text-teal-deep">
+                      <Icon className="size-5" />
+                    </div>
+                    <p className="mt-3 font-mono text-[11px] font-semibold tracking-wider text-muted-ink uppercase">
+                      {index + 1}
+                    </p>
+                    <h3 className="mt-1 font-newsreader text-[19px] font-semibold text-ink">
+                      {step.title}
+                    </h3>
+                    <p className="mt-1.5 text-[15px] leading-[1.5em] text-ink-muted">
+                      {step.body}
+                    </p>
+                  </Reveal>
                 </li>
               )
             })}
@@ -179,10 +199,13 @@ export function LandingView({ stats, teaser }: LandingViewProps) {
       </section>
 
       {/* ============================== 5. CONFIANCE ============================== */}
-      <section id="confiance" className="scroll-mt-20 border-b border-hairline bg-white py-14 lg:py-20">
+      <section
+        id="confiance"
+        className="scroll-mt-20 border-b border-hairline bg-white py-14 lg:py-20"
+      >
         <div className="mx-auto max-w-[72rem] px-5 lg:px-6">
           <Eyebrow>{t.trust.eyebrow}</Eyebrow>
-          <h2 className="font-newsreader text-[28px] font-medium leading-[1.15em] tracking-[-0.01em] text-ink lg:text-[36px]">
+          <h2 className="font-newsreader text-[30px] leading-[1.1em] font-medium tracking-[-0.015em] text-balance text-ink lg:text-[40px]">
             {t.trust.title}
           </h2>
 
@@ -190,14 +213,23 @@ export function LandingView({ stats, teaser }: LandingViewProps) {
             {t.trust.items.map((item, index) => {
               const Icon = TRUST_ICONS[index] ?? ShieldCheck
               return (
-                <li key={item.title} className="flex items-start gap-4">
-                  <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-teal-deep/10 text-teal-deep">
-                    <Icon className="size-5" />
-                  </span>
-                  <div>
-                    <h3 className="text-[16px] font-semibold text-ink">{item.title}</h3>
-                    <p className="mt-1 text-[15px] leading-[1.55em] text-ink-muted">{item.body}</p>
-                  </div>
+                <li key={item.title}>
+                  <Reveal
+                    delay={index * 0.08}
+                    className="flex items-start gap-4"
+                  >
+                    <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-teal-deep/10 text-teal-deep">
+                      <Icon className="size-5" />
+                    </span>
+                    <div>
+                      <h3 className="text-[16px] font-semibold text-ink">
+                        {item.title}
+                      </h3>
+                      <p className="mt-1 text-[15px] leading-[1.55em] text-ink-muted">
+                        {item.body}
+                      </p>
+                    </div>
+                  </Reveal>
                 </li>
               )
             })}
@@ -211,15 +243,19 @@ export function LandingView({ stats, teaser }: LandingViewProps) {
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12">
             <div className="lg:col-span-5">
               <Eyebrow>{t.benefits.eyebrow}</Eyebrow>
-              <h2 className="font-newsreader text-[28px] font-medium leading-[1.15em] tracking-[-0.01em] text-ink lg:text-[36px]">
+              <h2 className="font-newsreader text-[30px] leading-[1.1em] font-medium tracking-[-0.015em] text-balance text-ink lg:text-[40px]">
                 {t.benefits.title}
               </h2>
             </div>
             <ul className="space-y-4 lg:col-span-7">
               {t.benefits.items.map((item) => (
-                <li key={item} className="flex items-start gap-3 rounded-xl bg-white p-4">
-                  <Check className="mt-0.5 size-5 shrink-0 text-secure" />
-                  <span className="text-[16px] leading-[1.55em] text-ink">{item}</span>
+                <li key={item}>
+                  <Reveal className="flex items-start gap-3 rounded-xl bg-white p-4">
+                    <Check className="mt-0.5 size-5 shrink-0 text-secure" />
+                    <span className="text-[16px] leading-[1.55em] text-ink">
+                      {item}
+                    </span>
+                  </Reveal>
                 </li>
               ))}
             </ul>
@@ -228,13 +264,18 @@ export function LandingView({ stats, teaser }: LandingViewProps) {
       </section>
 
       {/* ============================== 7. PREUVE SOCIALE ============================== */}
-      <section id="preuve" className="scroll-mt-20 border-b border-hairline bg-white py-14 lg:py-20">
+      <section
+        id="preuve"
+        className="scroll-mt-20 border-b border-hairline bg-white py-14 lg:py-20"
+      >
         <div className="mx-auto max-w-[72rem] px-5 lg:px-6">
           <Eyebrow>{t.proof.eyebrow}</Eyebrow>
-          <h2 className="font-newsreader text-[28px] font-medium leading-[1.15em] tracking-[-0.01em] text-ink lg:text-[36px]">
+          <h2 className="font-newsreader text-[30px] leading-[1.1em] font-medium tracking-[-0.015em] text-balance text-ink lg:text-[40px]">
             {t.proof.title}
           </h2>
-          <p className="mt-3 max-w-2xl text-[17px] leading-[1.55em] text-ink-muted">{t.proof.intro}</p>
+          <p className="mt-3 max-w-2xl text-[17px] leading-[1.55em] text-ink-muted">
+            {t.proof.intro}
+          </p>
 
           {stats.published > 0 ? (
             <dl className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -248,12 +289,14 @@ export function LandingView({ stats, teaser }: LandingViewProps) {
                 <FileText className="size-5 text-teal-deep" />
                 {t.proof.emptyTitle}
               </p>
-              <p className="mt-2 text-[15px] leading-[1.55em] text-ink-muted">{t.proof.emptyBody}</p>
+              <p className="mt-2 text-[15px] leading-[1.55em] text-ink-muted">
+                {t.proof.emptyBody}
+              </p>
             </div>
           )}
 
           <div className="mt-10">
-            <h3 className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-ink">
+            <h3 className="font-mono text-[11px] font-semibold tracking-widest text-muted-ink uppercase">
               {t.proof.processTitle}
             </h3>
             <ol className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -262,8 +305,12 @@ export function LandingView({ stats, teaser }: LandingViewProps) {
                   <span className="font-newsreader text-[24px] font-light text-muted-ink/50">
                     {index + 1}
                   </span>
-                  <h4 className="mt-2 text-[16px] font-semibold text-ink">{step.title}</h4>
-                  <p className="mt-1 text-[15px] leading-[1.5em] text-ink-muted">{step.body}</p>
+                  <h4 className="mt-2 text-[16px] font-semibold text-ink">
+                    {step.title}
+                  </h4>
+                  <p className="mt-1 text-[15px] leading-[1.5em] text-ink-muted">
+                    {step.body}
+                  </p>
                 </li>
               ))}
             </ol>
@@ -272,10 +319,13 @@ export function LandingView({ stats, teaser }: LandingViewProps) {
       </section>
 
       {/* ============================== 8. FAQ ============================== */}
-      <section id="faq" className="scroll-mt-20 border-b border-hairline bg-paper py-14 lg:py-20">
+      <section
+        id="faq"
+        className="scroll-mt-20 border-b border-hairline bg-paper py-14 lg:py-20"
+      >
         <div className="mx-auto max-w-[72rem] px-5 lg:px-6">
           <Eyebrow>{t.faq.eyebrow}</Eyebrow>
-          <h2 className="font-newsreader text-[28px] font-medium leading-[1.15em] tracking-[-0.01em] text-ink lg:text-[36px]">
+          <h2 className="font-newsreader text-[30px] leading-[1.1em] font-medium tracking-[-0.015em] text-balance text-ink lg:text-[40px]">
             {t.faq.title}
           </h2>
 
@@ -286,12 +336,14 @@ export function LandingView({ stats, teaser }: LandingViewProps) {
                   {item.q}
                   <span
                     aria-hidden="true"
-                    className="shrink-0 text-[22px] font-light leading-none text-teal-deep transition-transform group-open:rotate-45"
+                    className="shrink-0 text-[22px] leading-none font-light text-teal-deep transition-transform group-open:rotate-45"
                   >
                     +
                   </span>
                 </summary>
-                <p className="px-5 pb-5 text-[16px] leading-[1.6em] text-ink-muted">{item.a}</p>
+                <p className="px-5 pb-5 text-[16px] leading-[1.6em] text-ink-muted">
+                  {item.a}
+                </p>
               </details>
             ))}
           </div>
@@ -302,10 +354,12 @@ export function LandingView({ stats, teaser }: LandingViewProps) {
       <section className="bg-white py-16 lg:py-24">
         <div className="mx-auto max-w-[72rem] px-5 lg:px-6">
           <div className="mx-auto flex max-w-2xl flex-col items-center text-center">
-            <h2 className="font-newsreader text-[34px] font-medium leading-[1.1em] tracking-[-0.015em] text-ink lg:text-[46px]">
+            <h2 className="font-newsreader text-[36px] leading-[1.05em] font-medium tracking-[-0.02em] text-balance text-ink lg:text-[54px]">
               {t.finalCta.title}
             </h2>
-            <p className="mt-3 text-[18px] leading-[1.55em] text-ink-muted">{t.finalCta.body}</p>
+            <p className="mt-3 text-[18px] leading-[1.55em] text-ink-muted">
+              {t.finalCta.body}
+            </p>
 
             <Link
               href="/signaler"
@@ -314,7 +368,9 @@ export function LandingView({ stats, teaser }: LandingViewProps) {
               {t.finalCta.cta}
               <ArrowRight className="size-5" />
             </Link>
-            <p className="mt-3 text-[15px] font-medium text-ink">{t.finalCta.note}</p>
+            <p className="mt-3 text-[15px] font-medium text-ink">
+              {t.finalCta.note}
+            </p>
 
             <Link
               href="/fil"
@@ -332,7 +388,7 @@ export function LandingView({ stats, teaser }: LandingViewProps) {
 
 function Eyebrow({ children }: { children: React.ReactNode }) {
   return (
-    <span className="mb-2 block font-mono text-[11px] font-semibold uppercase tracking-widest text-teal-deep">
+    <span className="mb-2 block font-mono text-[11px] font-semibold tracking-widest text-teal-deep uppercase">
       {children}
     </span>
   )
@@ -342,7 +398,7 @@ function Stat({ label, value }: { label: string; value: number }) {
   return (
     <div className="flex flex-col-reverse rounded-xl bg-paper p-5">
       <dt className="mt-2 text-[14px] text-ink-muted">{label}</dt>
-      <dd className="font-newsreader text-[34px] font-semibold leading-none text-ink">
+      <dd className="font-newsreader text-[40px] leading-none font-medium tracking-[-0.02em] text-ink">
         {new Intl.NumberFormat("fr-FR").format(value)}
       </dd>
     </div>

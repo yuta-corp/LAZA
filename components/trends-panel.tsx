@@ -24,11 +24,13 @@ export async function TrendsPanel({ lang = "fr" }: { lang?: Lang }) {
     >
       <div className="flex items-center gap-2">
         <Hash className="size-4 text-teal-deep" />
-        <h2 className="font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-ink">
+        <h2 className="font-mono text-[11px] font-semibold tracking-[0.18em] text-ink uppercase">
           {t.trendsTitle}
         </h2>
       </div>
-      <p className="mt-1.5 text-[13px] text-muted-ink">{t.trendsCount(total)}</p>
+      <p className="mt-1.5 text-[13px] text-muted-ink">
+        {t.trendsCount(total)}
+      </p>
 
       {grouped.length === 0 ? (
         <p className="mt-4 text-[14px] text-muted-ink">{t.trendsEmpty}</p>
@@ -43,7 +45,7 @@ export async function TrendsPanel({ lang = "fr" }: { lang?: Lang }) {
                 <span className="min-w-0 truncate text-[14px] font-medium text-ink">
                   {categoryLabel(lang, row.category as Category)}
                 </span>
-                <span className="shrink-0 font-mono text-[12px] tabular-nums text-muted-ink">
+                <span className="shrink-0 font-mono text-[12px] text-muted-ink tabular-nums">
                   {row._count._all.toString().padStart(2, "0")}
                 </span>
               </Link>

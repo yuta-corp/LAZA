@@ -11,7 +11,11 @@ import { LANG_COOKIE, normalizeLang } from "@/lib/i18n"
  * La langue est lue côté serveur depuis le cookie : le premier rendu est déjà
  * dans la bonne langue, et les composants clients partagent le même contexte.
  */
-export default async function PublicLayout({ children }: { children: React.ReactNode }) {
+export default async function PublicLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   const cookieStore = await cookies()
   const lang = normalizeLang(cookieStore.get(LANG_COOKIE)?.value)
 

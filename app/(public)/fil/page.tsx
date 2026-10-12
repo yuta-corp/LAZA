@@ -5,6 +5,7 @@ import { Megaphone, ShieldCheck } from "lucide-react"
 import { ReportCard } from "@/components/report-card"
 import { LegalWarning } from "@/components/legal-warning"
 import { prisma } from "@/lib/prisma"
+import { categoryLabel, getCopy, LANG_COOKIE, normalizeLang } from "@/lib/i18n"
 import { CATEGORY_LABELS } from "@/lib/report"
 import { FINGERPRINT_COOKIE } from "@/lib/constants"
 import { cn } from "@/lib/utils"
@@ -14,7 +15,7 @@ import type { Category } from "@/lib/generated/prisma/enums"
 export const dynamic = "force-dynamic"
 
 export const metadata: Metadata = {
-  title: "Fil des dénonciations vérifiées",
+  title: "Registre public des signalements vérifiés",
   description:
     "Suivez les signalements de corruption vérifiés et publiés à Madagascar. Soutenez-les et participez au fil de commentaires.",
 }
@@ -29,6 +30,8 @@ export default async function FeedPage({ searchParams }: FeedPageProps) {
 
   const cookieStore = await cookies()
   const fingerprint = cookieStore.get(FINGERPRINT_COOKIE)?.value
+  const lang = normalizeLang(cookieStore.get(LANG_COOKIE)?.value)
+  const t = getCopy(lang).feed
 
   const reports = await prisma.report.findMany({
     where: { status: "PUBLISHED", category: filter },
@@ -72,80 +75,79 @@ export default async function FeedPage({ searchParams }: FeedPageProps) {
   }
 
   return (
-    <div className="min-h-svh bg-canvas-tint">
-      {/* En-tête du fil : titre, vrai compteur, filtres réels */}
+    <div className="bg-white">
+      {/* En-tête du registre : titre, vrai compteur, filtres réels */}
       <div className="sticky top-14 z-30 border-b border-hairline bg-white/90 backdrop-blur md:top-0">
-        <div className="px-4 pt-4 sm:px-5">
-          <div className="flex items-start justify-between gap-3">
+        <div className="px-4 pt-5 sm:px-6">
+          <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-teal-deep">
+            {t.eyebrow}
+          </p>
+          <div className="mt-2 flex items-start justify-between gap-3">
             <div>
-              <h1 className="font-newsreader text-[22px] font-semibold leading-tight text-ink sm:text-[26px]">
-                Signalements publiés
+              <h1 className="font-newsreader text-[26px] font-medium leading-[1.1em] tracking-[-0.015em] text-ink sm:text-[32px]">
+                {t.title}
               </h1>
-              <p className="mt-0.5 text-[14px] text-ink-muted">
-                Des faits vérifiés, publiés sans le nom des personnes.
-              </p>
+              <p className="mt-1 text-[14px] text-ink-muted">{t.intro}</p>
             </div>
             <Link
               href="/signaler"
-              className="hidden shrink-0 items-center gap-1.5 rounded-xl bg-teal-deep px-4 py-2.5 text-[14px] font-semibold text-white transition-colors hover:bg-teal-mid sm:inline-flex"
+              className="hidden shrink-0 items-center gap-1.5 rounded-lg bg-teal-deep px-4 py-2.5 text-[14px] font-semibold text-white transition-colors hover:bg-teal-mid sm:inline-flex"
             >
               <Megaphone className="size-4" />
-              Signaler un fait
+              {t.report}
             </Link>
           </div>
 
-          {/* Filtres par catégorie — vraies puces, défilement horizontal sur mobile */}
-          <div className="-mx-4 mt-3 flex gap-2 overflow-x-auto px-4 pb-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            <FilterChip href="/fil" active={!filter} label="Tout" count={totalPublished} />
+          {/* Filtres par catégorie — onglets soulignés, défilement horizontal mobile */}
+          <nav className="-mx-4 mt-4 flex gap-4 overflow-x-auto px-4 sm:-mx-6 sm:px-6 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <FilterTab href="/fil" active={!filter} label={t.all} count={totalPublished} />
             {categoryCounts.map((row) => (
-              <FilterChip
+              <FilterTab
                 key={row.category}
                 href={`/fil?categorie=${row.category}`}
                 active={filter === row.category}
-                label={CATEGORY_LABELS[row.category]}
+                label={categoryLabel(lang, row.category)}
                 count={row._count._all}
               />
             ))}
-          </div>
+          </nav>
         </div>
       </div>
 
       {/* Fil */}
       {reports.length === 0 ? (
-        <div className="px-4 py-12 sm:px-5">
-          <div className="mx-auto max-w-md rounded-2xl border border-hairline bg-white p-6 text-center sm:p-8">
-            <span className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-teal-deep/10 text-teal-deep">
+        <div className="px-4 py-16 sm:px-6">
+          <div className="mx-auto max-w-sm text-center">
+            <span className="mx-auto flex size-12 items-center justify-center rounded-lg bg-teal-deep/10 text-teal-deep">
               <ShieldCheck className="size-6" />
             </span>
             <h2 className="mt-4 font-newsreader text-[22px] font-semibold text-ink">
-              {filter ? "Rien dans cette catégorie" : "Rien à afficher pour l'instant"}
+              {filter ? t.emptyCategoryTitle : t.emptyTitle}
             </h2>
             <p className="mt-2 text-[15px] leading-[1.55em] text-ink-muted">
-              {filter
-                ? "Aucun fait vérifié n'a encore été publié dans cette catégorie."
-                : "Les premiers signalements vérifiés apparaîtront ici. Tu peux être la première personne à en déposer un."}
+              {filter ? t.emptyCategoryBody : t.emptyBody}
             </p>
-            <div className="mt-5 flex flex-col items-center gap-2">
+            <div className="mt-5 flex flex-col items-center gap-3">
               <Link
                 href="/signaler"
-                className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-teal-deep px-6 text-[16px] font-semibold text-white transition-colors hover:bg-teal-mid sm:w-auto"
+                className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-teal-deep px-6 text-[16px] font-semibold text-white transition-colors hover:bg-teal-mid sm:w-auto"
               >
                 <Megaphone className="size-4" />
-                Signaler un fait
+                {t.report}
               </Link>
               {filter ? (
                 <Link
                   href="/fil"
                   className="text-[15px] font-medium text-teal-deep underline-offset-4 hover:underline"
                 >
-                  Voir tous les signalements
+                  {t.seeAll}
                 </Link>
               ) : null}
             </div>
           </div>
         </div>
       ) : (
-        <ul className="space-y-4 px-4 py-5 sm:px-5">
+        <ul>
           {reports.map((report) => (
             <li key={report.id}>
               <ReportCard
@@ -153,20 +155,21 @@ export default async function FeedPage({ searchParams }: FeedPageProps) {
                 likeCount={likeCountById.get(report.id) ?? 0}
                 commentCount={report.comments.length}
                 initialLiked={likedReportIds.has(report.id)}
+                lang={lang}
               />
             </li>
           ))}
         </ul>
       )}
 
-      <div className="px-4 pb-10 sm:px-5">
+      <div className="px-4 py-8 sm:px-6">
         <LegalWarning compact />
       </div>
     </div>
   )
 }
 
-function FilterChip({
+function FilterTab({
   href,
   label,
   count,
@@ -182,14 +185,21 @@ function FilterChip({
       href={href}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-[13px] font-medium transition-colors",
+        "group/tab inline-flex shrink-0 items-center gap-1.5 border-b-2 pb-2.5 pt-1 text-[14px] font-medium transition-colors",
         active
-          ? "border-teal-deep bg-teal-deep text-white"
-          : "border-hairline bg-white text-ink-muted hover:border-teal-deep/40 hover:text-ink",
+          ? "border-teal-deep text-ink"
+          : "border-transparent text-ink-muted hover:border-hairline-strong hover:text-ink",
       )}
     >
       {label}
-      <span className={cn("tabular-nums", active ? "text-white/75" : "text-muted-ink")}>{count}</span>
+      <span
+        className={cn(
+          "font-mono text-[11px] tabular-nums",
+          active ? "text-teal-deep" : "text-muted-ink",
+        )}
+      >
+        {count}
+      </span>
     </Link>
   )
 }

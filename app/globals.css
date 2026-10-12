@@ -5,7 +5,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-    --font-heading: var(--font-sans);
+    --font-display: var(--font-newsreader);
+    --font-heading: var(--font-newsreader);
     --font-sans: var(--font-sans);
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
@@ -75,84 +76,74 @@
 }
 
 :root {
-    /* AAPLY design system — charcoal primary, teal accent, neutres */
+    /* AAPLY → aligned on the LAZA editorial palette (single identity) */
     --background: #ffffff;
-    --foreground: #000000;
+    --foreground: #1a2027;
     --card: #ffffff;
-    --card-foreground: #000000;
+    --card-foreground: #1a2027;
     --popover: #ffffff;
-    --popover-foreground: #000000;
-    --primary: #4b5563;
+    --popover-foreground: #1a2027;
+    --primary: #006575;
     --primary-foreground: #ffffff;
-    --secondary: #f9fafb;
-    --secondary-foreground: #111111;
-    --muted: #f9fafb;
-    --muted-foreground: #6b7280;
-    --accent: #0c95ab;
+    --secondary: #f8fafc;
+    --secondary-foreground: #1a2027;
+    --muted: #f8fafc;
+    --muted-foreground: #64748b;
+    --accent: #008094;
     --accent-foreground: #ffffff;
     --destructive: #dc2626;
-    --border: #f3f4f6;
-    --input: #f3f4f6;
-    --ring: #0c95ab;
-    --chart-1: #0c95ab;
-    --chart-2: #4b5563;
-    --chart-3: #9ca3af;
-    --chart-4: #6ee7f8;
-    --chart-5: #111827;
-    /* Radius système AAPLY — petites, nettes */
-    --radius: 0.25rem;
-    --radius-sm: calc(var(--radius) * 0.6);
-    --radius-md: var(--radius);
-    --radius-lg: calc(var(--radius) * 1.6);
-    --radius-xl: calc(var(--radius) * 2);
-    --radius-2xl: calc(var(--radius) * 2.6);
-    --radius-3xl: calc(var(--radius) * 3.2);
-    --radius-4xl: calc(var(--radius) * 4);
-    --sidebar: #f9fafb;
-    --sidebar-foreground: #111111;
-    --sidebar-primary: #4b5563;
+    --border: #e2e8f0;
+    --input: #e2e8f0;
+    --ring: #006575;
+    --chart-1: #006575;
+    --chart-2: #008094;
+    --chart-3: #64748b;
+    --chart-4: #a7eeff;
+    --chart-5: #1a2027;
+    --sidebar: #f8fafc;
+    --sidebar-foreground: #1a2027;
+    --sidebar-primary: #006575;
     --sidebar-primary-foreground: #ffffff;
     --sidebar-accent: #ffffff;
-    --sidebar-accent-foreground: #0c95ab;
-    --sidebar-border: #f3f4f6;
-    --sidebar-ring: #0c95ab;
-    /* Ombres AAPLY — subtiles */
-    --shadow-card: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    --shadow-elevated: 0 10px 15px -3px rgb(12 149 171 / 0.2), 0 4px 6px -4px rgb(12 149 171 / 0.2);
+    --sidebar-accent-foreground: #006575;
+    --sidebar-border: #e2e8f0;
+    --sidebar-ring: #006575;
+    /* Radius système — net mais chaleureux, gouverné en un seul endroit */
+    --radius: 0.375rem;
 }
 
 .dark {
-    --background: #111827;
-    --foreground: #f9fafb;
-    --card: #0f172a;
-    --card-foreground: #f9fafb;
-    --popover: #0f172a;
-    --popover-foreground: #f9fafb;
-    --primary: #9ca3af;
-    --primary-foreground: #111827;
-    --secondary: #1f2937;
-    --secondary-foreground: #f9fafb;
-    --muted: #1f2937;
+    --background: #090c0e;
+    --foreground: #e9eef8;
+    --card: #0f1317;
+    --card-foreground: #e9eef8;
+    --popover: #0f1317;
+    --popover-foreground: #e9eef8;
+    --primary: #a7eeff;
+    --primary-foreground: #082f35;
+    --secondary: #12181f;
+    --secondary-foreground: #e9eef8;
+    --muted: #12181f;
     --muted-foreground: #9ca3af;
-    --accent: #22d3ee;
-    --accent-foreground: #082f35;
+    --accent: #008094;
+    --accent-foreground: #ffffff;
     --destructive: #ef4444;
     --border: #ffffff14;
     --input: #ffffff1f;
-    --ring: #22d3ee;
-    --chart-1: #22d3ee;
-    --chart-2: #9ca3af;
-    --chart-3: #4b5563;
-    --chart-4: #0e7490;
+    --ring: #008094;
+    --chart-1: #a7eeff;
+    --chart-2: #008094;
+    --chart-3: #64748b;
+    --chart-4: #22d3ee;
     --chart-5: #e5e7eb;
-    --sidebar: #0f172a;
-    --sidebar-foreground: #f9fafb;
-    --sidebar-primary: #9ca3af;
-    --sidebar-primary-foreground: #111827;
-    --sidebar-accent: #1f2937;
+    --sidebar: #0b1013;
+    --sidebar-foreground: #e9eef8;
+    --sidebar-primary: #a7eeff;
+    --sidebar-primary-foreground: #082f35;
+    --sidebar-accent: #12181f;
     --sidebar-accent-foreground: #22d3ee;
     --sidebar-border: #ffffff14;
-    --sidebar-ring: #22d3ee;
+    --sidebar-ring: #008094;
 }
 
 @layer base {
@@ -165,4 +156,23 @@
   html {
     @apply font-sans;
     }
+  :root {
+    color-scheme: light;
+    }
+  .dark {
+    color-scheme: dark;
+    }
+  ::selection {
+    background-color: var(--color-teal-light);
+    color: var(--color-navy-ink);
+    }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    }
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+      }
+  }
 }

@@ -164,6 +164,60 @@ const fr = {
     secondary: "Voir les signalements",
   },
 
+  feed: {
+    eyebrow: "Registre public",
+    title: "Signalements vérifiés",
+    intro: "Des faits vérifiés, publiés sans le nom des personnes.",
+    report: "Signaler un fait",
+    all: "Tout",
+    emptyCategoryTitle: "Rien dans cette catégorie",
+    emptyCategoryBody: "Aucun fait vérifié n'a encore été publié dans cette catégorie.",
+    emptyTitle: "Rien à afficher pour l'instant",
+    emptyBody:
+      "Les premiers signalements vérifiés apparaîtront ici. Tu peux être la première personne à en déposer un.",
+    seeAll: "Voir tous les signalements",
+    trendsTitle: "Tendances à Madagascar",
+    trendsCount: (n: number) =>
+      `${n} signalement${n > 1 ? "s" : ""} vérifié${n > 1 ? "s" : ""} publié${n > 1 ? "s" : ""}`,
+    trendsEmpty: "Aucune tendance pour l'instant.",
+    trendsExplore: "Explorer toutes les tendances",
+    categoryCount: (n: number) => `${n} signalement${n > 1 ? "s" : ""}`,
+    navHome: "Accueil",
+    navFeed: "Explorer",
+    navReport: "Signaler",
+  },
+
+  dossier: {
+    back: "Retour au fil",
+    kicker: "Dossier vérifié",
+    ref: "Référence",
+    verified: "Vérifié",
+    category: "Catégorie",
+    region: "Région",
+    anonymous: "Dénonciateur anonyme",
+    anonymity: "Anonymat",
+    anonymityNote:
+      "Seule une marque chiffrée relie ce dossier à sa source. Aucun nom n'est stocké.",
+    fingerprint: "Marque",
+    verifiedBy: "Vérifié par l'équipe Laza",
+    receivedOn: "Reçu le",
+    publishedOn: "Publié le",
+    facts: "Les faits",
+    evidence: "Pièces à conviction",
+    evidenceEmpty: "Aucune pièce jointe à ce dossier.",
+    evidenceVerified: "Intégrité vérifiée",
+    evidencePending: "En cours de vérification",
+    evidenceRejected: "Pièce écartée",
+    evidenceOpen: "Consulter la pièce",
+    evidenceOpenLink: "Ouvrir la source",
+    evidenceHash: "Empreinte",
+    read: "Lire le dossier",
+    comments: (n: number) => `${n} commentaire${n > 1 ? "s" : ""}`,
+    share: "Partager",
+    status: "Statut",
+    published: "Publié",
+  },
+
   footer: {
     tagline: "Signalement anonyme de corruption à Madagascar. Indépendant et gratuit.",
     sectionHelp: "Le site",
@@ -457,6 +511,59 @@ const mg: Copy = {
     secondary: "Hijery ny fitarainana",
   },
 
+  feed: {
+    eyebrow: "Rakitra ampahibemaso",
+    title: "Fitarainana voamarina",
+    intro: "Zava-misy voamarina, avoaka tsy misy anaran'olona.",
+    report: "Mitatitra zava-misy",
+    all: "Izy rehetra",
+    emptyCategoryTitle: "Tsy misy ao amin'io sokajy io",
+    emptyCategoryBody: "Mbola tsy misy zava-misy voamarina navoaka amin'io sokajy io.",
+    emptyTitle: "Mbola tsy misy hita izao",
+    emptyBody:
+      "Hiseho eto ny fitarainana voamarina voalohany. Ianao no mety ho voalohany mandefa iray.",
+    seeAll: "Hijery ny fitarainana rehetra",
+    trendsTitle: "Fironana eto Madagasikara",
+    trendsCount: (n: number) => `${n} fitarainana voamarina navoaka`,
+    trendsEmpty: "Mbola tsy misy fironana.",
+    trendsExplore: "Hijery ny fironana rehetra",
+    categoryCount: (n: number) => `${n} fitarainana`,
+    navHome: "Fandraisana",
+    navFeed: "Hikaroka",
+    navReport: "Mitatitra",
+  },
+
+  dossier: {
+    back: "Miverina amin'ny fitarainana",
+    kicker: "Rakitra voamarina",
+    ref: "Laharana",
+    verified: "Voamarina",
+    category: "Sokajy",
+    region: "Faritra",
+    anonymous: "Mpandefa tsy mitonona anarana",
+    anonymity: "Tsy mitonona anarana",
+    anonymityNote:
+      "Marika voafefy ihany no mampifandray io rakitra io amin'ny loharano. Tsy misy anarana tehirizina.",
+    fingerprint: "Marika",
+    verifiedBy: "Voamarina tamin'ny ekipan'ny Laza",
+    receivedOn: "Noraisina tamin'ny",
+    publishedOn: "Navoaka tamin'ny",
+    facts: "Ny zava-misy",
+    evidence: "Porofo",
+    evidenceEmpty: "Tsy misy porofo ampiarahina amin'io rakitra io.",
+    evidenceVerified: "Voamarina ny fahamarinany",
+    evidencePending: "Eo am-panadinana",
+    evidenceRejected: "Porofo nolavina",
+    evidenceOpen: "Hijery ny porofo",
+    evidenceOpenLink: "Hanokatra ny loharano",
+    evidenceHash: "Marika",
+    read: "Vakio ny rakitra",
+    comments: (n: number) => `${n} fanehoan-kevitra`,
+    share: "Zarao",
+    status: "Toe-javatra",
+    published: "Navoaka",
+  },
+
   footer: {
     tagline: "Fitarainana tsy mitonona anarana momba ny kolikoly eto Madagasikara. Mahaleo tena sy maimaim-poana.",
     sectionHelp: "Ny tranokala",
@@ -621,4 +728,9 @@ export const dictionaries: Record<Lang, Copy> = { fr, mg }
 
 export function getCopy(lang: Lang): Copy {
   return dictionaries[lang]
+}
+
+/** Libellé de catégorie dans la langue courante (source unique : form.categories). */
+export function categoryLabel(lang: Lang, category: Category): string {
+  return dictionaries[lang].form.categories[category]
 }

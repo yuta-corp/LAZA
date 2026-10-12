@@ -126,6 +126,31 @@ export function formatDateFr(date: Date): string {
   }).format(date)
 }
 
+/** Dateline éditoriale « 12 octobre 2026 » (identitaire, quelle que soit la langue). */
+export function formatDateLong(date: Date): string {
+  return formatDateFr(date)
+}
+
+/** Taille de fichier lisible (« 1,2 Mo »). */
+export function formatBytes(bytes: number, lang: Lang = "fr"): string {
+  if (!bytes || bytes <= 0) return lang === "mg" ? "—" : "—"
+  const units = lang === "mg" ? ["o", "Ko", "Mo", "Go"] : ["o", "Ko", "Mo", "Go"]
+  let value = bytes
+  let unit = 0
+  while (value >= 1024 && unit < units.length - 1) {
+    value /= 1024
+    unit++
+  }
+  const rounded = value >= 10 || unit === 0 ? Math.round(value) : Number(value.toFixed(1))
+  return `${String(rounded).replace(".", ",")} ${units[unit]}`
+}
+
+/** Extrait lisible du type de média (« pdf », « jpeg »…). */
+export function mimeExtension(mimeType: string): string {
+  const subtype = mimeType.split("/")[1] ?? mimeType
+  return subtype.replace("vnd.", "").replace("x-", "").split(";")[0].toUpperCase()
+}
+
 /**
  * Titre court déduit du récit libre.
  * Le parcours simplifié ne demande pas de titre : il est proposé à partir de la

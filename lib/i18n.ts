@@ -81,7 +81,7 @@ const fr = {
       },
       {
         title: "On vérifie",
-        body: "Une vraie personne lit ton dossier sous 48 heures.",
+        body: "Une vraie personne lit ton dossier, souvent sous 48 heures.",
       },
       {
         title: "On publie",
@@ -521,7 +521,7 @@ const mg: Copy = {
       },
       {
         title: "Manamarina izahay",
-        body: "Olona tena izy no mamaky ny rakitrao ao anatin'ny 48 ora.",
+        body: "Olona tena izy no mamaky ny rakitrao, matetika ao anatin'ny 48 ora.",
       },
       {
         title: "Mamoaka izahay",

@@ -381,6 +381,8 @@ const fr = {
       noProofTitle: "Pas de preuve sous la main ?",
       noProofBody:
         "Tu peux enregistrer ton récit maintenant et revenir plus tard. Un dossier sans preuve ne peut pas être vérifié, donc il ne sera pas publié.",
+      removeFile: (name: string) => `Retirer ${name}`,
+      removeLink: "Retirer le lien",
     },
 
     step4: {
@@ -824,6 +826,8 @@ const mg: Copy = {
       noProofTitle: "Tsy manana porofo amin'izao ?",
       noProofBody:
         "Afaka mitahiry ny tantaranao ianao ary hiverina aoriana. Tsy azo hamarinina ny rakitra tsy misy porofo, ka tsy havoaka izy.",
+      removeFile: (name: string) => `Esory ${name}`,
+      removeLink: "Esory ny rohy",
     },
 
     step4: {

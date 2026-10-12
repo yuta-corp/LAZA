@@ -4,7 +4,12 @@ import { useState } from "react"
 import { Share2 } from "lucide-react"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { useLanguage } from "@/components/language-provider"
 
 interface FeedShareButtonProps {
   title: string
@@ -12,6 +17,7 @@ interface FeedShareButtonProps {
 }
 
 export function FeedShareButton({ title, path }: FeedShareButtonProps) {
+  const { t } = useLanguage()
   const [copied, setCopied] = useState(false)
 
   async function copyLink() {
@@ -20,10 +26,10 @@ export function FeedShareButton({ title, path }: FeedShareButtonProps) {
     try {
       await navigator.clipboard.writeText(url)
       setCopied(true)
-      toast.success(`Lien copié — « ${title} » est partageable.`)
+      toast.success(t.actions.share.feedCopied(title))
       setTimeout(() => setCopied(false), 2000)
     } catch {
-      toast.error("Impossible de copier le lien.")
+      toast.error(t.actions.share.copyFailed)
     }
   }
 
@@ -41,7 +47,9 @@ export function FeedShareButton({ title, path }: FeedShareButtonProps) {
           </Button>
         }
       />
-      <TooltipContent>{copied ? "Lien copié !" : "Partager"}</TooltipContent>
+      <TooltipContent>
+        {copied ? t.actions.share.copied : t.actions.share.share}
+      </TooltipContent>
     </Tooltip>
   )
 }

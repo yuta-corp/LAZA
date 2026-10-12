@@ -6,6 +6,7 @@ import { toast } from "sonner"
 import { cn } from "@/lib/utils"
 import { toggleLike } from "@/app/actions"
 import { ensureShaFingerprint } from "@/lib/fingerprint"
+import { useLanguage } from "@/components/language-provider"
 
 interface LikeButtonProps {
   slug: string
@@ -13,7 +14,12 @@ interface LikeButtonProps {
   initialLiked: boolean
 }
 
-export function LikeButton({ slug, initialCount, initialLiked }: LikeButtonProps) {
+export function LikeButton({
+  slug,
+  initialCount,
+  initialLiked,
+}: LikeButtonProps) {
+  const { t } = useLanguage()
   const [count, setCount] = useState(initialCount)
   const [liked, setLiked] = useState(initialLiked)
   const [pending, startTransition] = useTransition()
@@ -42,10 +48,10 @@ export function LikeButton({ slug, initialCount, initialLiked }: LikeButtonProps
         setCount(result.count)
         if (result.liked) setBump(true)
       } catch {
-        toast.error("Erreur réseau — réessayez.")
+        toast.error(t.actions.errors.network)
       }
     })
-  }, [liked, pending, slug])
+  }, [liked, pending, slug, t])
 
   return (
     <button
@@ -53,10 +59,10 @@ export function LikeButton({ slug, initialCount, initialLiked }: LikeButtonProps
       onClick={toggle}
       disabled={pending}
       aria-pressed={liked}
-      aria-label={liked ? "Retirer mon soutien" : "Soutenir ce signalement"}
+      aria-label={liked ? t.actions.like.unsupport : t.actions.like.support}
       className={cn(
         "group flex items-center gap-1.5 rounded-full px-2 py-1 text-sm text-muted-foreground transition-colors",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none",
         liked ? "text-accent" : "hover:bg-accent/10 hover:text-accent"
       )}
     >

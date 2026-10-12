@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { cookies } from "next/headers"
 import { Inter, Geist_Mono, Newsreader } from "next/font/google"
 
 import "./globals.css"
@@ -6,6 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { CookieConsent } from "@/components/cookie-consent"
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { LANG_COOKIE, normalizeLang } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
@@ -35,7 +37,9 @@ export const metadata: Metadata = {
     template: "%s — Laza",
   },
   description: DESCRIPTION,
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
+  ),
   openGraph: {
     type: "website",
     siteName: "Laza",
@@ -59,21 +63,24 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const cookieStore = await cookies()
+  const lang = normalizeLang(cookieStore.get(LANG_COOKIE)?.value)
+
   return (
     <html
-      lang="fr"
+      lang={lang}
       suppressHydrationWarning
       className={cn(
         "antialiased",
         fontMono.variable,
         newsreader.variable,
         "font-sans",
-        inter.variable,
+        inter.variable
       )}
     >
       <body className="flex min-h-svh flex-col">

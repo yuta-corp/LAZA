@@ -19,6 +19,12 @@ export default function AuthLayout({
           borderRadius: "0.5rem",
           fontFamily: "var(--font-sans)",
         },
+        elements: {
+          // Clerk centre mal sa carte dans un conteneur flex : on force
+          // l'alignement et une largeur maximale éditoriale.
+          rootBox: "mx-auto w-full",
+          cardBox: "w-full",
+        },
       }}
     >
       <div className="flex min-h-svh flex-col bg-canvas-tint">
@@ -33,7 +39,7 @@ export default function AuthLayout({
         </header>
 
         <main className="flex flex-1 items-center justify-center px-4 py-10">
-          {children}
+          <div className="mx-auto w-full max-w-md">{children}</div>
         </main>
       </div>
     </ClerkProvider>

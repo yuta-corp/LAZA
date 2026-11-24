@@ -1,6 +1,12 @@
 "use client"
 
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react"
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react"
 import Link from "next/link"
 import { toast } from "sonner"
 import {
@@ -151,7 +157,9 @@ function parseDraft(raw: string | null): Draft | null {
 
 /** Enregistre le brouillon local sans jamais effacer celui déjà présent. */
 function persistDraft(draft: Draft) {
-  const hasContent = Boolean(draft.story.trim() || draft.category || draft.pseudo.trim())
+  const hasContent = Boolean(
+    draft.story.trim() || draft.category || draft.pseudo.trim()
+  )
   if (!hasContent) return
   try {
     window.localStorage.setItem(DRAFT_KEY, JSON.stringify(draft))
@@ -201,7 +209,10 @@ export function ReportForm() {
   const [pseudo, setPseudo] = useState("")
   const [cin, setCin] = useState("")
   const [birthDate, setBirthDate] = useState("")
-  const [commitment, setCommitment] = useState<{ hash: string; salt: string } | null>(null)
+  const [commitment, setCommitment] = useState<{
+    hash: string
+    salt: string
+  } | null>(null)
   const [computing, setComputing] = useState(false)
 
   // Vérification finale
@@ -213,7 +224,11 @@ export function ReportForm() {
 
   // Brouillon local : lu via useSyncExternalStore (pas de setState dans un effet,
   // pas d'écart entre le rendu serveur et le rendu navigateur).
-  const draftRaw = useSyncExternalStore(subscribeNothing, readDraftAtLoad, getServerDraftRaw)
+  const draftRaw = useSyncExternalStore(
+    subscribeNothing,
+    readDraftAtLoad,
+    getServerDraftRaw
+  )
   const [draftDismissed, setDraftDismissed] = useState(false)
   const [savedNotice, setSavedNotice] = useState(false)
   const storedDraft = useMemo(() => parseDraft(draftRaw), [draftRaw])
@@ -221,7 +236,7 @@ export function ReportForm() {
 
   const derived = useMemo(
     () => ({ title: deriveTitle(story), summary: deriveSummary(story) }),
-    [story],
+    [story]
   )
   const title = titleOverride ?? derived.title
   const summary = summaryOverride ?? derived.summary
@@ -239,7 +254,16 @@ export function ReportForm() {
       summaryOverride,
       updatedAt: Date.now(),
     })
-  }, [phase, step, story, category, region, pseudo, titleOverride, summaryOverride])
+  }, [
+    phase,
+    step,
+    story,
+    category,
+    region,
+    pseudo,
+    titleOverride,
+    summaryOverride,
+  ])
 
   // Chaque écran repart du haut, comme sur un téléphone.
   useEffect(() => {
@@ -287,7 +311,9 @@ export function ReportForm() {
 
   function validateStep(current: number): string | null {
     if (current === 0) {
-      return story.trim().length >= TEXT_RULES.description.min ? null : t.form.step1.error
+      return story.trim().length >= TEXT_RULES.description.min
+        ? null
+        : t.form.step1.error
     }
     if (current === 1) {
       return category ? null : t.form.step2.error
@@ -382,7 +408,11 @@ export function ReportForm() {
     setComputing(true)
     try {
       const { salt } = await getIdentitySalt()
-      const hash = await computeIdentityCommitment(normalizeCin(cin), birthDate, salt)
+      const hash = await computeIdentityCommitment(
+        normalizeCin(cin),
+        birthDate,
+        salt
+      )
       setCommitment({ hash, salt })
       toast.success(t.form.step4.generated)
     } catch {
@@ -394,7 +424,8 @@ export function ReportForm() {
 
   function validateReview(): string | null {
     if (title.trim().length < TEXT_RULES.title.min) return t.form.step1.error
-    if (summary.trim().length < TEXT_RULES.summary.min) return t.form.review.summaryTooShort
+    if (summary.trim().length < TEXT_RULES.summary.min)
+      return t.form.review.summaryTooShort
     if (!legalAccepted) return t.form.review.errorLegal
     return null
   }
@@ -425,13 +456,18 @@ export function ReportForm() {
       formData.append("links", JSON.stringify(links))
       formData.append(
         "evidenceHashes",
-        JSON.stringify(files.map((f) => ({ name: f.file.name, sha256: f.hash }))),
+        JSON.stringify(
+          files.map((f) => ({ name: f.file.name, sha256: f.hash }))
+        )
       )
       for (const f of files) {
         formData.append("evidence", f.file)
       }
 
-      const res = await fetch("/api/reports", { method: "POST", body: formData })
+      const res = await fetch("/api/reports", {
+        method: "POST",
+        body: formData,
+      })
       const data = await res.json()
       if (res.ok && data.ok) {
         clearDraft()
@@ -455,23 +491,34 @@ export function ReportForm() {
     return (
       <div className="rounded-2xl border border-hairline bg-white p-6 sm:p-8">
         <CircleCheck className="size-12 text-secure" />
-        <h1 className="mt-4 font-newsreader text-[28px] font-semibold leading-tight text-ink">
+        <h1 className="mt-4 font-newsreader text-[28px] leading-tight font-semibold text-ink">
           {t.form.done.title}
         </h1>
-        <p className="mt-2 text-[16px] leading-[1.55em] text-ink-muted">{t.form.done.body}</p>
+        <p className="mt-2 text-[16px] leading-[1.55em] text-ink-muted">
+          {t.form.done.body}
+        </p>
 
         <div className="mt-6 rounded-xl bg-paper p-4">
-          <p className="text-[13px] font-medium uppercase tracking-wider text-muted-ink">
+          <p className="text-[13px] font-medium tracking-wider text-muted-ink uppercase">
             {t.form.done.refLabel}
           </p>
-          <p className="mt-1 font-mono text-[20px] font-semibold text-ink">{reference}</p>
-          <p className="mt-2 text-[15px] leading-[1.5em] text-ink-muted">{t.form.done.refHint}</p>
+          <p className="mt-1 font-mono text-[20px] font-semibold text-ink">
+            {reference}
+          </p>
+          <p className="mt-2 text-[15px] leading-[1.5em] text-ink-muted">
+            {t.form.done.refHint}
+          </p>
         </div>
 
-        <h2 className="mt-6 text-[16px] font-semibold text-ink">{t.form.done.nextTitle}</h2>
+        <h2 className="mt-6 text-[16px] font-semibold text-ink">
+          {t.form.done.nextTitle}
+        </h2>
         <ol className="mt-3 space-y-3">
           {t.form.done.next.map((line, index) => (
-            <li key={line} className="flex items-start gap-3 text-[16px] leading-[1.55em] text-ink-muted">
+            <li
+              key={line}
+              className="flex items-start gap-3 text-[16px] leading-[1.55em] text-ink-muted"
+            >
               <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-teal-deep/10 text-[13px] font-semibold text-teal-deep">
                 {index + 1}
               </span>
@@ -507,10 +554,12 @@ export function ReportForm() {
 
         {error ? <StepError message={error} /> : null}
 
-        <h1 className="font-newsreader text-[26px] font-semibold leading-tight text-ink">
+        <h1 className="font-newsreader text-[26px] leading-tight font-semibold text-ink">
           {t.form.review.title}
         </h1>
-        <p className="text-[16px] leading-[1.55em] text-ink-muted">{t.form.review.hint}</p>
+        <p className="text-[16px] leading-[1.55em] text-ink-muted">
+          {t.form.review.hint}
+        </p>
 
         <Field label={t.form.review.titleLabel} htmlFor="review-title">
           <input
@@ -522,7 +571,11 @@ export function ReportForm() {
           />
         </Field>
 
-        <Field label={t.form.review.summaryLabel} htmlFor="review-summary" hint={t.form.review.summaryHint}>
+        <Field
+          label={t.form.review.summaryLabel}
+          htmlFor="review-summary"
+          hint={t.form.review.summaryHint}
+        >
           <textarea
             id="review-summary"
             value={summary}
@@ -534,11 +587,15 @@ export function ReportForm() {
         </Field>
 
         <div className="rounded-xl border border-hairline bg-white p-4 text-[15px]">
-          <p className="font-semibold text-ink">{t.form.review.recapEvidence}</p>
+          <p className="font-semibold text-ink">
+            {t.form.review.recapEvidence}
+          </p>
           <p className="mt-1 text-ink-muted">
             {t.form.review.recapEvidenceCount(files.length, links.length)}
           </p>
-          <p className="mt-3 font-semibold text-ink">{t.form.review.recapIdentity}</p>
+          <p className="mt-3 font-semibold text-ink">
+            {t.form.review.recapIdentity}
+          </p>
           <p className="mt-1 text-ink-muted">@{pseudo.trim()}</p>
         </div>
 
@@ -551,7 +608,9 @@ export function ReportForm() {
             onChange={(event) => setLegalAccepted(event.target.checked)}
             className="mt-1 size-5 shrink-0 accent-teal-deep"
           />
-          <span className="text-[15px] leading-[1.55em] text-ink">{t.form.review.legalLabel}</span>
+          <span className="text-[15px] leading-[1.55em] text-ink">
+            {t.form.review.legalLabel}
+          </span>
         </label>
 
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-between">
@@ -569,7 +628,11 @@ export function ReportForm() {
             disabled={submitting}
             className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-teal-deep px-6 text-[16px] font-semibold text-white transition-colors hover:bg-teal-mid disabled:opacity-60"
           >
-            {submitting ? <Loader2 className="size-5 animate-spin" /> : <ShieldAlert className="size-5" />}
+            {submitting ? (
+              <Loader2 className="size-5 animate-spin" />
+            ) : (
+              <ShieldAlert className="size-5" />
+            )}
             {submitting ? t.form.review.sending : t.form.review.send}
           </button>
         </div>
@@ -583,10 +646,12 @@ export function ReportForm() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="font-newsreader text-[24px] font-semibold leading-tight text-ink sm:text-[28px]">
+        <h1 className="font-newsreader text-[24px] leading-tight font-semibold text-ink sm:text-[28px]">
           {t.form.pageTitle}
         </h1>
-        <p className="mt-1 text-[16px] leading-[1.5em] text-ink-muted">{t.form.pageIntro}</p>
+        <p className="mt-1 text-[16px] leading-[1.5em] text-ink-muted">
+          {t.form.pageIntro}
+        </p>
       </div>
 
       {pendingDraft ? (
@@ -595,7 +660,9 @@ export function ReportForm() {
             <BookmarkCheck className="size-5 shrink-0 text-teal-deep" />
             {t.form.draftBannerTitle}
           </p>
-          <p className="mt-1 text-[15px] text-ink-muted">{t.form.draftBannerBody}</p>
+          <p className="mt-1 text-[15px] text-ink-muted">
+            {t.form.draftBannerBody}
+          </p>
           <div className="mt-3 flex flex-wrap gap-2">
             <button
               type="button"
@@ -644,7 +711,9 @@ export function ReportForm() {
           <StepTitle title={t.form.step2.title} hint={t.form.step2.hint} />
 
           <fieldset>
-            <legend className="text-[16px] font-semibold text-ink">{t.form.step2.categoryLabel}</legend>
+            <legend className="text-[16px] font-semibold text-ink">
+              {t.form.step2.categoryLabel}
+            </legend>
             <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
               {CATEGORIES.map((value) => {
                 const active = value === category
@@ -658,18 +727,24 @@ export function ReportForm() {
                       "flex min-h-12 items-center justify-between gap-2 rounded-xl border px-4 py-3 text-left text-[16px] transition-colors",
                       active
                         ? "border-teal-deep bg-teal-deep/10 font-semibold text-ink"
-                        : "border-hairline bg-white text-ink hover:border-teal-deep/40",
+                        : "border-hairline bg-white text-ink hover:border-teal-deep/40"
                     )}
                   >
                     {t.form.categories[value]}
-                    {active ? <Check className="size-5 shrink-0 text-teal-deep" /> : null}
+                    {active ? (
+                      <Check className="size-5 shrink-0 text-teal-deep" />
+                    ) : null}
                   </button>
                 )
               })}
             </div>
           </fieldset>
 
-          <Field label={t.form.step2.regionLabel} htmlFor="region" hint={t.form.step2.regionHint}>
+          <Field
+            label={t.form.step2.regionLabel}
+            htmlFor="region"
+            hint={t.form.step2.regionHint}
+          >
             <input
               id="region"
               list="regions-list"
@@ -709,12 +784,20 @@ export function ReportForm() {
             className="flex min-h-32 w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-hairline-strong bg-white p-6 text-center transition-colors hover:border-teal-deep/60"
           >
             <Upload className="size-7 text-teal-deep" />
-            <span className="text-[17px] font-semibold text-ink">{t.form.step3.addFiles}</span>
-            <span className="text-[15px] text-ink-muted">{t.form.step3.dropHint}</span>
-            <span className="text-[13px] text-muted-ink">{t.form.step3.limit}</span>
+            <span className="text-[17px] font-semibold text-ink">
+              {t.form.step3.addFiles}
+            </span>
+            <span className="text-[15px] text-ink-muted">
+              {t.form.step3.dropHint}
+            </span>
+            <span className="text-[13px] text-muted-ink">
+              {t.form.step3.limit}
+            </span>
           </button>
 
-          {!hasEvidence ? <p className="text-[15px] text-muted-ink">{t.form.step3.empty}</p> : null}
+          {!hasEvidence ? (
+            <p className="text-[15px] text-muted-ink">{t.form.step3.empty}</p>
+          ) : null}
 
           {files.length > 0 ? (
             <ul className="space-y-2">
@@ -727,7 +810,9 @@ export function ReportForm() {
                   >
                     <Icon className="size-5 shrink-0 text-teal-deep" />
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-[15px] font-medium text-ink">{file.name}</p>
+                      <p className="truncate text-[15px] font-medium text-ink">
+                        {file.name}
+                      </p>
                       <p className="text-[13px] text-muted-ink">
                         {formatSize(file.size)}
                         {file.size > 0 ? " · " : ""}
@@ -736,8 +821,12 @@ export function ReportForm() {
                     </div>
                     <button
                       type="button"
-                      aria-label={`Retirer ${file.name}`}
-                      onClick={() => setFiles((prev) => prev.filter((item) => item.file !== file))}
+                      aria-label={t.form.step3.removeFile(file.name)}
+                      onClick={() =>
+                        setFiles((prev) =>
+                          prev.filter((item) => item.file !== file)
+                        )
+                      }
                       className="flex size-10 shrink-0 items-center justify-center rounded-lg text-ink-muted transition-colors hover:bg-paper hover:text-ink"
                     >
                       <Trash2 className="size-5" />
@@ -749,7 +838,10 @@ export function ReportForm() {
           ) : null}
 
           <div>
-            <label htmlFor="link" className="text-[16px] font-semibold text-ink">
+            <label
+              htmlFor="link"
+              className="text-[16px] font-semibold text-ink"
+            >
               {t.form.step3.addLink}
             </label>
             <div className="mt-2 flex flex-col gap-2 sm:flex-row">
@@ -785,11 +877,15 @@ export function ReportForm() {
                   className="flex items-center gap-3 rounded-xl border border-hairline bg-white p-3"
                 >
                   <Link2 className="size-4 shrink-0 text-teal-deep" />
-                  <span className="min-w-0 flex-1 truncate text-[15px] text-ink">{link}</span>
+                  <span className="min-w-0 flex-1 truncate text-[15px] text-ink">
+                    {link}
+                  </span>
                   <button
                     type="button"
-                    aria-label="Retirer le lien"
-                    onClick={() => setLinks((prev) => prev.filter((item) => item !== link))}
+                    aria-label={t.form.step3.removeLink}
+                    onClick={() =>
+                      setLinks((prev) => prev.filter((item) => item !== link))
+                    }
                     className="flex size-10 shrink-0 items-center justify-center rounded-lg text-ink-muted transition-colors hover:bg-paper hover:text-ink"
                   >
                     <Trash2 className="size-5" />
@@ -819,7 +915,11 @@ export function ReportForm() {
         <div className="space-y-5">
           <StepTitle title={t.form.step4.title} hint={t.form.step4.hint} />
 
-          <Field label={t.form.step4.pseudoLabel} htmlFor="pseudo" hint={t.form.step4.pseudoHint}>
+          <Field
+            label={t.form.step4.pseudoLabel}
+            htmlFor="pseudo"
+            hint={t.form.step4.pseudoHint}
+          >
             <div className="flex gap-2">
               <input
                 id="pseudo"
@@ -846,7 +946,11 @@ export function ReportForm() {
             </div>
           </Field>
 
-          <Field label={t.form.step4.cinLabel} htmlFor="cin" hint={t.form.step4.cinHint}>
+          <Field
+            label={t.form.step4.cinLabel}
+            htmlFor="cin"
+            hint={t.form.step4.cinHint}
+          >
             <input
               id="cin"
               inputMode="numeric"
@@ -860,7 +964,11 @@ export function ReportForm() {
             />
           </Field>
 
-          <Field label={t.form.step4.birthLabel} htmlFor="birth" hint={t.form.step4.birthHint}>
+          <Field
+            label={t.form.step4.birthLabel}
+            htmlFor="birth"
+            hint={t.form.step4.birthHint}
+          >
             <input
               id="birth"
               type="date"
@@ -879,7 +987,11 @@ export function ReportForm() {
             disabled={computing}
             className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-white px-5 text-[16px] font-medium text-ink ring-1 ring-hairline transition-colors hover:bg-paper disabled:opacity-60"
           >
-            {computing ? <Loader2 className="size-5 animate-spin" /> : <Fingerprint className="size-5" />}
+            {computing ? (
+              <Loader2 className="size-5 animate-spin" />
+            ) : (
+              <Fingerprint className="size-5" />
+            )}
             {computing ? t.form.step4.computing : t.form.step4.generate}
           </button>
 
@@ -923,8 +1035,14 @@ export function ReportForm() {
           <BookmarkCheck className="size-4" />
           {t.form.save}
         </button>
-        <p className="mt-1 text-[13px] text-muted-ink">{t.form.savedFilesNote}</p>
-        {savedNotice ? <p className="mt-2 text-[14px] font-medium text-secure">{t.form.saved}</p> : null}
+        <p className="mt-1 text-[13px] text-muted-ink">
+          {t.form.savedFilesNote}
+        </p>
+        {savedNotice ? (
+          <p className="mt-2 text-[14px] font-medium text-secure">
+            {t.form.saved}
+          </p>
+        ) : null}
       </div>
     </div>
   )
@@ -963,7 +1081,9 @@ function StepHeader({ step, label }: { step: number; label: string }) {
   return (
     <div>
       <div className="flex items-center justify-between text-[15px]">
-        <span className="font-semibold text-ink">{t.form.progress(step, TOTAL_STEPS)}</span>
+        <span className="font-semibold text-ink">
+          {t.form.progress(step, TOTAL_STEPS)}
+        </span>
         <span className="text-ink-muted">{label}</span>
       </div>
       <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-surface-container">
@@ -976,7 +1096,9 @@ function StepHeader({ step, label }: { step: number; label: string }) {
 function StepTitle({ title, hint }: { title: string; hint: string }) {
   return (
     <div>
-      <h2 className="font-newsreader text-[26px] font-semibold leading-tight text-ink">{title}</h2>
+      <h2 className="font-newsreader text-[26px] leading-tight font-semibold text-ink">
+        {title}
+      </h2>
       <p className="mt-2 text-[16px] leading-[1.55em] text-ink-muted">{hint}</p>
     </div>
   )
@@ -1016,10 +1138,17 @@ function Field({
 }) {
   return (
     <div>
-      <label htmlFor={htmlFor} className="block text-[16px] font-semibold text-ink">
+      <label
+        htmlFor={htmlFor}
+        className="block text-[16px] font-semibold text-ink"
+      >
         {label}
       </label>
-      {hint ? <p className="mt-1 text-[14px] leading-[1.5em] text-ink-muted">{hint}</p> : null}
+      {hint ? (
+        <p className="mt-1 text-[14px] leading-[1.5em] text-ink-muted">
+          {hint}
+        </p>
+      ) : null}
       <div className="mt-2">{children}</div>
     </div>
   )

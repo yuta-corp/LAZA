@@ -1,6 +1,12 @@
 {
   "version": 1,
   "skills": {
+    "motion-web": {
+      "source": "feitangyuan/motion-web",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "be186f7df573fdcddb78d3f873a9311986d563bcf5e9683300a66af4102e3807"
+    },
     "prisma-cli": {
       "source": "prisma/skills",
       "sourceType": "github",
@@ -54,6 +60,12 @@
       "sourceType": "github",
       "skillPath": "prisma-upgrade-v7/SKILL.md",
       "computedHash": "0e07dc2831f86cf27627df914db43d862b0fc75d72c1f9070434aab7940bad7c"
+    },
+    "top-design": {
+      "source": "wondelai/skills",
+      "sourceType": "github",
+      "skillPath": "top-design/SKILL.md",
+      "computedHash": "25929c6bc4b7eedeb8df481713fdc02c335a3acec1f59e87d5e00ac408d04847"
     }
   }
 }

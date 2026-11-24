@@ -16,7 +16,7 @@ export function FocusHeader() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-hairline bg-white/95 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-3xl items-center justify-between gap-3 px-4 sm:px-6">
-        <Logo href="/" size={40} />
+        <Logo href="/" size={44} />
         <div className="flex items-center gap-2">
           <LanguageSwitcher />
           <Link

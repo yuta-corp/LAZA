@@ -19,6 +19,7 @@ export function Footer() {
   const links = [
     { label: t.footer.links.how, href: "/#comment-ca-marche" },
     { label: t.footer.links.feed, href: "/fil" },
+    { label: t.footer.links.press, href: "/brand" },
     { label: t.footer.links.legal, href: "/legal" },
     { label: t.footer.links.terms, href: "/terms" },
     { label: t.footer.links.cookies, href: "/cookies" },
@@ -44,7 +45,7 @@ export function Footer() {
 
         <div className="mt-10 flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div className="max-w-md">
-            <Logo href="/" size={36} />
+            <Logo href="/" size={44} />
             <p className="mt-3 text-[15px] leading-[1.55em] text-ink-muted">{t.footer.tagline}</p>
           </div>
 

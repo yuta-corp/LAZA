@@ -58,11 +58,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton className="data-[slot=sidebar-menu-button]:p-1.5!" render={<Link href="/" />}>
               <Image
-                src="/log.png"
+                src="/brand/icon-512.png"
                 alt="Logo Laza"
                 width={28}
                 height={28}
-                className="size-7 rounded-md object-cover"
+                className="size-7 rounded-md object-contain"
               />
               <span className="text-base font-semibold">Laza</span>
               <span className="ml-auto text-xs font-normal text-muted-foreground">Modération</span>

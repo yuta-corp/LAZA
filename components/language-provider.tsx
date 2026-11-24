@@ -1,7 +1,21 @@
 "use client"
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react"
-import { DEFAULT_LANG, LANG_COOKIE, dictionaries, type Copy, type Lang } from "@/lib/i18n"
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react"
+import { useRouter } from "next/navigation"
+import {
+  DEFAULT_LANG,
+  LANG_COOKIE,
+  dictionaries,
+  type Copy,
+  type Lang,
+} from "@/lib/i18n"
 
 interface LanguageValue {
   lang: Lang
@@ -36,17 +50,24 @@ export function LanguageProvider({
   children: React.ReactNode
 }) {
   const [lang, setLangState] = useState<Lang>(initialLang)
+  const router = useRouter()
 
-  const setLang = useCallback((next: Lang) => {
-    setLangState(next)
-    try {
-      document.cookie = `${LANG_COOKIE}=${next}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`
-      window.localStorage.setItem(LANG_COOKIE, next)
-    } catch {
-      // Cookie/localStorage indisponibles (mode privé) : la langue reste
-      // active pour la session en cours, sans persistance.
-    }
-  }, [])
+  const setLang = useCallback(
+    (next: Lang) => {
+      setLangState(next)
+      try {
+        document.cookie = `${LANG_COOKIE}=${next}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`
+        window.localStorage.setItem(LANG_COOKIE, next)
+      } catch {
+        // Cookie/localStorage indisponibles (mode privé) : la langue reste
+        // active pour la session en cours, sans persistance.
+      }
+      // Les textes rendus côté serveur (lecture du cookie) doivent se rafraîchir
+      // aussi : on relance un rendu soft sans rechargement complet ni clignotement.
+      router.refresh()
+    },
+    [router]
+  )
 
   useEffect(() => {
     document.documentElement.lang = lang
@@ -54,10 +75,14 @@ export function LanguageProvider({
 
   const value = useMemo<LanguageValue>(
     () => ({ lang, setLang, t: dictionaries[lang] }),
-    [lang, setLang],
+    [lang, setLang]
   )
 
-  return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>
+  return (
+    <LanguageContext.Provider value={value}>
+      {children}
+    </LanguageContext.Provider>
+  )
 }
 
 export function useLanguage(): LanguageValue {

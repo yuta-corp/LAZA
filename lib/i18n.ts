@@ -19,10 +19,15 @@ export const DEFAULT_LANG: Lang = "fr"
 export const LANG_COOKIE = "laza_lang"
 
 export const LANG_LABELS: Record<Lang, string> = { fr: "FR", mg: "MG" }
-export const LANG_NAMES: Record<Lang, string> = { fr: "Français", mg: "Malagasy" }
+export const LANG_NAMES: Record<Lang, string> = {
+  fr: "Français",
+  mg: "Malagasy",
+}
 
 export function isLang(value: unknown): value is Lang {
-  return typeof value === "string" && (LANGS as readonly string[]).includes(value)
+  return (
+    typeof value === "string" && (LANGS as readonly string[]).includes(value)
+  )
 }
 
 export function normalizeLang(value: string | null | undefined): Lang {
@@ -41,6 +46,14 @@ const fr = {
     feed: "Voir les signalements",
   },
 
+  nav: {
+    home: "Accueil",
+    explore: "Signalements",
+    how: "Comment ça marche",
+    trust: "Anonymat & confiance",
+    press: "Presse & partenaires",
+  },
+
   hero: {
     kicker: "Signalement anonyme · Madagascar",
     title: "On t'a volé ?",
@@ -51,7 +64,8 @@ const fr = {
     cta: "Signaler maintenant",
     ctaNote: "Gratuit. Sans nom. Sans compte.",
     secondary: "Voir les signalements",
-    reassure: "Ton numéro de CIN reste sur ton téléphone. On ne le voit jamais.",
+    reassure:
+      "Ton numéro de CIN reste sur ton téléphone. On ne le voit jamais.",
     previewTitle: "Un vrai signalement publié",
     previewNote: "Ce dossier est réel. Il a été vérifié avant d'être publié.",
     previewEmptyTitle: "Aucun dossier publié pour l'instant",
@@ -65,10 +79,22 @@ const fr = {
     title: "Quatre étapes. C'est tout.",
     intro: "Tu n'as rien à installer. Un téléphone et cinq minutes suffisent.",
     steps: [
-      { title: "Tu racontes", body: "Écris ce qui s'est passé, avec tes mots." },
-      { title: "Tu ajoutes une preuve", body: "Photo, reçu, audio ou lien. Une seule suffit." },
-      { title: "On vérifie", body: "Une vraie personne lit ton dossier sous 48 heures." },
-      { title: "On publie", body: "Les faits sortent sans ton nom. Chacun peut les partager." },
+      {
+        title: "Tu racontes",
+        body: "Écris ce qui s'est passé, avec tes mots.",
+      },
+      {
+        title: "Tu ajoutes une preuve",
+        body: "Photo, reçu, audio ou lien. Une seule suffit.",
+      },
+      {
+        title: "On vérifie",
+        body: "Une vraie personne lit ton dossier, souvent sous 48 heures.",
+      },
+      {
+        title: "On publie",
+        body: "Les faits sortent sans ton nom. Chacun peut les partager.",
+      },
     ],
   },
 
@@ -119,9 +145,18 @@ const fr = {
       "Nous ne montrons pas de faux chiffres pour faire joli. Voici plutôt comment un dossier est traité.",
     processTitle: "Le chemin d'un signalement",
     process: [
-      { title: "Tu envoies", body: "Ton dossier arrive chez les modérateurs. Ton nom n'y figure pas." },
-      { title: "On vérifie", body: "On contrôle chaque preuve et on cherche des sources publiques." },
-      { title: "On publie", body: "On retire les noms des autres personnes, puis on publie les faits." },
+      {
+        title: "Tu envoies",
+        body: "Ton dossier arrive chez les modérateurs. Ton nom n'y figure pas.",
+      },
+      {
+        title: "On vérifie",
+        body: "On contrôle chaque preuve et on cherche des sources publiques.",
+      },
+      {
+        title: "On publie",
+        body: "On retire les noms des autres personnes, puis on publie les faits.",
+      },
     ],
   },
 
@@ -164,8 +199,121 @@ const fr = {
     secondary: "Voir les signalements",
   },
 
+  feed: {
+    eyebrow: "Registre public",
+    title: "Signalements vérifiés",
+    intro: "Des faits vérifiés, publiés sans le nom des personnes.",
+    report: "Signaler un fait",
+    all: "Tout",
+    emptyCategoryTitle: "Rien dans cette catégorie",
+    emptyCategoryBody:
+      "Aucun fait vérifié n'a encore été publié dans cette catégorie.",
+    emptyTitle: "Rien à afficher pour l'instant",
+    emptyBody:
+      "Les premiers signalements vérifiés apparaîtront ici. Tu peux être la première personne à en déposer un.",
+    seeAll: "Voir tous les signalements",
+    trendsTitle: "Tendances à Madagascar",
+    trendsCount: (n: number) =>
+      `${n} signalement${n > 1 ? "s" : ""} vérifié${n > 1 ? "s" : ""} publié${n > 1 ? "s" : ""}`,
+    trendsEmpty: "Aucune tendance pour l'instant.",
+    trendsExplore: "Explorer toutes les tendances",
+    categoryCount: (n: number) => `${n} signalement${n > 1 ? "s" : ""}`,
+    navHome: "Accueil",
+    navFeed: "Explorer",
+    navReport: "Signaler",
+  },
+
+  dossier: {
+    back: "Retour au fil",
+    kicker: "Dossier vérifié",
+    ref: "Référence",
+    verified: "Vérifié",
+    category: "Catégorie",
+    region: "Région",
+    anonymous: "Dénonciateur anonyme",
+    anonymity: "Anonymat",
+    anonymityNote:
+      "Seule une marque chiffrée relie ce dossier à sa source. Aucun nom n'est stocké.",
+    fingerprint: "Marque",
+    verifiedBy: "Vérifié par l'équipe Laza",
+    receivedOn: "Reçu le",
+    publishedOn: "Publié le",
+    facts: "Les faits",
+    evidence: "Pièces à conviction",
+    evidenceEmpty: "Aucune pièce jointe à ce dossier.",
+    evidenceVerified: "Intégrité vérifiée",
+    evidencePending: "En cours de vérification",
+    evidenceRejected: "Pièce écartée",
+    evidenceOpen: "Consulter la pièce",
+    evidenceOpenLink: "Ouvrir la source",
+    evidenceHash: "Empreinte",
+    read: "Lire le dossier",
+    comments: (n: number) => `${n} commentaire${n > 1 ? "s" : ""}`,
+    share: "Partager",
+    status: "Statut",
+    published: "Publié",
+  },
+
+  actions: {
+    like: {
+      support: "Soutenir ce signalement",
+      unsupport: "Retirer mon soutien",
+    },
+    share: {
+      onX: "Partager sur X",
+      onLinkedin: "Partager sur LinkedIn",
+      onFacebook: "Partager sur Facebook",
+      onWhatsapp: "Partager sur WhatsApp",
+      text: (title: string) => `${title} — signalement vérifié sur Laza`,
+      copiedToast: "Lien copié dans le presse-papier.",
+      copyFailed: "Impossible de copier le lien.",
+      copied: "Copié !",
+      copyLink: "Copier le lien",
+      share: "Partager",
+      storyCopied: "Lien copié — collez-le dans votre story Instagram.",
+      storyLabel: "Story Instagram (copie le lien)",
+      feedCopied: (title: string) =>
+        `Lien copié — « ${title} » est partageable.`,
+    },
+    comments: {
+      title: "Commentaires",
+      anonymous: "Anonyme",
+      placeholder:
+        "Apporter un écho, une précision, une information complémentaire… (pré-modéré)",
+      pseudoPlaceholder: "Choisissez votre pseudo (affiché sur le fil)",
+      pseudoRequired: "Choisissez un pseudo pour participer.",
+      asIdentity: "Vous commentez en tant que",
+      identityNote: "— votre identité est liée à votre empreinte locale.",
+      send: "Envoyer",
+    },
+    errors: {
+      network: "Erreur réseau — réessayez.",
+    },
+    legal: {
+      title: "Avertissement légal",
+      intro:
+        "Toute dénonciation doit être de bonne foi et étayée par des preuves. En vertu de l'article 373.1 du Code pénal malgache, la dénonciation abusive est punie de",
+      penaltyJail: "6 mois à 5 ans d'emprisonnement",
+      and: "et d'une amende de",
+      penaltyFine: "1 à 10 millions d'Ariary",
+      outro:
+        "Les signalements sont soumis à une vérification préalable par une équipe de modération indépendante. Les données à caractère personnel sont traitées conformément à la loi n° 2014-038 (déclaration CMIL).",
+      extra:
+        "En cas de dénonciation abusive avérée, l'identité du déclarant peut être levée sur réquisition judiciaire.",
+    },
+    cookies: {
+      ariaLabel: "Choix des cookies",
+      title: "Tes données restent à toi",
+      body: "Laza garde juste quelques cookies pour que le site marche : ton choix ici, ton pseudo, et ton thème d'affichage. Pas de publicité, pas de pistage. Tu peux accepter ou refuser.",
+      accept: "J'accepte",
+      refuse: "Je refuse",
+      learnMore: "En savoir plus",
+    },
+  },
+
   footer: {
-    tagline: "Signalement anonyme de corruption à Madagascar. Indépendant et gratuit.",
+    tagline:
+      "Signalement anonyme de corruption à Madagascar. Indépendant et gratuit.",
     sectionHelp: "Le site",
     sectionLegal: "Informations légales",
     links: {
@@ -173,6 +321,7 @@ const fr = {
       feed: "Signalements publiés",
       report: "Signaler un fait",
       how: "Comment ça marche",
+      press: "Presse & partenaires",
       legal: "Mentions légales",
       terms: "Conditions d'utilisation",
       cookies: "Cookies",
@@ -193,7 +342,8 @@ const fr = {
     back: "Retour",
     save: "Enregistrer et continuer plus tard",
     saved: "Ton brouillon est enregistré sur ce téléphone.",
-    savedFilesNote: "Les fichiers déjà ajoutés ne sont pas conservés dans le brouillon.",
+    savedFilesNote:
+      "Les fichiers déjà ajoutés ne sont pas conservés dans le brouillon.",
     draftBannerTitle: "Tu as un signalement enregistré",
     draftBannerBody: "Tu peux le continuer là où tu t'es arrêté.",
     draftRestore: "Reprendre",
@@ -207,7 +357,8 @@ const fr = {
       placeholder:
         "Exemple : le 12 mars, au bureau des impôts d'Antananarivo, un agent m'a demandé 200 000 Ar pour sortir mon dossier…",
       reassurance: "Tu ne mets pas ton nom ici.",
-      error: "Écris un peu plus : au moins deux ou trois phrases (40 caractères minimum).",
+      error:
+        "Écris un peu plus : au moins deux ou trois phrases (40 caractères minimum).",
     },
 
     step2: {
@@ -232,11 +383,14 @@ const fr = {
       empty: "Aucune preuve ajoutée pour l'instant.",
       limit: "Maximum 5 pièces, 10 Mo par fichier.",
       fileReady: "Protégée avant l'envoi",
-      reassurance: "Les fichiers partent depuis ton téléphone. On ne partage rien sans vérification.",
+      reassurance:
+        "Les fichiers partent depuis ton téléphone. On ne partage rien sans vérification.",
       error: "Il faut au moins une preuve pour envoyer ton signalement.",
       noProofTitle: "Pas de preuve sous la main ?",
       noProofBody:
         "Tu peux enregistrer ton récit maintenant et revenir plus tard. Un dossier sans preuve ne peut pas être vérifié, donc il ne sera pas publié.",
+      removeFile: (name: string) => `Retirer ${name}`,
+      removeLink: "Retirer le lien",
     },
 
     step4: {
@@ -246,13 +400,16 @@ const fr = {
       pseudoHint: "C'est le seul nom qui apparaîtra avec ton signalement.",
       surprise: "Au hasard",
       cinLabel: "Ton numéro de CIN",
-      cinHint: "10 à 14 chiffres. Il reste sur ton téléphone et n'est jamais envoyé.",
+      cinHint:
+        "10 à 14 chiffres. Il reste sur ton téléphone et n'est jamais envoyé.",
       birthLabel: "Ta date de naissance",
       birthHint: "Elle sert avec ton CIN à créer ta marque anonyme.",
       generate: "Créer ma marque anonyme",
       computing: "Création en cours…",
-      generated: "Ta marque anonyme est prête. C'est la seule chose qu'on enregistre.",
-      reassurance: "Ton CIN et ta date de naissance ne quittent pas ton téléphone.",
+      generated:
+        "Ta marque anonyme est prête. C'est la seule chose qu'on enregistre.",
+      reassurance:
+        "Ton CIN et ta date de naissance ne quittent pas ton téléphone.",
     },
 
     review: {
@@ -260,8 +417,10 @@ const fr = {
       hint: "Voici ce que les gens verront. Tu peux corriger le titre et le résumé.",
       titleLabel: "Titre affiché",
       summaryLabel: "Résumé affiché",
-      summaryHint: "Deux ou trois phrases. C'est ce que les gens lisent en premier.",
-      summaryTooShort: "Écris un résumé un peu plus long (20 caractères minimum).",
+      summaryHint:
+        "Deux ou trois phrases. C'est ce que les gens lisent en premier.",
+      summaryTooShort:
+        "Écris un résumé un peu plus long (20 caractères minimum).",
       recapStory: "Ton récit",
       recapEvidence: "Preuves",
       recapEvidenceCount: (files: number, links: number) =>
@@ -284,16 +443,19 @@ const fr = {
         "Si c'est solide, les faits sont publiés sans ton nom.",
       ],
       refLabel: "Ta référence",
-      refHint: "Note-la. Elle sert à retrouver ton dossier auprès de la modération.",
+      refHint:
+        "Note-la. Elle sert à retrouver ton dossier auprès de la modération.",
       seeFeed: "Voir les signalements",
       again: "Signaler un autre fait",
     },
 
     files: {
-      notAllowed: (name: string) => `Ce type de fichier n'est pas accepté : ${name}`,
+      notAllowed: (name: string) =>
+        `Ce type de fichier n'est pas accepté : ${name}`,
       tooBig: (name: string) => `Fichier trop lourd (10 Mo maximum) : ${name}`,
       tooMany: "Maximum 5 pièces par signalement.",
-      badLink: "Ce lien n'est pas valide. Il doit commencer par http:// ou https://",
+      badLink:
+        "Ce lien n'est pas valide. Il doit commencer par http:// ou https://",
     },
 
     errors: {
@@ -333,6 +495,14 @@ const mg: Copy = {
     feed: "Hijery ny fitarainana",
   },
 
+  nav: {
+    home: "Fandraisana",
+    explore: "Fitarainana",
+    how: "Ahoana ny fiasany",
+    trust: "Tsy mitonona anarana",
+    press: "Presa & mpiara-miombon'antoka",
+  },
+
   hero: {
     kicker: "Fitarainana tsy mitonona anarana · Madagasikara",
     title: "Nangalarina ianao ?",
@@ -343,7 +513,8 @@ const mg: Copy = {
     cta: "Mitatitra izao",
     ctaNote: "Maimaim-poana. Tsy misy anarana. Tsy mila kaonty.",
     secondary: "Hijery ny fitarainana",
-    reassure: "Ny laharana CIN-nao dia mijanona ao amin'ny findainao. Tsy hitantsika mihitsy izy.",
+    reassure:
+      "Ny laharana CIN-nao dia mijanona ao amin'ny findainao. Tsy hitantsika mihitsy izy.",
     previewTitle: "Fitarainana tena navoaka",
     previewNote: "Tena misy ity rakitra ity. Noamarina izy vao navoaka.",
     previewEmptyTitle: "Mbola tsy misy rakitra navoaka",
@@ -353,20 +524,33 @@ const mg: Copy = {
   },
 
   how: {
-    eyebrow: "Ahoana no fandehany",
+    eyebrow: "Ahoana no fiasany",
     title: "Efatra dingana. Izay ihany.",
-    intro: "Tsy misy apetraka. Finday sy dimy minitra dia ampy.",
+    intro:
+      "Tsy mila mametraka na inona na inona ianao. Finday sy dimy minitra dia ampy.",
     steps: [
-      { title: "Mitantara ianao", body: "Soraty amin'ny teninao izay zava-nitranga." },
-      { title: "Manampy porofo ianao", body: "Sary, rosia, feo na rohy. Iray dia ampy." },
-      { title: "Manamarina izahay", body: "Olona tena izy no mamaky ny rakitrao ao anatin'ny 48 ora." },
-      { title: "Mamoaka izahay", body: "Mivoaka ny zava-misy tsy misy anaranao. Afaka mizara azy ny rehetra." },
+      {
+        title: "Mitantara ianao",
+        body: "Soraty amin'ny teninao izay zava-nitranga.",
+      },
+      {
+        title: "Manampy porofo ianao",
+        body: "Sary, rosia, feo na rohy. Iray dia ampy.",
+      },
+      {
+        title: "Manamarina izahay",
+        body: "Olona tena izy no mamaky ny rakitrao, matetika ao anatin'ny 48 ora.",
+      },
+      {
+        title: "Mamoaka izahay",
+        body: "Mivoaka ny zava-misy tsy misy anaranao. Afaka mizara azy ny rehetra.",
+      },
     ],
   },
 
   trust: {
-    eyebrow: "Antony hatokisanao anay",
-    title: "Ny fiarovana anao, hazavaina tsotra.",
+    eyebrow: "Nahoana no matoky anay ?",
+    title: "Ny fiarovanao, hazavaina tsotra.",
     items: [
       {
         title: "Tsy mangataka ny anaranao izahay",
@@ -393,7 +577,7 @@ const mg: Copy = {
     items: [
       "Mivoaka ny tantaranao. Hita izy.",
       "Hita ny zava-misy, tsy hita ny anaranao.",
-      "Afaka manadihady ny mpanao gazety sy ny andrim-panjakana.",
+      "Afaka manadihady izany ny mpanao gazety sy ny manam-pahefana.",
       "Mitahiry porofo misy daty momba izay hitanao ianao.",
     ],
   },
@@ -402,18 +586,27 @@ const mg: Copy = {
     eyebrow: "Isa, fa tsy teny fotsiny",
     title: "Tena izy avokoa izay hitanao eto.",
     intro:
-      "Mivantana avy amin'ny banky angonao ny isa. Tsy mamorona teny na isa izahay.",
+      "Mivantana avy amin'ny angon-drakitry ny tranokala ny isa. Tsy mamorona tantara na isa izahay.",
     statReports: "Rakitra navoaka",
     statEvidence: "Porofo voamarina",
-    statSupport: "Fanohanana",
+    statSupport: "Fanohanana vahoaka",
     emptyTitle: "Mbola tsy misy rakitra navoaka",
     emptyBody:
       "Tsy mampiseho isa sandoka izahay. Izao kosa no fomba fitantanana ny rakitra iray.",
     processTitle: "Ny dian'ny fitarainana iray",
     process: [
-      { title: "Mandefa ianao", body: "Tongany amin'ny mpanara-maso ny rakitrao. Tsy misy anaranao ao." },
-      { title: "Manamarina izahay", body: "Dinihintsika ny porofo tsirairay ary mitady loharano hafa." },
-      { title: "Mamoaka izahay", body: "Esorintsika ny anaran'olona hafa, avy eo avoakantsika ny zava-misy." },
+      {
+        title: "Mandefa ianao",
+        body: "Tongany amin'ny mpanara-maso ny rakitrao. Tsy misy anaranao ao.",
+      },
+      {
+        title: "Manamarina izahay",
+        body: "Dinihintsika ny porofo tsirairay ary mitady loharano hafa.",
+      },
+      {
+        title: "Mamoaka izahay",
+        body: "Esorintsika ny anaran'olona hafa, avy eo avoakantsika ny zava-misy.",
+      },
     ],
   },
 
@@ -456,22 +649,138 @@ const mg: Copy = {
     secondary: "Hijery ny fitarainana",
   },
 
+  feed: {
+    eyebrow: "Rakitra ampahibemaso",
+    title: "Fitarainana voamarina",
+    intro: "Zava-misy voamarina, avoaka tsy misy anaran'olona.",
+    report: "Mitatitra zava-misy",
+    all: "Izy rehetra",
+    emptyCategoryTitle: "Tsy misy ao amin'io sokajy io",
+    emptyCategoryBody:
+      "Mbola tsy misy zava-misy voamarina navoaka amin'io sokajy io.",
+    emptyTitle: "Mbola tsy misy hita izao",
+    emptyBody:
+      "Hiseho eto ny fitarainana voamarina voalohany. Ianao no mety ho voalohany mandefa iray.",
+    seeAll: "Hijery ny fitarainana rehetra",
+    trendsTitle: "Fironana eto Madagasikara",
+    trendsCount: (n: number) => `${n} fitarainana voamarina navoaka`,
+    trendsEmpty: "Mbola tsy misy fironana.",
+    trendsExplore: "Hijery ny fironana rehetra",
+    categoryCount: (n: number) => `${n} fitarainana`,
+    navHome: "Fandraisana",
+    navFeed: "Hikaroka",
+    navReport: "Mitatitra",
+  },
+
+  dossier: {
+    back: "Miverina amin'ny fitarainana",
+    kicker: "Rakitra voamarina",
+    ref: "Laharana",
+    verified: "Voamarina",
+    category: "Sokajy",
+    region: "Faritra",
+    anonymous: "Mpandefa tsy mitonona anarana",
+    anonymity: "Tsy mitonona anarana",
+    anonymityNote:
+      "Marika voafefy ihany no mampifandray io rakitra io amin'ny loharano. Tsy misy anarana tehirizina.",
+    fingerprint: "Marika",
+    verifiedBy: "Voamarina tamin'ny ekipan'ny Laza",
+    receivedOn: "Noraisina tamin'ny",
+    publishedOn: "Navoaka tamin'ny",
+    facts: "Ny zava-misy",
+    evidence: "Porofo",
+    evidenceEmpty: "Tsy misy porofo ampiarahina amin'io rakitra io.",
+    evidenceVerified: "Voamarina ny fahamarinany",
+    evidencePending: "Eo am-panadinana",
+    evidenceRejected: "Porofo nolavina",
+    evidenceOpen: "Hijery ny porofo",
+    evidenceOpenLink: "Hanokatra ny loharano",
+    evidenceHash: "Marika",
+    read: "Vakio ny rakitra",
+    comments: (n: number) => `${n} fanehoan-kevitra`,
+    share: "Zarao",
+    status: "Toe-javatra",
+    published: "Navoaka",
+  },
+
+  actions: {
+    like: {
+      support: "Manohana ity fitarainana ity",
+      unsupport: "Esory ny fanohanako",
+    },
+    share: {
+      onX: "Zarao amin'ny X",
+      onLinkedin: "Zarao amin'ny LinkedIn",
+      onFacebook: "Zarao amin'ny Facebook",
+      onWhatsapp: "Zarao amin'ny WhatsApp",
+      text: (title: string) =>
+        `${title} — fitarainana voamarina tao amin'ny Laza`,
+      copiedToast: "Voadika tao amin'ny takelaka ny rohy.",
+      copyFailed: "Tsy afaka nadika ny rohy.",
+      copied: "Voadika !",
+      copyLink: "Adikao ny rohy",
+      share: "Zarao",
+      storyCopied: "Voadika ny rohy — apetaho ao amin'ny Instagram story-nao.",
+      storyLabel: "Instagram story (adika ny rohy)",
+      feedCopied: (title: string) =>
+        `Voadika ny rohy — azo zaraina « ${title} ».`,
+    },
+    comments: {
+      title: "Fanehoan-kevitra",
+      anonymous: "Tsy mitonona anarana",
+      placeholder:
+        "Lazao ny hevitrao, fanazavana na vaovao fanampiny… (dinihina mialoha)",
+      pseudoPlaceholder:
+        "Safidio ny solon'anaranao (aseho amin'ny fifanakalozana)",
+      pseudoRequired: "Safidio solon'anarana vao mandray anjara ianao.",
+      asIdentity: "Maneho hevitra amin'ny anarana",
+      identityNote:
+        "ianao — mifamatotra amin'ny marika eo an-toerana ny maha-ianao.",
+      send: "Alefa",
+    },
+    errors: {
+      network: "Nisy olana tamin'ny aterineto — andramo indray.",
+    },
+    legal: {
+      title: "Fampitandremana ara-dalàna",
+      intro:
+        "Tsy maintsy amin'ny fo madio sy tohanan'ny porofo ny fitarainana rehetra. Araka ny andininy 373.1 amin'ny Fehezan-dalàna famaizana malagasy, ny fitarainana diso dia voasazy",
+      penaltyJail: "6 volana ka hatramin'ny 5 taona an-tranomaizina",
+      and: "sy lamandy",
+      penaltyFine: "1 ka hatramin'ny 10 tapitrisa Ariary",
+      outro:
+        "Ny fitarainana dia dinihin'ny ekipa mpanara-maso mahaleo tena aloha. Ny angona manokana dia karakaraina araka ny lalàna laharana 2014-038 (fanambarana CMIL).",
+      extra:
+        "Raha hita fa fitarainana diso izy, azo ambara ny maha-izy azy raha mangataka ny fitsarana.",
+    },
+    cookies: {
+      ariaLabel: "Safidy momba ny cookies",
+      title: "Anao ihany ny angonao",
+      body: "Cookies vitsivitsy ihany no tehirizin'i Laza mba handehanan'ny tranokala: ny safidinao eto, ny solon'anaranao, ary ny endrika aseho. Tsy misy dokam-barotra, tsy misy fanarahamaso. Azonao ekena na lavina.",
+      accept: "Ekena",
+      refuse: "Lavina",
+      learnMore: "Fantaro bebe kokoa",
+    },
+  },
+
   footer: {
-    tagline: "Fitarainana tsy mitonona anarana momba ny kolikoly eto Madagasikara. Mahaleo tena sy maimaim-poana.",
+    tagline:
+      "Fitarainana tsy mitonona anarana momba ny kolikoly eto Madagasikara. Mahaleo tena sy maimaim-poana.",
     sectionHelp: "Ny tranokala",
     sectionLegal: "Fampahalalana ara-dalàna",
     links: {
       home: "Fandraisana",
       feed: "Fitarainana navoaka",
       report: "Mitatitra",
-      how: "Ahoana no fandehany",
+      how: "Ahoana no fiasany",
+      press: "Gazety sy mpiara-miasa",
       legal: "Fanamarihana ara-dalàna",
       terms: "Fepetran'ny fampiasana",
       cookies: "Cookies",
       contact: "Mifandraisa aminay",
     },
     legalShort:
-      "Sazy ara-dalàna ny fitarainana sandoka eto Madagasikara (andrin'ny 373.1 amin'ny fehezan-dalàna famaizana). Ny marina ihany no atolory.",
+      "Sazy ara-dalàna ny fitarainana sandoka eto Madagasikara (373.1 amin'ny fehezan-dalàna famaizana). Ny marina ihany no atolory.",
     rights: "© 2026 Laza Madagascar · Tranokala mahaleo tena.",
   },
 
@@ -480,12 +789,14 @@ const mg: Copy = {
     pageIntro: "Efatra dingana, dimy minitra. Tsy hisy hahafantatra anao.",
     exit: "Hiala",
     steps: ["Ny tantaranao", "Aiza sy inona", "Ny porofo", "Ianao"],
-    progress: (step: number, total: number) => `Dingana ${step} amin'ny ${total}`,
+    progress: (step: number, total: number) =>
+      `Dingana ${step} amin'ny ${total}`,
     next: "Hanohy",
     back: "Hiverina",
     save: "Tehirizo ary hanohy aoriana",
     saved: "Voatahiry ao amin'ny findainao ny volavolanao.",
-    savedFilesNote: "Tsy tehirizina ao anatin'ny volavola ny rakitra efa nampidirinao.",
+    savedFilesNote:
+      "Tsy tehirizina ao anatin'ny volavola ny rakitra efa nampidirinao.",
     draftBannerTitle: "Misy fitarainana voatahiry ianao",
     draftBannerBody: "Afaka manohy izay nifoananao ianao.",
     draftRestore: "Hanohy",
@@ -497,9 +808,10 @@ const mg: Copy = {
       hint: "Soraty araka ny fiteninao. Ny fiandohana, ny afovoany, ny fiafarana. Tsy hisy hitsara anao.",
       label: "Ny tantaranao",
       placeholder:
-        "Ohatra : tamin'ny 12 marsa, tao amin'ny biraon'ny hetra Antananarivo, nangataka 200 000 Ar tamin'ahy ny mpiasa iray mba hampivoaka ny rakitrako…",
+        "Ohatra : tamin'ny 12 martsa, tao amin'ny biraon'ny hetra Antananarivo, nangataka 200 000 Ar tamin'ahy ny mpiasa iray mba hampivoaka ny rakitrako…",
       reassurance: "Tsy asoratrao eto ny anaranao.",
-      error: "Soraty kely misimisy kokoa : roa na telo fehezanteny (40 litera farafahakeliny).",
+      error:
+        "Soraty kely misimisy kokoa : roa na telo fehezanteny (40 litera farafahakeliny).",
     },
 
     step2: {
@@ -524,11 +836,14 @@ const mg: Copy = {
       empty: "Mbola tsy misy porofo nampidirina.",
       limit: "5 rakitra ny fetra, 10 Mo isaky ny rakitra.",
       fileReady: "Voaro vao alefa",
-      reassurance: "Avotra amin'ny findainao ny rakitra. Tsy zarainay izy raha tsy voamarina.",
+      reassurance:
+        "Avotra amin'ny findainao ny rakitra. Tsy zarainay izy raha tsy voamarina.",
       error: "Mila porofo iray farafahakeliny handefasana ny fitarainanao.",
       noProofTitle: "Tsy manana porofo amin'izao ?",
       noProofBody:
         "Afaka mitahiry ny tantaranao ianao ary hiverina aoriana. Tsy azo hamarinina ny rakitra tsy misy porofo, ka tsy havoaka izy.",
+      removeFile: (name: string) => `Esory ${name}`,
+      removeLink: "Esory ny rohy",
     },
 
     step4: {
@@ -538,13 +853,16 @@ const mg: Copy = {
       pseudoHint: "Io ihany no anarana hiseho miaraka amin'ny fitarainanao.",
       surprise: "Kisendrasendra",
       cinLabel: "Ny laharana CIN-nao",
-      cinHint: "10 ka hatramin'ny 14 isa. Mijanona ao amin'ny findainao izy ary tsy alefa.",
+      cinHint:
+        "10 ka hatramin'ny 14 isa. Mijanona ao amin'ny findainao izy ary tsy alefa.",
       birthLabel: "Ny daty nahaterahanao",
-      birthHint: "Ampiasaina miaraka amin'ny CIN hamoronana ny marika tsy mitonona anarana.",
+      birthHint:
+        "Ampiasaina miaraka amin'ny CIN hamoronana ny marika tsy mitonona anarana.",
       generate: "Hamorona ny marika tsy mitonona anarana",
       computing: "Eo am-panamboarana…",
       generated: "Vonona ny marikao. Io ihany no voatahiry.",
-      reassurance: "Tsy miala amin'ny findainao ny CIN sy ny daty nahaterahanao.",
+      reassurance:
+        "Tsy miala amin'ny findainao ny CIN sy ny daty nahaterahanao.",
     },
 
     review: {
@@ -553,14 +871,15 @@ const mg: Copy = {
       titleLabel: "Lohahevitra aseho",
       summaryLabel: "Famintinana aseho",
       summaryHint: "Roa na telo fehezanteny. Io no vakian'ny olona aloha.",
-      summaryTooShort: "Soraty lava kely ny famintinana (20 litera farafahakeliny).",
+      summaryTooShort:
+        "Soraty lava kely ny famintinana (20 litera farafahakeliny).",
       recapStory: "Ny tantaranao",
       recapEvidence: "Porofo",
       recapEvidenceCount: (files: number, links: number) =>
         `rakitra ${files} sy rohy ${links}`,
       recapIdentity: "Avoaka amin'ny solon'anarana",
       legalLabel:
-        "Manambara aho fa marina izay lazaiko ary marina ny porofoko. Fantatro fa misy sazy ny fitarainana sandoka eto Madagasikara (andrin'ny 373.1).",
+        "Manambara aho fa marina izay lazaiko ary marina ny porofoko. Fantatro fa misy sazy ny fitarainana sandoka eto Madagasikara (373.1 amin'ny fehezan-dalàna famaizana).",
       send: "Alefa ny fitarainako",
       sending: "Eo am-pandefasana…",
       errorLegal: "Tsindrio ny efamira vao afaka mandefa.",
@@ -576,22 +895,28 @@ const mg: Copy = {
         "Raha mafy izany, avoaka ny zava-misy tsy misy anaranao.",
       ],
       refLabel: "Ny laharan-taratao",
-      refHint: "Soraty izy. Ampiasaina hitadiavana ny rakitrao amin'ny mpanara-maso.",
+      refHint:
+        "Soraty izy. Ampiasaina hitadiavana ny rakitrao amin'ny mpanara-maso.",
       seeFeed: "Hijery ny fitarainana",
       again: "Mitatitra zavatra hafa",
     },
 
     files: {
-      notAllowed: (name: string) => `Tsy ekena io karazana rakitra io : ${name}`,
-      tooBig: (name: string) => `Mavesatra loatra ny rakitra (10 Mo ny fetra) : ${name}`,
+      notAllowed: (name: string) =>
+        `Tsy ekena io karazana rakitra io : ${name}`,
+      tooBig: (name: string) =>
+        `Mavesatra loatra ny rakitra (10 Mo ny fetra) : ${name}`,
       tooMany: "5 rakitra ny fetra isaky ny fitarainana.",
-      badLink: "Tsy mety io rohy io. Tsy maintsy manomboka amin'ny http:// na https://",
+      badLink:
+        "Tsy mety io rohy io. Tsy maintsy manomboka amin'ny http:// na https://",
     },
 
     errors: {
-      network: "Tsy misy fifandraisana. Hamarino ny aterineto dia andramo indray.",
+      network:
+        "Tsy misy fifandraisana. Hamarino ny aterineto dia andramo indray.",
       generic: "Nisy olana. Andramo indray.",
-      pseudo: "Tsy mety io solon'anarana io. Misafidiana litera na isa 2 ka hatramin'ny 24.",
+      pseudo:
+        "Tsy mety io solon'anarana io. Misafidiana litera na isa 2 ka hatramin'ny 24.",
       cin: "Tsy mety io laharana CIN io. Mila isa 10 ka hatramin'ny 14.",
       birth: "Tsy mety io daty nahaterahana io.",
       commitment: "Mamorona aloha ny marika tsy mitonona anarana.",
@@ -619,4 +944,9 @@ export const dictionaries: Record<Lang, Copy> = { fr, mg }
 
 export function getCopy(lang: Lang): Copy {
   return dictionaries[lang]
+}
+
+/** Libellé de catégorie dans la langue courante (source unique : form.categories). */
+export function categoryLabel(lang: Lang, category: Category): string {
+  return dictionaries[lang].form.categories[category]
 }
